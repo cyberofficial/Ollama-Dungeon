@@ -1,0 +1,14 @@
+{
+  "name": "Dark Forest",
+  "description": "Ancient trees tower overhead, their thick canopy blocking most sunlight. Strange sounds echo from deeper in the woods, and you can't shake the feeling that something is watching you.",
+  "exits": {
+    "west": "world/town",
+    "north": "world/forest/cave",
+    "deeper": "world/forest/deep"
+  },
+  "ambient": {
+    "sounds": ["rustling leaves", "distant howls", "snapping twigs"],
+    "time_of_day": "dusk",
+    "lighting": "shadowy"
+  }
+}

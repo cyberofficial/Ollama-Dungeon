@@ -1,0 +1,15 @@
+{
+  "name": "Town Square",
+  "description": "A bustling town square with cobblestone paths. Merchants hawk their wares while children play around an ornate fountain. The air smells of fresh bread and horse leather.",
+  "exits": {
+    "north": "world/town/tavern",
+    "south": "world/town/market",
+    "east": "world/forest",
+    "west": "world/town/inn"
+  },
+  "ambient": {
+    "sounds": ["fountain bubbling", "children laughing", "merchants calling"],
+    "time_of_day": "afternoon",
+    "weather": "sunny"
+  }
+}

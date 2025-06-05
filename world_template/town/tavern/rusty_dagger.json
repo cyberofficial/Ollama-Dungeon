@@ -1,0 +1,14 @@
+{
+  "name": "Rusty Dagger",
+  "description": "An old, rusty dagger with a worn leather grip. Despite its age, it still looks sharp enough to be useful.",
+  "type": "weapon",
+  "value": 5,
+  "weight": 1,
+  "properties": {
+    "damage": "1d4",
+    "material": "iron",
+    "condition": "poor"
+  },
+  "usable": true,
+  "portable": true
+}

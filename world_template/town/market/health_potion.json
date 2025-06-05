@@ -1,0 +1,15 @@
+{
+  "name": "Health Potion",
+  "description": "A small glass vial filled with a glowing red liquid. It radiates warmth and seems to pulse with magical energy.",
+  "type": "consumable",
+  "value": 50,
+  "weight": 0.5,
+  "properties": {
+    "healing": "2d4+2",
+    "magic": true,
+    "uses": 1
+  },
+  "usable": true,
+  "portable": true,
+  "use_description": "You drink the potion and feel a warm healing energy flow through your body."
+}

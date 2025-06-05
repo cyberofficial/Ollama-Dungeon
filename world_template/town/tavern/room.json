@@ -1,0 +1,13 @@
+{
+  "name": "The Prancing Pony Tavern",
+  "description": "A warm, dimly lit tavern filled with the chatter of locals and the smell of roasted meat. Wooden tables are scattered around a central fireplace, and a bar stretches along the far wall.",
+  "exits": {
+    "south": "world/town",
+    "up": "world/town/tavern/rooms"
+  },
+  "ambient": {
+    "sounds": ["crackling fire", "muffled conversation", "clinking mugs"],
+    "time_of_day": "evening",
+    "lighting": "dim candlelight"
+  }
+}

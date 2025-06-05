@@ -1,0 +1,12 @@
+{
+  "name": "Town Market",
+  "description": "A bustling marketplace with stalls selling everything from fresh produce to exotic trinkets. The air is filled with the sounds of haggling and the smells of spices and cooking food.",
+  "exits": {
+    "north": "world/town"
+  },
+  "ambient": {
+    "sounds": ["merchants calling", "coins jingling", "cart wheels"],
+    "time_of_day": "afternoon",
+    "weather": "sunny"
+  }
+}

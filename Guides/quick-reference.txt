@@ -1,0 +1,41 @@
+```
+                           OLLAMA DUNGEON
+         A Text Adventure Powered by Local AI - Quick Reference
+
+BASIC COMMANDS:
+/look, /l                 - Describe current room
+/go <direction>           - Move to another location (north, south, east, west)
+/agents, /people          - List people in current room
+/inventory, /inv          - View your inventory
+/help                     - Show all commands
+/quit, /exit, /q          - Exit the game
+
+INTERACTION:
+/say <agent> <message>    - Talk to an agent
+/memory <agent>           - Show an agent's memory
+/share <context>          - Share context with agents in room
+/follow <agent>           - Have agent follow you
+/stay <agent>             - Have agent stop following you
+
+ITEMS:
+/pickup <item>            - Pick up an item
+/take <item>              - Alternative to /pickup
+/use <item>               - Use an item from inventory
+
+CONVERSATIONS:
+/conv <alice,bob,player> [turns] <topic> - Start conversation (omit turns for endless mode)
+/endconv                  - End endless conversation
+/invite <agent>           - Invite agent to endless conversation
+/remove <agent>           - Remove agent from endless conversation
+/dialog <alice,bob> <num> - Generate dialog between agents
+
+SYSTEM:
+/save [name]              - Save game state
+/load [name]              - Load game state
+/saves                    - List saved games
+/delete <save_name>       - Delete a saved game
+/status                   - Show system status
+/tokens [agent]           - Show token usage
+
+Type '/help' in-game for complete command list.
+```

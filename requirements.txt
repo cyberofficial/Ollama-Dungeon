@@ -1,0 +1,6 @@
+requests
+ollama
+colorama
+pandas
+prompt_toolkit
+tiktoken
