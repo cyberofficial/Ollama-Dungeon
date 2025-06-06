@@ -34,6 +34,7 @@ AGENT_SETTINGS = {
     "strip_thinking_tokens": True,   # Remove <think> tags and content from AI responses
     "randomize_responses": True,     # Add random seed to agent calls
     "temperature": 0.7,              # Temperature for responses (higher = more creative and varied)
+    "reply_length": "medium",        # Response length: "brief", "medium", "detailed", or "verbose"
 }
 
 # Game settings

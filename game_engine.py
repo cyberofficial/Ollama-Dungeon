@@ -106,7 +106,7 @@ class Agent:
         """Load agent's memory from CSV file."""
         memory_file = os.path.join(os.path.dirname(self.agent_file), self.data['memory_file'])
         if os.path.exists(memory_file):
-            with open(memory_file, 'r') as f:
+            with open(memory_file, 'r', encoding='utf-8') as f:
                 reader = csv.DictReader(f)
                 self.memory = list(reader)
     
@@ -123,10 +123,9 @@ class Agent:
         }
         
         self.memory.append(new_memory)
-        
-        # Append to CSV file
+          # Append to CSV file
         file_exists = os.path.exists(memory_file)
-        with open(memory_file, 'a', newline='') as f:
+        with open(memory_file, 'a', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=['memory_type', 'key', 'value', 'timestamp'])
             if not file_exists:
                 writer.writeheader()
@@ -379,7 +378,7 @@ SHARED CONTEXT (what others have told you recently):
 INSTRUCTIONS:
 - Stay in character as {self.data['name']}
 - Respond naturally to the player's input
-- Keep responses concise (1-3 sentences)
+{self._get_length_instruction()}
 - Show personality through your mood and persona
 - React appropriately to the location and context
 - If the player says something unrelated, respond as your character would
@@ -475,7 +474,7 @@ Items you can see:
 - Be aware of your environment and other people
 - You can suggest actions based on your goals and knowledge
 - Form opinions about the player based on their actions
-- Keep responses conversational (1-3 sentences usually)
+{self._get_length_instruction()}
 - Let your personality shine through in how you speak and act
 
 === IMPORTANT ===
@@ -511,6 +510,20 @@ You are {self.data['name']}. You have consciousness, agency, and free will withi
             context_data['shared_context'] = sanitized_shared
         
         return context_data
+    def _get_length_instruction(self) -> str:
+        """Get response length instruction based on config setting."""
+        from config import AGENT_SETTINGS
+        
+        reply_length = AGENT_SETTINGS.get('reply_length', 'medium').lower()
+        
+        length_instructions = {
+            'brief': '- Keep responses very short (1-2 sentences)',
+            'medium': '- Keep responses concise (1-3 sentences)', 
+            'detailed': '- Keep responses moderate length (3-5 sentences)',
+            'verbose': '- Feel free to give longer, detailed responses (5+ sentences)'
+        }
+        
+        return length_instructions.get(reply_length, length_instructions['medium'])
 
 
 class WorldController:
