@@ -10,6 +10,19 @@
 
 A sophisticated, locally-hosted AI-powered text adventure game where **the world IS the filesystem**. This modular platform features intelligent AI agents with persistent memories, advanced multi-agent conversation systems, location-aware endless conversation mode, and comprehensive analytics—all running completely offline with automatic backups and save management.
 
+-------------------
+
+⚠⚠⚠⚠ Please note ⚠⚠⚠⚠
+
+This is not fully finished, somethings will break or not function as intended. 
+
+If you encounter an issue, please make a report
+
+items are useless right now, they are just for prop/show. items will be implemented later.
+
+
+-------------------
+
 <div align="center">
   <img src="https://github.com/user-attachments/assets/1e0b6e0e-8793-434a-877a-a7317300bca5" alt="Ollama Dungeon Screenshot" width="50%"/>
 </div>
