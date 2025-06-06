@@ -1,0 +1,12 @@
+{
+  "name": "Meditation Grove - Circle of Ancient Trees",
+  "description": "Ancient olive and cypress trees form a perfect circle around a small fountain whose water glows with soft blue light. The trees are far older than they should be, their branches intertwined to create a natural cathedral. Comfortable cushions and prayer mats are arranged around the fountain, and the air shimmers with peaceful energy. This is a place where the mind can find true quietude, high above the bustle of the world below.",
+  "exits": {
+    "east": "world/sky_gardens"
+  },
+  "ambient": {
+    "sounds": ["leaves whispering ancient secrets", "fountain bubbling softly", "your own peaceful breathing"],
+    "time_of_day": "serene twilight",
+    "weather": "perfect stillness with occasional gentle breeze"
+  }
+}

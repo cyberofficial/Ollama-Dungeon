@@ -1,0 +1,17 @@
+{
+  "name": "Desert Survival Kit",
+  "description": "A carefully assembled collection of desert survival essentials in a weathered leather satchel. Contains a specially treated water gourd that keeps liquid cool, dried dates and jerky, a compass that points to the nearest water, cloth wrappings for protection from sandstorms, and small packets of salt and medicinal herbs essential for desert travel.",
+  "type": "survival_gear",
+  "value": 75,
+  "weight": 2.0,
+  "properties": {
+    "water_preservation": "extends water supplies by 50%",
+    "heat_protection": "reduces damage from extreme temperatures", 
+    "navigation_aid": "compass points to nearest water source",
+    "nutrition": "provides emergency food for 3 days",
+    "medicine": "basic healing herbs for common desert ailments"
+  },
+  "usable": true,
+  "portable": true,
+  "use_description": "You carefully ration the survival kit's supplies, feeling more confident about facing the harsh desert environment with proper preparation."
+}

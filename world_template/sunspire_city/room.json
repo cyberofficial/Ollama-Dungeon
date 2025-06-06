@@ -1,0 +1,17 @@
+{
+  "name": "Sunspire City - Oasis Plaza",
+  "description": "You stand at the heart of Sunspire City, where shimmering waters of the Sacred Oasis reflect towering spires of golden sandstone. Palm trees provide blessed shade while colorful silk canopies flutter in the desert breeze. The air is cooler here, filled with the sound of flowing water and distant calls of merchants. Crystalline channels carry the oasis water throughout the city, their surfaces glinting with magical light.",
+  "exits": {
+    "north": "world/sunspire_city/palace_district",
+    "south": "world/sunspire_city/merchant_quarter",
+    "east": "world/sunspire_city/scholar_district",
+    "west": "world/whispering_dunes",
+    "up": "world/sky_gardens",
+    "down": "world/crystal_caves"
+  },
+  "ambient": {
+    "sounds": ["gentle water flowing", "palm fronds rustling", "distant flute music", "merchants calling"],
+    "time_of_day": "eternal golden hour",
+    "weather": "warm breeze, magical coolness from the oasis"
+  }
+}

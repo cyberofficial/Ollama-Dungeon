@@ -1,0 +1,13 @@
+{
+  "name": "Nomad Camp - Circle of Black Tents",
+  "description": "A cluster of elegant black tents arranged in a protective circle around a central fire pit, even though no flames burn in the desert heat. Colorful rugs and cushions are scattered in the shade, while camels rest nearby, their bells jingling softly in the breeze. Prayer flags flutter from tall poles, and the scent of cardamom tea mingles with incense. Water barrels and desert survival equipment are neatly organized, showing the nomads' expertise in harsh environment living.",
+  "exits": {
+    "south": "world/whispering_dunes",
+    "east": "world/whispering_dunes/nomad_camp/chieftain_tent"
+  },
+  "ambient": {
+    "sounds": ["tent fabric flapping", "camel bells", "quiet conversations", "tea bubbling"],
+    "time_of_day": "comfortable evening",
+    "weather": "cooler under the tent shade with gentle breezes"
+  }
+}

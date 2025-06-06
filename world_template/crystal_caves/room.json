@@ -1,0 +1,15 @@
+{
+  "name": "Crystal Caves - Glimmering Cavern",
+  "description": "You find yourself in a vast underground cavern where thousands of crystals of every color imaginable jut from walls, ceiling, and floor. The crystals pulse with soft magical light, creating a kaleidoscope of shifting colors that dance across the smooth stone surfaces. The air is cool and filled with a subtle humming sound as the crystals resonate with magical energy. Underground streams trickle between crystal formations, their water sparkling with mineral deposits. The ceiling stretches so high it disappears into crystal-lit shadows.",
+  "exits": {
+    "up": "world/sunspire_city",
+    "north": "world/crystal_caves/mining_tunnels",
+    "east": "world/crystal_caves/resonance_chamber",
+    "south": "world/crystal_caves/underground_lake"
+  },
+  "ambient": {
+    "sounds": ["crystal humming", "water trickling", "distant pickaxe strikes", "magical resonance"],
+    "time_of_day": "eternal twilight from crystal light",
+    "weather": "cool, humid, with magical energy in the air"
+  }
+}

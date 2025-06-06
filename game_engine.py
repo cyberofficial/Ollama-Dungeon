@@ -530,7 +530,8 @@ class WorldController:
     """Manages the game world, rooms, and overall state."""
     
     def __init__(self):
-        self.player_location = "world/town"  # Starting location
+        from config import GAME_SETTINGS
+        self.player_location = GAME_SETTINGS.get("default_location", "world/sunspire_city")  # Starting location
         self.player_inventory = []
         self.agents_cache = {}  # Cache loaded agents
         self.load_player_state()  # Load existing player state if available
@@ -547,7 +548,9 @@ class WorldController:
             try:
                 with open(player_file, 'r') as f:
                     player_data = json.load(f)
-                    self.player_location = player_data.get('location', 'world/town')
+                    from config import GAME_SETTINGS
+                    default_location = GAME_SETTINGS.get("default_location", "world/sunspire_city")
+                    self.player_location = player_data.get('location', default_location)
                     self.player_inventory = player_data.get('inventory', [])
                     print(f"🎮 Loaded player state from {player_file}")
                     print(f"📍 Player location: {self.player_location}")
@@ -678,16 +681,34 @@ class WorldController:
                 with open(item_file, 'r') as f:
                     item_data = json.load(f)
                     item_data['filename'] = file
-                    items.append(item_data)
-        
+                    items.append(item_data)        
         return items
     
     def find_agent_by_name(self, name: str) -> Optional[Agent]:
-        """Find agent by name in current room."""
+        """Find agent by name in current room. Supports partial name matching."""
         agents = self.get_agents_in_room()
+        search_name = name.lower().strip()
+        
+        # First try exact match
         for agent in agents:
-            if agent.data['name'].lower() == name.lower():
+            if agent.data['name'].lower() == search_name:
                 return agent
+        
+        # Then try partial match (agent name contains the search term)
+        for agent in agents:
+            if search_name in agent.data['name'].lower():
+                return agent
+        
+        # Finally try word-based partial match (search term matches any word in agent name)
+        for agent in agents:
+            agent_name_words = agent.data['name'].lower().split()
+            search_words = search_name.split()
+            # Check if any search word matches any agent name word
+            for search_word in search_words:
+                for agent_word in agent_name_words:
+                    if search_word == agent_word or agent_word.startswith(search_word):
+                        return agent
+        
         return None
     
     def find_item_by_name(self, name: str) -> Optional[Dict[str, Any]]:

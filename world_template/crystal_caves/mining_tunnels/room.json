@@ -1,0 +1,13 @@
+{
+  "name": "Mining Tunnels - Crystal Harvesting Site",
+  "description": "Narrow tunnels carved from living rock snake through rich crystal veins. The walls are studded with partially extracted gems of incredible beauty, while mining tools rest against crystal formations. Wooden support beams hold up sections where the most valuable stones have been removed. Cart tracks run along the floor, leading deeper into the earth where the richest deposits lie hidden. The air sparkles with crystal dust that glitters in the magical light.",
+  "exits": {
+    "south": "world/crystal_caves",
+    "north": "world/crystal_caves/mining_tunnels/foreman_office"
+  },
+  "ambient": {
+    "sounds": ["pickaxe strikes", "cart wheels rolling", "crystals clinking", "miners calling"],
+    "time_of_day": "continuous work shifts",
+    "weather": "dusty and warm from physical labor"
+  }
+}

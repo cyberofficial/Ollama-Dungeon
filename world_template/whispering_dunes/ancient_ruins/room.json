@@ -1,0 +1,13 @@
+{
+  "name": "Ancient Ruins - Lost Temple of the Sun",
+  "description": "Half-buried in shifting sands, the remains of a magnificent temple emerge like a stone island from the dune sea. Massive columns carved with hieroglyphs and astronomical symbols reach toward the sky, while sand-scoured statues of forgotten gods guard empty doorways. The stonework shows incredible craftsmanship, with precision joints that have survived millennia. At the center lies a circular altar where ancient rituals once honored the desert sun, its surface still warm to the touch despite the shadows.",
+  "exits": {
+    "north": "world/whispering_dunes",
+    "down": "world/whispering_dunes/ancient_ruins/buried_chamber"
+  },
+  "ambient": {
+    "sounds": ["wind through stone", "sand falling", "distant echoes", "whispers of the past"],
+    "time_of_day": "eternal golden sunset",
+    "weather": "mystical atmosphere with swirling sand and strange lights"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Crystal Pickaxe",
+  "description": "A masterfully crafted mining pickaxe with a head made from compressed crystal dust and steel. The handle is wrapped in leather worn smooth by years of use, and small crystals embedded in the metal head glow softly to provide light while working. The tool feels perfectly balanced and seems to find crystal veins almost by itself.",
+  "type": "tool",
+  "value": 150,
+  "weight": 3.0,
+  "properties": {
+    "mining_efficiency": "extracts crystals without damage",
+    "light_source": "provides illumination in dark tunnels",
+    "magic_detection": "glows brighter near valuable magical stones",
+    "durability": "never dulls or breaks from normal use",
+    "craftsmanship": "masterwork quality"
+  },
+  "usable": true,
+  "portable": true,
+  "use_description": "You swing the crystal pickaxe and it strikes true, the magical crystals in the head helping guide it to extract valuable stones without damage."
+}

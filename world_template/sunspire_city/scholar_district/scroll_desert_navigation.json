@@ -1,0 +1,17 @@
+{
+  "name": "Scroll of Desert Navigation",
+  "description": "An ancient papyrus scroll bound with silk cord, covered in detailed maps and symbols. The ink seems to shift slightly in the light, and compass roses mark cardinal directions with mystical accuracy. Star charts along the borders show the celestial navigation techniques of the desert nomads.",
+  "type": "scroll",
+  "value": 120,
+  "weight": 0.2,
+  "properties": {
+    "magic": true,
+    "navigation": "never get lost in desert terrain",
+    "water_finding": "locates nearest water source",
+    "weather_prediction": "warns of dangerous sandstorms",
+    "uses": "unlimited"
+  },
+  "usable": true,
+  "portable": true,
+  "use_description": "You unroll the scroll and study its mystical markings. The ink glows softly and you feel an inner compass align with the desert's hidden paths and water sources."
+}

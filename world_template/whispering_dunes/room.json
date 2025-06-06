@@ -1,0 +1,15 @@
+{
+  "name": "Whispering Dunes - Endless Sands",
+  "description": "You stand amidst rolling dunes of golden sand that stretch to the horizon in every direction. The sand shifts and whispers with each breath of wind, creating an almost musical symphony of sound. Ancient stone markers peek through the sand, hinting at long-buried secrets. The blazing sun overhead makes the air shimmer with heat waves, while the sand beneath your feet radiates stored warmth. In the distance, you can see the occasional glint of crystal formations and the wavering mirage of lost ruins.",
+  "exits": {
+    "east": "world/sunspire_city",
+    "north": "world/whispering_dunes/nomad_camp",
+    "south": "world/whispering_dunes/ancient_ruins",
+    "west": "world/whispering_dunes/crystal_grove"
+  },
+  "ambient": {
+    "sounds": ["sand whispering", "wind howling", "distant crystal chimes", "your own footsteps"],
+    "time_of_day": "scorching noon",
+    "weather": "blazing heat with shifting sand patterns"
+  }
+}

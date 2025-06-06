@@ -1,0 +1,14 @@
+{
+  "name": "Merchant Quarter - Grand Bazaar",
+  "description": "Beneath billowing silk awnings of every color imaginable, the Grand Bazaar bustles with life. Stalls overflow with exotic spices, gleaming gemstones, and mysterious artifacts from across the desert realm. The scent of incense mixes with roasted almonds and cardamom tea. Merchants from distant oases display their wares while customers haggle in a dozen different tongues. Crystal wind chimes tinkle overhead, powered by the desert breeze.",
+  "exits": {
+    "north": "world/sunspire_city",
+    "east": "world/sunspire_city/merchant_quarter/spice_hall",
+    "west": "world/sunspire_city/merchant_quarter/gem_market"
+  },
+  "ambient": {
+    "sounds": ["haggling voices", "crystal chimes", "spice grinding", "coins clinking"],
+    "time_of_day": "busy afternoon",
+    "weather": "shaded and comfortable under the awnings"
+  }
+}

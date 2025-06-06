@@ -1,0 +1,17 @@
+{
+  "name": "Sunfire Crystal",
+  "description": "A brilliant orange-red crystal that seems to contain captured sunlight. It pulses with warm energy and feels pleasantly hot to the touch. Ancient runes are etched into its surface, glowing faintly with inner fire. When held up to light, it projects dancing flame patterns on nearby surfaces.",
+  "type": "magical_crystal",
+  "value": 200,
+  "weight": 0.8,
+  "properties": {
+    "magic": true,
+    "fire_resistance": "provides protection from heat and flame",
+    "light_source": "illuminates darkness with warm golden light",
+    "desert_adaptation": "prevents dehydration in extreme heat",
+    "resonance": "fire elemental magic"
+  },
+  "usable": true,
+  "portable": true,
+  "use_description": "You hold the Sunfire Crystal aloft and feel its warm energy flow through you, protecting you from the harsh desert heat and illuminating your path with golden light."
+}

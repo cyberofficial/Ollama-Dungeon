@@ -1,0 +1,17 @@
+{
+  "name": "Vial of Celestial Dew",
+  "description": "A small crystal vial containing what appears to be ordinary morning dew, but this precious liquid was collected from the leaves of the Sky Gardens' most sacred plants. The dew glows with a soft inner light and feels warm to the touch despite its aqueous nature. When held up to the light, tiny stars seem to swirl within the liquid.",
+  "type": "consumable",
+  "value": 300,
+  "weight": 0.1,
+  "properties": {
+    "healing": "4d4+4 restoration over time",
+    "magic": true,
+    "purification": "removes poison and disease",
+    "spiritual_healing": "restores mental peace and clarity",
+    "uses": 1
+  },
+  "usable": true,
+  "portable": true,
+  "use_description": "You drink the celestial dew and feel a wave of pure healing energy wash through your body and soul, mending wounds and bringing profound inner peace."
+}

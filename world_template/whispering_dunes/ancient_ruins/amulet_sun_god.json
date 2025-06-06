@@ -1,0 +1,18 @@
+{
+  "name": "Amulet of the Sun God",
+  "description": "A magnificent golden amulet in the shape of a stylized sun with rays extending in all directions. Ancient hieroglyphs are etched around the central sun disk, and the gold seems to hold an inner fire that never dims. A heavy golden chain allows it to be worn around the neck. The amulet radiates warmth and authority, marking its wearer as one blessed by the ancient solar deities.",
+  "type": "artifact",
+  "value": 500,
+  "weight": 1.5,
+  "properties": {
+    "magic": true,
+    "sun_blessing": "protection from dark magic and undead",
+    "leadership": "inspires confidence and respect in others",
+    "desert_mastery": "immunity to heat exhaustion and dehydration",
+    "light_creation": "can create brilliant daylight in darkness",
+    "artifact_power": "grows stronger with faith and noble deeds"
+  },
+  "usable": true,
+  "portable": true,
+  "use_description": "You raise the Amulet of the Sun God and it blazes with brilliant golden light, banishing darkness and filling you with divine confidence and protection."
+}

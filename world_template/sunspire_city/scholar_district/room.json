@@ -1,0 +1,14 @@
+{
+  "name": "Scholar District - Library of Whispered Wisdom",
+  "description": "The great Library of Whispered Wisdom rises like a sandstone pyramid, its walls lined with thousands of scrolls and tablets containing the knowledge of ages. Soft blue light emanates from floating crystal orbs that illuminate the reading alcoves. Scholars in flowing robes move quietly between the shelves, their sandaled feet silent on the polished stone floors. The air carries the scent of papyrus, ink, and the faint ozone smell of contained magic.",
+  "exits": {
+    "west": "world/sunspire_city",
+    "north": "world/sunspire_city/scholar_district/archive_vaults",
+    "south": "world/sunspire_city/scholar_district/translation_chamber"
+  },
+  "ambient": {
+    "sounds": ["pages turning softly", "whispered conversations", "crystal humming", "sand settling"],
+    "time_of_day": "eternal twilight (magically maintained)",
+    "weather": "cool and dry, perfect for preserving ancient texts"
+  }
+}

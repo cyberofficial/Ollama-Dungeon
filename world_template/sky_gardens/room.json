@@ -1,0 +1,15 @@
+{
+  "name": "Sky Gardens - Floating Paradise",
+  "description": "You stand on an impossible garden floating high above the desert city, held aloft by ancient magic. Lush plants from across the known world grow in terraced gardens that spiral around crystalline pillars. Waterfalls cascade from nowhere, their spray creating rainbows in the golden sunlight. The air is sweet with the scent of jasmine, roses, and exotic fruits that should not be able to grow in the desert. From here you can see the entire Sunspire Realm spread out below - the city, the dunes, and distant mountains on the horizon.",
+  "exits": {
+    "down": "world/sunspire_city",
+    "north": "world/sky_gardens/observatory",
+    "east": "world/sky_gardens/greenhouse",
+    "west": "world/sky_gardens/meditation_grove"
+  },
+  "ambient": {
+    "sounds": ["gentle wind through leaves", "birds singing", "water trickling", "distant city sounds below"],
+    "time_of_day": "perpetual golden afternoon",
+    "weather": "perfect temperature with gentle breezes and occasional rainbow mist"
+  }
+}
