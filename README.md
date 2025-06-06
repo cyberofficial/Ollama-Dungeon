@@ -23,6 +23,15 @@ items are useless right now, they are just for prop/show. items will be implemen
 
 -------------------
 
+## Video Demo
+### Video demo of a 3 way conversation.
+
+
+https://github.com/user-attachments/assets/e9efc5b7-c276-4b24-a530-a111f8ca4bd8
+
+
+-------------------
+
 <div align="center">
   <img src="https://github.com/user-attachments/assets/1e0b6e0e-8793-434a-877a-a7317300bca5" alt="Ollama Dungeon Screenshot" width="50%"/>
 </div>
