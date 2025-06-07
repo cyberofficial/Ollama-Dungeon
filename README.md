@@ -3,7 +3,7 @@
 <div align="center">
 
 ![Python](https://img.shields.io/badge/python-3.12.7-brightgreen.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+![License](https://img.shields.io/badge/license-AGPLv3-green.svg)
 [![Ollama](https://img.shields.io/badge/Ollama-Powered-orange.svg)](https://ollama.ai/)
 
 </div>
