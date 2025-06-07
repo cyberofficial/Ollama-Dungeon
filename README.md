@@ -1,509 +1,225 @@
-# 🎮 Ollama Dungeon – AI-Powered Text Adventure
-
 <div align="center">
 
-![Python](https://img.shields.io/badge/python-3.12.7-brightgreen.svg)
-![License](https://img.shields.io/badge/license-AGPLv3-green.svg)
-[![Ollama](https://img.shields.io/badge/Ollama-Powered-orange.svg)](https://ollama.ai/)
+# Ollama Dungeon
+### AI-Powered Text Adventure with Filesystem-Based World
+
+[![Python 3.12.7](https://img.shields.io/badge/python-3.12.7-brightgreen.svg)](https://python.org)
+[![License AGPLv3](https://img.shields.io/badge/license-AGPLv3-green.svg)](LICENSE)
+[![Ollama Powered](https://img.shields.io/badge/Ollama-Powered-orange.svg)](https://ollama.ai/)
+[![Offline First](https://img.shields.io/badge/Offline-First-blue.svg)](#)
+
+**A sophisticated, locally-hosted AI-powered text adventure where the world IS the filesystem**
+
+Experience intelligent AI agents with persistent memories, advanced multi-agent conversations, location-aware endless conversation mode, and comprehensive analytics—all running completely offline with automatic backups and save management.
 
 </div>
 
-A sophisticated, locally-hosted AI-powered text adventure game where **the world IS the filesystem**. This modular platform features intelligent AI agents with persistent memories, advanced multi-agent conversation systems, location-aware endless conversation mode, and comprehensive analytics—all running completely offline with automatic backups and save management.
+---
 
--------------------
+> **Development Status:** This project is actively in development. Some features may not function as intended. Items are currently for display purposes only and will be fully implemented in future updates. Please report any issues you encounter.
 
-⚠⚠⚠⚠ Please note ⚠⚠⚠⚠
+---
 
-This is not fully finished, somethings will break or not function as intended. 
+## Demo
 
-If you encounter an issue, please make a report
+### Interactive Multi-Agent Conversation
 
-items are useless right now, they are just for prop/show. items will be implemented later.
-
-
--------------------
-
-## Video Demo
-### Video demo of a 3 way conversation.
-
+Watch a 3-way conversation between AI agents demonstrating the advanced conversation system:
 
 https://github.com/user-attachments/assets/e9efc5b7-c276-4b24-a530-a111f8ca4bd8
 
-
--------------------
+### Game Interface
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/1e0b6e0e-8793-434a-877a-a7317300bca5" alt="Ollama Dungeon Screenshot" width="50%"/>
+  <img src="https://github.com/user-attachments/assets/1e0b6e0e-8793-434a-877a-a7317300bca5" alt="Ollama Dungeon Game Interface" width="80%"/>
 </div>
 
-## ✨ Key Features
+---
 
-<table>
-  <tr>
-    <td width="50%" valign="top">
-      <h3>🌍 Filesystem-Based World</h3>
-      <ul>
-        <li><b>Dynamic World Creation:</b> Automatically copies <code>world_template</code> to <code>world</code> on first run</li>
-        <li><b>Hierarchical Structure:</b> Each folder represents a location, files represent agents and items</li>
-        <li><b>Persistent State:</b> All changes to the world are saved to the filesystem</li>
-        <li><b>Template Protection:</b> Original <code>world_template</code> is never modified, ensuring clean resets</li>
-      </ul>
-    </td>
-    <td width="50%" valign="top">
-      <h3>🤖 Intelligent AI Agents</h3>
-      <ul>
-        <li><b>Individual Personalities:</b> Each agent has unique persona, background, goals, and relationships</li>
-        <li><b>Persistent Memory:</b> Agents remember conversations through CSV-based long-term memory</li>
-        <li><b>Context Awareness:</b> Agents understand their environment, other people, and available items</li>
-        <li><b>Emotional Intelligence:</b> Agents have moods, fears, motivations, and personality quirks</li>
-        <li><b>Isolated Contexts:</b> Each agent maintains separate conversation history with automatic compression</li>
-      </ul>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <h3>💾 Advanced Save/Load System</h3>
-      <ul>
-        <li><b>Complete World Saves:</b> Entire world state, agent contexts, and inventory preserved</li>
-        <li><b>Multiple Save Slots:</b> Create and manage unlimited named saves</li>
-        <li><b>Automatic Backups:</b> Creates timestamped backups before loading or deleting saves</li>
-        <li><b>Safe Operations:</b> All destructive operations create recovery backups</li>
-        <li><b>Detailed Save Info:</b> Shows timestamp and player location for each save</li>
-      </ul>
-    </td>
-    <td width="50%" valign="top">
-      <h3>🧠 Smart Token Management</h3>
-      <ul>
-        <li><b>Automatic Compression:</b> Context automatically compressed when approaching token limits</li>
-        <li><b>Dual Model System:</b> Main model (40k context) + summary model for efficient compression</li>
-        <li><b>Token Monitoring:</b> Real-time token usage tracking and warnings</li>
-        <li><b>Manual Control:</b> Manual compression commands for fine-tuning performance</li>
-        <li><b>Emergency Handling:</b> Graceful degradation when approaching hard limits</li>
-      </ul>
-    </td>
-  </tr>  <tr>
-    <td width="50%" valign="top">
-      <h3>🔄 Enhanced Conversation System</h3>
-      <ul>
-        <li><b>Endless Conversation Mode:</b> Multi-agent conversations that flow naturally between participants</li>
-        <li><b>Location-Aware Conversations:</b> Agents automatically join/leave conversations based on location</li>
-        <li><b>Following Behavior:</b> Control which agents follow you and participate in conversations</li>
-        <li><b>Manual Participant Management:</b> Invite or remove specific agents from ongoing conversations</li>
-        <li><b>Context Sharing:</b> Share observations and thoughts with agents in your current location</li>
-      </ul>
-    </td>
-    <td width="50%" valign="top">
-      <h3>🛡️ Privacy & Security</h3>
-      <ul>
-        <li><b>Fully Offline:</b> All processing happens on your local machine</li>
-        <li><b>No Data Collection:</b> Your stories and interactions remain private</li>
-        <li><b>Open Architecture:</b> Transparent design with no hidden processes</li>
-        <li><b>Local LLM:</b> Uses Ollama for complete privacy and control</li>
-      </ul>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <h3>🔄 Context Sharing</h3>
-      <ul>
-        <li><b>Shared Experiences:</b> Agents can share context within the same location</li>
-        <li><b>Player Narration:</b> Share observations and thoughts with all agents in a room</li>
-        <li><b>Memory Integration:</b> Shared context becomes part of agent memory systems</li>
-        <li><b>Token-Aware:</b> Shared context limited by token budgets to prevent overflow</li>
-      </ul>
-    </td>
-    <td width="50%" valign="top">
-      <h3>📊 Advanced Analytics</h3>
-      <ul>
-        <li><b>Game Statistics:</b> Track conversations, locations visited, and agent interactions</li>
-        <li><b>Performance Monitoring:</b> Monitor model loading, response times, and system health</li>
-        <li><b>Token Usage Analytics:</b> Detailed breakdown of token consumption across all agents</li>
-        <li><b>Memory Management:</b> Insights into agent memory compression and optimization</li>
-      </ul>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <h3>🛡️ Privacy & Security</h3>
-      <ul>
-        <li><b>Fully Offline:</b> All processing happens on your local machine</li>
-        <li><b>No Data Collection:</b> Your stories and interactions remain private</li>
-        <li><b>Open Architecture:</b> Transparent design with no hidden processes</li>
-        <li><b>Local LLM:</b> Uses Ollama for complete privacy and control</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+## Features
 
-## 🚀 Quick Start
+### Core Capabilities
 
-### Prerequisites
+| **Filesystem-Based World** | **Intelligent AI Agents** |
+|:---------------------------|:---------------------------|
+| **Dynamic World Creation** - Automatically copies `world_template` to `world` on first run | **Individual Personalities** - Each agent has unique persona, background, goals, and relationships |
+| **Hierarchical Structure** - Each folder represents a location, files represent agents and items | **Persistent Memory** - Agents remember conversations through CSV-based long-term memory |
+| **Persistent State** - All changes to the world are saved to the filesystem | **Context Awareness** - Agents understand their environment, other people, and available items |
+| **Template Protection** - Original `world_template` is never modified, ensuring clean resets | **Emotional Intelligence** - Agents have moods, fears, motivations, and personality quirks |
 
-<table>
-  <tr>
-    <td align="center"><img src="https://via.placeholder.com/50?text=🐍" alt="Python" width="50" height="50"/></td>
-    <td><b>Python 3.12.7</b> with pip</td>
-  </tr>
-  <tr>
-    <td align="center"><img src="https://via.placeholder.com/50?text=🦙" alt="Ollama" width="50" height="50"/></td>
-    <td><b>Ollama</b> running locally</td>
-  </tr>
-  <tr>
-    <td align="center"><img src="https://via.placeholder.com/50?text=🧠" alt="Models" width="50" height="50"/></td>
-    <td><b>Required Models</b>: <code>qwen3:8b</code> (main) and <code>qwen3:4b</code> (summary)</td>
-  </tr>
-</table>
+| **Advanced Save System** | **Smart Token Management** |
+|:-------------------------|:---------------------------|
+| **Complete World Saves** - Entire world state, agent contexts, and inventory preserved | **Automatic Compression** - Context automatically compressed when approaching token limits |
+| **Multiple Save Slots** - Create and manage unlimited named saves | **Configurable Models** - Main and summary models configurable in config.py (defaults to qwen3:4b) |
+| **Automatic Backups** - Creates timestamped backups before loading or deleting saves | **Token Monitoring** - Real-time token usage tracking and warnings |
+| **Safe Operations** - All destructive operations create recovery backups | **Emergency Handling** - Graceful degradation when approaching hard limits |
+
+### Advanced Features
+
+| **Conversation System** | **Privacy & Analytics** |
+|:------------------------|:------------------------|
+| **Endless Conversation Mode** - Multi-agent conversations that flow naturally | **Fully Offline** - All processing happens on your local machine |
+| **Location-Aware Conversations** - Agents automatically join/leave based on location | **No Data Collection** - Your stories and interactions remain private |
+| **Following Behavior** - Control which agents follow you between locations | **Comprehensive Analytics** - Track token usage, conversation patterns, and system performance |
+| **Context Sharing** - Share observations and thoughts with agents in your location | **Performance Monitoring** - Monitor model loading, response times, and system health |
+
+## Quick Start
+
+### Requirements
+
+```diff
++ Python 3.12.7 with pip
++ Ollama running locally  
++ Required Model: qwen3:4b (configurable in config.py)
++ Recommended: qwen3:8b for better responses (optional)
+```
 
 ### Installation
 
-<div class="installation-steps">
-  <ol>
-    <li>
-      <b>Install Dependencies:</b>
-      <pre><code class="language-bash">pip install -r requirements.txt</code></pre>
-    </li>
-    <li>
-      <b>Setup Ollama Models:</b>
-      <pre><code class="language-bash">ollama pull qwen3:8b
+**1. Install Dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+**2. Setup Ollama Models**
+```bash
+ollama pull qwen3:8b
 ollama pull qwen3:4b
-ollama serve</code></pre>
-    </li>
-    <li>
-      <b>Verify Setup:</b>
-      <pre><code class="language-bash">python verify_setup.py</code></pre>
-    </li>
-    <li>
-      <b>Start Playing:</b>
-      <pre><code class="language-bash">python main.py</code></pre>
-    </li>  </ol>
-</div>
+ollama serve
+```
 
-##  Commands Reference
+**3. Verify Setup**
+```bash
+python verify_setup.py
+```
 
-<div class="commands-container">
-  <div class="command-section">
-    <h3>🧭 Movement & Exploration</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Command</th>
-          <th>Description</th>
-          <th>Example</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>/look</code>, <code>/l</code></td>
-          <td>Describe current room and contents</td>
-          <td><code>/look</code></td>
-        </tr>
-        <tr>
-          <td><code>/go &lt;direction&gt;</code></td>
-          <td>Move to another location</td>
-          <td><code>/go north</code></td>
-        </tr>
-        <tr>
-          <td><code>/move &lt;direction&gt;</code></td>
-          <td>Alternative to /go</td>
-          <td><code>/move south</code></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+**4. Start Playing**
+```bash
+python main.py
+```
 
-  <div class="command-section">
-    <h3>💬 Agent Interaction</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Command</th>
-          <th>Description</th>
-          <th>Example</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>/say &lt;agent&gt; &lt;message&gt;</code></td>
-          <td>Talk to an agent</td>
-          <td><code>/say alice Hello there!</code></td>
-        </tr>
-        <tr>
-          <td><code>/talk &lt;agent&gt; &lt;message&gt;</code></td>
-          <td>Alternative to /say</td>
-          <td><code>/talk bob Hi!</code></td>
-        </tr>
-        <tr>
-          <td><code>/agents</code>, <code>/people</code></td>
-          <td>List all people in current room</td>
-          <td><code>/agents</code></td>
-        </tr>
-        <tr>
-          <td><code>/memory &lt;agent&gt;</code></td>
-          <td>Show agent's recent memories</td>
-          <td><code>/memory bob</code></td>
-        </tr>
-        <tr>
-          <td><code>/summarize [target(s)] [context]</code></td>
-          <td>Share context with agents</td>
-          <td><code>/summarize alice Bob looks worried</code></td>
-        </tr>
-        <tr>
-          <td><code>/share [target(s)] [context]</code></td>
-          <td>Alternative to /summarize</td>
-          <td><code>/share alice,bob Secret meeting</code></td>
-        </tr>        <tr>
-          <td><code>/follow &lt;agent&gt;</code></td>
-          <td>Have agent follow you</td>
-          <td><code>/follow alice</code></td>
-        </tr>
-        <tr>
-          <td><code>/stay &lt;agent&gt;</code></td>
-          <td>Make agent stop following and stay in current location</td>
-          <td><code>/stay alice</code></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+## Commands Reference
 
-  <div class="command-section">
-    <h3>🗣️ Endless Conversation Mode</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Command</th>
-          <th>Description</th>
-          <th>Example</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>/conv</code></td>
-          <td>Start endless conversation mode with all agents in room</td>
-          <td><code>/conv</code></td>
-        </tr>
-        <tr>
-          <td><code>/endconv</code></td>
-          <td>End endless conversation mode</td>
-          <td><code>/endconv</code></td>
-        </tr>
-        <tr>
-          <td><code>/invite &lt;agent&gt;</code></td>
-          <td>Add an agent to current endless conversation</td>
-          <td><code>/invite bob</code></td>
-        </tr>
-        <tr>
-          <td><code>/remove &lt;agent&gt;</code></td>
-          <td>Remove an agent from current endless conversation</td>
-          <td><code>/remove alice</code></td>
-        </tr>
-        <tr>
-          <td><code>/dialog &lt;message&gt;</code></td>
-          <td>Send message in endless conversation mode</td>
-          <td><code>/dialog What should we do next?</code></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+### Movement & Exploration
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/look`, `/l` | Describe current room and contents | `/look` |
+| `/go <direction>` | Move to another location | `/go north` |
+| `/move <direction>` | Alternative to /go | `/move south` |
 
-  <div class="command-section">
-    <h3>🎒 Inventory Management</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Command</th>
-          <th>Description</th>
-          <th>Example</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>/inventory</code>, <code>/inv</code></td>
-          <td>View your inventory</td>
-          <td><code>/inventory</code></td>
-        </tr>
-        <tr>
-          <td><code>/pickup &lt;item&gt;</code></td>
-          <td>Pick up an item</td>
-          <td><code>/pickup rusty dagger</code></td>
-        </tr>
-        <tr>
-          <td><code>/take &lt;item&gt;</code></td>
-          <td>Alternative to /pickup</td>
-          <td><code>/take health potion</code></td>
-        </tr>
-        <tr>
-          <td><code>/use &lt;item&gt;</code></td>
-          <td>Use an item from inventory</td>
-          <td><code>/use health potion</code></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+### Agent Interaction
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/say <agent> <message>` | Talk to an agent | `/say alice Hello there!` |
+| `/talk <agent> <message>` | Alternative to /say | `/talk bob Hi!` |
+| `/agents`, `/people` | List all people in current room | `/agents` |
+| `/memory <agent>` | Show agent's recent memories | `/memory bob` |
+| `/summarize [target(s)] [context]` | Share context with agents | `/summarize alice Bob looks worried` |
+| `/share [target(s)] [context]` | Alternative to /summarize | `/share alice,bob Secret meeting` |
+| `/follow <agent>` | Have agent follow you | `/follow alice` |
+| `/stay <agent>` | Make agent stop following | `/stay alice` |
 
-  <div class="command-section">
-    <h3>💾 Save & Load System</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Command</th>
-          <th>Description</th>
-          <th>Example</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>/save [name]</code></td>
-          <td>Save current game state</td>
-          <td><code>/save adventure1</code></td>
-        </tr>
-        <tr>
-          <td><code>/load [name]</code></td>
-          <td>Load a saved game</td>
-          <td><code>/load adventure1</code></td>
-        </tr>
-        <tr>
-          <td><code>/saves</code></td>
-          <td>List all available saves</td>
-          <td><code>/saves</code></td>
-        </tr>
-        <tr>
-          <td><code>/delete &lt;name&gt;</code></td>
-          <td>Delete a save (creates backup)</td>
-          <td><code>/delete old_save</code></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+### Endless Conversation Mode
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/conv` | Start endless conversation mode | `/conv` |
+| `/endconv` | End endless conversation mode | `/endconv` |
+| `/invite <agent>` | Add agent to current conversation | `/invite bob` |
+| `/remove <agent>` | Remove agent from conversation | `/remove alice` |
+| `/dialog <message>` | Send message in conversation mode | `/dialog What should we do next?` |
 
-  <div class="command-section">
-    <h3>⚙️ System & Debug</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Command</th>
-          <th>Description</th>
-          <th>Example</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>/tokens [agent]</code></td>
-          <td>Show token usage statistics</td>
-          <td><code>/tokens alice</code></td>
-        </tr>
-        <tr>
-          <td><code>/compress &lt;agent&gt;</code></td>
-          <td>Manually compress agent context</td>
-          <td><code>/compress bob</code></td>
-        </tr>
-        <tr>
-          <td><code>/compress_all</code></td>
-          <td>Compress all agents in current room</td>
-          <td><code>/compress_all</code></td>
-        </tr>
-        <tr>
-          <td><code>/status</code></td>
-          <td>Show system connectivity and stats</td>
-          <td><code>/status</code></td>
-        </tr>        <tr>
-          <td><code>/reset &lt;agent&gt;</code></td>
-          <td>Reset agent's memory and context</td>
-          <td><code>/reset alice</code></td>
-        </tr>
-        <tr>
-          <td><code>/analytics</code></td>
-          <td>Show detailed game analytics and statistics</td>
-          <td><code>/analytics</code></td>
-        </tr>
-        <tr>
-          <td><code>/model_state</code></td>
-          <td>Display model loading and performance information</td>
-          <td><code>/model_state</code></td>
-        </tr>
-        <tr>
-          <td><code>/help</code></td>
-          <td>Show all available commands</td>
-          <td><code>/help</code></td>
-        </tr>
-        <tr>
-          <td><code>/quit</code>, <code>/exit</code>, <code>/q</code></td>
-          <td>Exit the game</td>
-          <td><code>/quit</code></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+### Inventory Management
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/inventory`, `/inv` | View your inventory | `/inventory` |
+| `/pickup <item>` | Pick up an item | `/pickup rusty dagger` |
+| `/take <item>` | Alternative to /pickup | `/take health potion` |
+| `/use <item>` | Use an item from inventory | `/use health potion` |
 
-## 🏗️ World Structure
+### Save & Load System
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/save [name]` | Save current game state | `/save adventure1` |
+| `/load [name]` | Load a saved game | `/load adventure1` |
+| `/saves` | List all available saves | `/saves` |
+| `/delete <name>` | Delete a save (creates backup) | `/delete old_save` |
 
-### **Directory Layout**
+### System & Debug
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/tokens [agent]` | Show token usage statistics | `/tokens alice` |
+| `/compress <agent>` | Manually compress agent context | `/compress bob` |
+| `/compress_all` | Compress all agents in current room | `/compress_all` |
+| `/status` | Show system connectivity and stats | `/status` |
+| `/reset <agent>` | Reset agent's memory and context | `/reset alice` |
+| `/analytics` | Show detailed game analytics | `/analytics` |
+| `/model_state` | Display model performance info | `/model_state` |
+| `/help` | Show all available commands | `/help` |
+| `/quit`, `/exit`, `/q` | Exit the game | `/quit` |
 
-<div class="directory-structure" style="background-color: #f8f9fa; padding: 15px; border-radius: 5px;">
-<pre>
-<span style="color: #0366d6; font-weight: bold;">world_template/</span>          <span style="color: #6a737d;"># Protected template (never modified)</span>
-├── <span style="color: #0366d6;">town/</span>
-│   ├── <span style="color: #032f62;">room.json</span>       <span style="color: #6a737d;"># Room description and exits</span>
-│   ├── <span style="color: #0366d6;">tavern/</span>
-│   │   ├── <span style="color: #032f62;">room.json</span>
-│   │   ├── <span style="color: #032f62;">agent_alice.json</span>     <span style="color: #6a737d;"># Tavern keeper</span>
-│   │   ├── <span style="color: #032f62;">agent_bob.json</span>       <span style="color: #6a737d;"># Local scout</span>
-│   │   ├── <span style="color: #032f62;">memory_alice.csv</span>     <span style="color: #6a737d;"># Alice's memories</span>
-│   │   ├── <span style="color: #032f62;">memory_bob.csv</span>       <span style="color: #6a737d;"># Bob's memories</span>
-│   │   ├── <span style="color: #032f62;">rusty_dagger.json</span>    <span style="color: #6a737d;"># Pickupable item</span>
-│   │   └── <span style="color: #0366d6;">contexts/</span>            <span style="color: #6a737d;"># Agent conversation contexts</span>
-│   │       ├── <span style="color: #032f62;">alice_context.pkl</span>
-│   │       └── <span style="color: #032f62;">bob_context.pkl</span>
-│   └── <span style="color: #0366d6;">market/</span>
-│       ├── <span style="color: #032f62;">room.json</span>
-│       └── <span style="color: #032f62;">health_potion.json</span>
-└── <span style="color: #0366d6;">forest/</span>
-    ├── <span style="color: #032f62;">room.json</span>
-    └── <span style="color: #0366d6;">cave/</span>
-        ├── <span style="color: #032f62;">room.json</span>
-        ├── <span style="color: #032f62;">agent_grix.json</span>     <span style="color: #6a737d;"># Goblin scout</span>
-        └── <span style="color: #032f62;">memory_grix.csv</span>
+## World Structure
 
-<span style="color: #0366d6; font-weight: bold;">world/</span>                   <span style="color: #6a737d;"># Active world (copied from template)</span>
-├── <span style="color: #6a737d;">[same structure as template]</span>
+### Directory Layout
 
-<span style="color: #0366d6; font-weight: bold;">saves/</span>                   <span style="color: #6a737d;"># Save game storage</span>
-├── <span style="color: #0366d6;">save1/</span>
-│   ├── <span style="color: #032f62;">player_state.json</span>
-│   ├── <span style="color: #0366d6;">world/</span>          <span style="color: #6a737d;"># Complete world snapshot</span>
-│   └── <span style="color: #0366d6;">inventory/</span>      <span style="color: #6a737d;"># Player inventory snapshot</span>
-└── <span style="color: #0366d6;">save2/</span>
+```
+world_template/              # Protected template (never modified)
+├── town/
+│   ├── room.json           # Room description and exits
+│   ├── tavern/
+│   │   ├── room.json
+│   │   ├── agent_alice.json     # Tavern keeper
+│   │   ├── agent_bob.json       # Local scout
+│   │   ├── memory_alice.csv     # Alice's memories
+│   │   ├── memory_bob.csv       # Bob's memories
+│   │   ├── rusty_dagger.json    # Pickupable item
+│   │   └── contexts/            # Agent conversation contexts
+│   │       ├── alice_context.pkl
+│   │       └── bob_context.pkl
+│   └── market/
+│       ├── room.json
+│       └── health_potion.json
+└── forest/
+    ├── room.json
+    └── cave/
+        ├── room.json
+        ├── agent_grix.json     # Goblin scout
+        └── memory_grix.csv
 
-<span style="color: #0366d6; font-weight: bold;">backups/</span>                <span style="color: #6a737d;"># Automatic safety backups</span>
-├── <span style="color: #0366d6;">world_backup_before_load_save1_20250605_143026/</span>
-└── <span style="color: #0366d6;">deleted_save_old_save_20250605_144404/</span>
+world/                       # Active world (copied from template)
+├── [same structure as template]
 
-<span style="color: #0366d6; font-weight: bold;">inventory/</span>              <span style="color: #6a737d;"># Player's items</span>
-└── <span style="color: #6a737d;">[item files moved here when picked up]</span>
-</pre>
-</div>
+saves/                       # Save game storage
+├── save1/
+│   ├── player_state.json
+│   ├── world/              # Complete world snapshot
+│   └── inventory/          # Player inventory snapshot
+└── save2/
 
-### **File Formats**
+backups/                     # Automatic safety backups
+├── world_backup_before_load_save1_20250605_143026/
+└── deleted_save_old_save_20250605_144404/
 
-<div class="file-formats">
-  <div class="file-format">
-    <h4>📄 Room Definition (<code>room.json</code>)</h4>
-    <div class="code-block">
-      <pre><code class="language-json">{
+inventory/                   # Player's items
+└── [item files moved here when picked up]
+```
+
+### File Formats
+
+#### Room Definition (`room.json`)
+```json
+{
   "name": "The Prancing Pony Tavern",
   "description": "A warm, dimly lit tavern...",
   "exits": {
     "south": "world/town",
     "up": "world/town/tavern/upstairs"
   }
-}</code></pre>
-    </div>
-  </div>
+}
+```
 
-  <div class="file-format">
-    <h4>👤 Agent Definition (<code>agent_alice.json</code>)</h4>
-    <div class="code-block">
-      <pre><code class="language-json">{
+#### Agent Definition (`agent_alice.json`)
+```json
+{
   "name": "Alice",
   "persona": "A friendly tavern keeper who knows everyone's business",
   "background": "Has run this tavern for 20 years",
@@ -518,195 +234,122 @@ ollama serve</code></pre>
     "Bob": "Good friend and regular customer",
     "Mayor": "Respectful business relationship"
   }
-}</code></pre>
-    </div>
-  </div>
+}
+```
 
-  <div class="file-format">
-    <h4>🧪 Item Definition (<code>health_potion.json</code>)</h4>
-    <div class="code-block">
-      <pre><code class="language-json">{
+#### Item Definition (`health_potion.json`)
+```json
+{
   "name": "Health Potion",
   "description": "A small vial of red liquid that glows faintly",
   "portable": true,
   "usable": true,
   "use_description": "You feel refreshed and energized!",
   "value": 50
-}</code></pre>
-    </div>
-  </div>
-</div>
+}
+```
 
-## 🧰 Technical Features
+## Technical Features
 
-<div class="features-container">
-  <div class="feature-section">
-    <div class="feature-card">
-      <h3>🤖 AI Architecture</h3>
-      <ul>
-        <li><b>Local LLM Integration</b>: Uses Ollama for complete privacy and control</li>
-        <li><b>Dual Model Strategy</b>: High-capacity main model + efficient summary model</li>
-        <li><b>Context Compression</b>: Intelligent summarization prevents token overflow</li>
-        <li><b>Session Persistence</b>: Agent contexts saved and restored between sessions</li>
-      </ul>
-    </div>
-    
-  <div class="feature-card">
-    <h3>🧠 Memory Systems</h3>
-    <ul>
-      <li><b>CSV-Based Storage</b>: Structuredmemory entries with timestamps</li>
-      <li><b>Memory Types</b>: Events, observations,dialogue, emotions</li>
-      <li><b>Automatic Summarization</b>: Recentmemories compressed into readable summaries<li>
-      <li><b>Cross-Session Persistence</b>: Memoriessurvive game restarts</li>
-    </ul>
-  </div>
-  </div>
-  
-  <div class="feature-section">
-    <div class="feature-card">
-      <h3>🛡️ Safety & Reliability</h3>
-      <ul>
-        <li><b>Automatic Backups</b>: Every destructive operation creates timestamped backups</li>
-        <li><b>Template Protection</b>: Original world template never modified</li>
-        <li><b>Graceful Degradation</b>: System continues functioning even with AI failures</li>
-        <li><b>Error Recovery</b>: Robust error handling with informative messages</li>
-      </ul>
-    </div>
-    
-  <div class="feature-card">
-    <h3>⚡ Performance Optimization</h3>
-    <ul>
-      <li><b>Agent Caching</b>: Loaded agents cachedfor better performance</li>
-      <li><b>Token Monitoring</b>: Real-timetracking prevents unexpected failures</li>
-      <li><b>Lazy Loading</b>: Agents and itemsloaded only when needed</li>
-      <li><b>Compression Triggers</b>: Automaticcontext compression based on configurablethresholds</li>
-    </ul>
-  </div>
-  </div>
-</div>
+### AI Architecture
+- **Local LLM Integration** - Uses Ollama for complete privacy and control
+- **Flexible Model Configuration** - Configurable main and summary models via config.py
+- **Context Compression** - Intelligent summarization prevents token overflow
+- **Session Persistence** - Agent contexts saved and restored between sessions
+- **Dynamic Token Management** - Automatic token limit expansion and compression
 
-## 🎯 Use Cases
+### Memory Systems
+- **CSV-Based Storage** - Structured memory entries with timestamps
+- **Memory Types** - Events, observations, dialogue, emotions
+- **Automatic Summarization** - Recent memories compressed into readable summaries
+- **Cross-Session Persistence** - Memories survive game restarts
 
-<div class="use-cases">
-  <div class="use-case">
-    <h3>📚 Interactive Storytelling</h3>
-    <p>Create dynamic narratives with persistent characters</p>
-  </div>
-  <div class="use-case">
-    <h3>🔬 AI Research</h3>
-    <p>Experiment with multi-agent interactions and memory systems</p>
-  </div>
-  <div class="use-case">
-    <h3>🎲 Game Development</h3>
-    <p>Use as a foundation for more complex text adventures</p>
-  </div>
-  <div class="use-case">
-    <h3>🎓 Education</h3>
-    <p>Learn about AI, file systems, and game architecture</p>
-  </div>
-  <div class="use-case">
-    <h3>🔧 Modding & Customization</h3>
-    <p>Easily create new worlds, agents, and items</p>
-  </div>
-</div>
+### Safety & Reliability
+- **Automatic Backups** - Every destructive operation creates timestamped backups
+- **Template Protection** - Original world template never modified
+- **Graceful Degradation** - System continues functioning even with AI failures
+- **Error Recovery** - Robust error handling with informative messages
 
-## 🛠️ Customization
+### Performance Optimization
+- **Agent Caching** - Loaded agents cached for better performance
+- **Token Monitoring** - Real-time tracking prevents unexpected failures
+- **Lazy Loading** - Agents and items loaded only when needed
+- **Compression Triggers** - Automatic context compression based on configurable thresholds
+- **Analytics System** - Comprehensive token usage tracking and analysis
+- **Model State Management** - Intelligent model reloading optimization
 
-<div class="customization-container">
-  <div class="customization-section">
-    <h3>👤 Creating New Agents</h3>
-    <ol>
-      <li>Copy an existing agent file from <code>world_template</code></li>
-      <li>Modify the JSON with new personality, goals, and relationships</li>
-      <li>Create a corresponding memory CSV file</li>
-      <li>Place in appropriate location folder</li>
-    </ol>
-  </div>
-  
-  <div class="customization-section">
-    <h3>🗺️ Adding New Locations</h3>
-    <ol>
-      <li>Create a new folder in <code>world_template</code></li>
-      <li>Add a <code>room.json</code> file with description and exits</li>
-      <li>Update parent room's exits to link to new location</li>
-      <li>Add agents and items as desired</li>
-    </ol>
-  </div>
-  
-  <div class="customization-section">
-    <h3>⚙️ Modifying Game Behavior</h3>
-    <ul>
-      <li>Edit <code>config.py</code> for token limits, model selection, and game settings</li>
-      <li>Modify <code>cli.py</code> to add new commands or change interface</li>
-      <li>Adjust <code>game_engine.py</code> for core game mechanics</li>
-    </ul>
-  </div>
-</div>
+---
 
-## 📊 System Requirements
+## Use Cases
 
-<div class="system-requirements">
-  <div class="requirement">
-    <span class="requirement-icon">💻</span>
-    <span class="requirement-label">RAM:</span>
-    <span class="requirement-value">8GB+ recommended (for local LLM)</span>
-  </div>
-  <div class="requirement">
-    <span class="requirement-icon">�️</span>
-    <span class="requirement-label">CPU:</span>
-    <span class="requirement-value">6+ cores recommended</span>
-  </div>
-  <div class="requirement">
-    <span class="requirement-icon">🎮</span>
-    <span class="requirement-label">GPU:</span>
-    <span class="requirement-value">At least 6GB VRAM recommended</span>
-  </div>
-  <div class="requirement">
-    <span class="requirement-icon">🌐</span>
-    <span class="requirement-label">Network:</span>
-    <span class="requirement-value">Required only for initial model download</span>
-  </div>
-</div>
+**Interactive Storytelling** - Create dynamic narratives with persistent characters  
+**AI Research** - Experiment with multi-agent interactions and memory systems  
+**Game Development** - Use as a foundation for more complex text adventures  
+**Education** - Learn about AI, file systems, and game architecture  
+**Modding & Customization** - Easily create new worlds, agents, and items
 
-## 🔧 Troubleshooting
+---
 
-<div class="troubleshooting-container">
-  <div class="troubleshooting-section">
-    <h3>⚠️ Common Issues</h3>
-    <ul>
-      <li><b>"Can't connect to Ollama"</b>: Ensure <code>ollama serve</code> is running</li>
-      <li><b>"Model not found"</b>: Run <code>ollama pull qwen3:8b</code> and <code>ollama pull qwen3:4b</code></li>
-      <li><b>Token warnings</b>: Use <code>/compress_all</code> or <code>/tokens</code> to monitor usage</li>
-      <li><b>Agent not responding</b>: Check <code>/status</code> for connectivity issues</li>
-    </ul>
-  </div>
-  
-  <div class="troubleshooting-section">
-    <h3>📚 Getting Help</h3>
-    <ol>
-      <li>Run <code>python verify_setup.py</code> to check system health</li>
-      <li>Use <code>/status</code> command in-game for real-time diagnostics</li>
-      <li>Check agent memory with <code>/memory &lt;agent&gt;</code> for context issues</li>
-      <li>Review token usage with <code>/tokens</code> for performance problems</li>      <li><b>See comprehensive guides for detailed documentation:</b>
-        <ul>
-          <li><a href="Guides/00-getting-started.md">Getting Started Guide</a> - Complete setup and basic gameplay</li>
-          <li><a href="Guides/02-interacting-with-npcs.md">Interacting with NPCs</a> - Agent conversations and following behavior</li>
-          <li><a href="Guides/04-conversation-system.md">Conversation System</a> - Endless conversation mode and multi-agent chats</li>
-          <li><a href="Guides/06-command-reference.md">Command Reference</a> - Complete list of all available commands</li>
-          <li><a href="Guides/05-advanced-features.md">Advanced Features</a> - Token management, analytics, and optimization</li>
-        </ul>
-      </li>
-    </ol>
-  </div>
-</div>
+## Customization
+
+### Creating New Agents
+1. Copy an existing agent file from `world_template`
+2. Modify the JSON with new personality, goals, and relationships
+3. Create a corresponding memory CSV file
+4. Place in appropriate location folder
+
+### Adding New Locations
+1. Create a new folder in `world_template`
+2. Add a `room.json` file with description and exits
+3. Update parent room's exits to link to new location
+4. Add agents and items as desired
+
+### Modifying Game Behavior
+- Edit `config.py` for token limits, model selection, and game settings
+- Modify `cli.py` to add new commands or change interface
+- Adjust `game_engine.py` for core game mechanics
+
+---
+
+## System Requirements
+
+| Component | Requirement |
+|-----------|------------|
+| **RAM** | 8GB+ recommended (for local LLM) |
+| **CPU** | 6+ cores recommended |
+| **GPU** | 6GB+ VRAM recommended |
+| **Network** | Required only for initial model download |
+
+---
+
+## Troubleshooting
+
+### Common Issues
+- **"Can't connect to Ollama"** - Ensure `ollama serve` is running
+- **"Model not found"** - Run `ollama pull qwen3:4b` (default) or configure different models in config.py
+- **Token warnings** - Use `/compress_all` or `/tokens` to monitor usage
+- **Agent not responding** - Check `/status` for connectivity issues
+
+### Getting Help
+1. Run `python verify_setup.py` to check system health
+2. Use `/status` command in-game for real-time diagnostics
+3. Check agent memory with `/memory <agent>` for context issues
+4. Review token usage with `/tokens` for performance problems
+
+### Documentation
+- [Getting Started Guide](Guides/00-getting-started.md) - Complete setup and basic gameplay
+- [Interacting with NPCs](Guides/02-interacting-with-npcs.md) - Agent conversations and following behavior
+- [Conversation System](Guides/04-conversation-system.md) - Endless conversation mode and multi-agent chats
+- [Command Reference](Guides/06-command-reference.md) - Complete list of all available commands
+- [Advanced Features](Guides/05-advanced-features.md) - Token management, analytics, and optimization
 
 ---
 
 <div align="center">
-  <p><strong>Note</strong>: This is a fully offline, privacy-focused AI experience. All data stays on your local machine, and the world persists between sessions through the filesystem-based architecture.</p>
-  <p>
-    <a href="https://github.com/cyberofficial/Ollama-Dungeon">GitHub</a> •
-    <a href="Guides/00-getting-started.md">Documentation</a> •
-    <a href="LICENSE">License</a>
-  </p>
+
+**This is a fully offline, privacy-focused AI experience.**  
+All data stays on your local machine, and the world persists between sessions through the filesystem-based architecture.
+
+[**GitHub**](https://github.com/cyberofficial/Ollama-Dungeon) • [**Documentation**](Guides/00-getting-started.md) • [**License**](LICENSE)
+
 </div>
