@@ -2,6 +2,7 @@
 """
 Ollama Dungeon Test Runner
 Runs all tests with detailed reporting and performance metrics.
+Now uses the comprehensive testall.py for all testing.
 """
 
 import unittest
@@ -18,6 +19,9 @@ init()
 
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Import the comprehensive test suite
+from tests.testall import TestAllOllamaDungeon, run_comprehensive_tests
 
 class ColoredTextTestResult(unittest.TextTestResult):
     """Custom test result with colored output."""
@@ -212,23 +216,24 @@ def run_performance_benchmarks():
     """Run performance benchmarks."""
     print(f"\n{Fore.CYAN}🚀 Running Performance Benchmarks...{Style.RESET_ALL}")
     
-    # Import test modules
     try:
-        from test_ultimate import UltimateTestSuite
+        # Use the comprehensive testall.py test suite
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestAllOllamaDungeon)
         
-        # Run a subset of performance-critical tests
-        suite = UltimateTestSuite()
-        
+        # Run some basic performance tests
         benchmarks = [
-            ("Token Counting", lambda: suite.test_token_management()),
-            ("Agent Loading", lambda: suite.test_agent_system()),
-            ("World Navigation", lambda: suite.test_world_controller()),
+            ("Token Management", "test_token_manager_initialization"),
+            ("Agent System", "test_agent_initialization"),
+            ("World Controller", "test_world_controller_initialization"),
         ]
         
-        for name, benchmark in benchmarks:
+        for name, test_method in benchmarks:
             start_time = time.time()
             try:
-                benchmark()
+                # Create a test instance and run the specific test
+                test_instance = TestAllOllamaDungeon()
+                test_instance.setUp()
+                getattr(test_instance, test_method)()
                 duration = time.time() - start_time
                 color = Fore.GREEN if duration < 1.0 else Fore.YELLOW if duration < 3.0 else Fore.RED
                 print(f"{color}{name}: {duration:.3f}s{Style.RESET_ALL}")
@@ -239,15 +244,16 @@ def run_performance_benchmarks():
         print(f"{Fore.RED}Could not run benchmarks: {e}{Style.RESET_ALL}")
 
 def main():
-    """Main test runner function."""
+    """Main test runner function - now uses comprehensive testall.py."""
     parser = argparse.ArgumentParser(description='Ollama Dungeon Test Runner')
-    parser.add_argument('--category', '-c', choices=['agents', 'tokens', 'integration', 'ultimate', 'all'],
-                       default='all', help='Test category to run')
-    parser.add_argument('--file', '-f', help='Specific test file to run')
+    parser.add_argument('--comprehensive', '-c', action='store_true', 
+                       help='Run comprehensive test suite (default)')
+    parser.add_argument('--legacy', '-l', action='store_true', 
+                       help='Run legacy individual test files')
     parser.add_argument('--verbose', '-v', action='count', default=1, help='Increase verbosity')
     parser.add_argument('--no-prereq', action='store_true', help='Skip prerequisite check')
     parser.add_argument('--benchmark', '-b', action='store_true', help='Run performance benchmarks')
-    parser.add_argument('--quick', '-q', action='store_true', help='Run only quick tests')
+    parser.add_argument('--quick', '-q', action='store_true', help='Run only essential tests')
     
     args = parser.parse_args()
     
@@ -257,34 +263,44 @@ def main():
             print(f"{Fore.RED}Prerequisites not met. Use --no-prereq to skip this check.{Style.RESET_ALL}")
             return 1
     
-    success = True
+    print(f"\n{Fore.CYAN}🧪 OLLAMA DUNGEON TEST RUNNER{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}{'='*60}{Style.RESET_ALL}")
     
-    # Run specific test file
-    if args.file:
-        success = run_specific_test_file(args.file, args.verbose)
-    
-    # Run specific category
-    elif args.category != 'all':
-        success = run_test_category(args.category, args.verbose)
-    
-    # Run all tests
-    else:
-        print(f"{Fore.CYAN}Running all test categories...{Style.RESET_ALL}")
-        
+    if args.legacy:
+        print(f"{Fore.YELLOW}⚠️  Running legacy individual test files...{Style.RESET_ALL}")
+        # Run legacy tests by category (keeping old functionality)
+        success = True
         categories = ['agents', 'tokens', 'integration']
         if not args.quick:
             categories.append('ultimate')
         
         for category in categories:
-            print(f"\n{Fore.CYAN}{'='*60}{Style.RESET_ALL}")
-            print(f"{Fore.CYAN}Running {category.upper()} tests...{Style.RESET_ALL}")
-            print(f"{Fore.CYAN}{'='*60}{Style.RESET_ALL}")
-            
+            print(f"\n{Fore.CYAN}Running {category.upper()} tests...{Style.RESET_ALL}")
             category_success = run_test_category(category, args.verbose)
             if not category_success:
                 success = False
-                if not args.quick:  # Continue with other categories unless quick mode
-                    continue
+    else:
+        # Use the new comprehensive test suite (default)
+        print(f"{Fore.GREEN}🚀 Running comprehensive test suite...{Style.RESET_ALL}")
+        
+        if args.quick:
+            # Run quick subset of tests
+            print(f"{Fore.YELLOW}⚡ Quick test mode - running essential tests only{Style.RESET_ALL}")
+            suite = unittest.TestSuite()
+            suite.addTest(TestAllOllamaDungeon('test_agent_initialization'))
+            suite.addTest(TestAllOllamaDungeon('test_world_controller_initialization'))
+            suite.addTest(TestAllOllamaDungeon('test_room_navigation'))
+            suite.addTest(TestAllOllamaDungeon('test_item_interaction'))
+            suite.addTest(TestAllOllamaDungeon('test_token_manager_initialization'))
+            suite.addTest(TestAllOllamaDungeon('test_cli_basic_commands'))
+            suite.addTest(TestAllOllamaDungeon('test_save_load_system'))
+            
+            runner = ColoredTextTestRunner(verbosity=args.verbose)
+            result = runner.run(suite)
+            success = result.wasSuccessful()
+        else:
+            # Run full comprehensive test suite
+            success = run_comprehensive_tests()
     
     # Run benchmarks if requested
     if args.benchmark:

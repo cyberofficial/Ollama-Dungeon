@@ -1,7 +1,7 @@
-# RolePlayBot Editor Integration Guide
+# Ollama-Dungeon Editor Integration Guide
 
 ## Overview
-The RolePlayBot Editor Suite provides integrated tools for building and managing your game world and NPCs. The World Editor and NPC Editor work together seamlessly to provide a comprehensive world-building experience.
+The Ollama-Dungeon Editor Suite provides integrated tools for building and managing your game world and NPCs. The World Editor and NPC Editor work together seamlessly to provide a comprehensive world-building experience.
 
 ## Quick Start
 

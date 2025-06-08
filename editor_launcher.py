@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-RolePlayBot Editor Launcher
+Ollama-Dungeon Editor Launcher
 Main launcher for the World Editor and NPC Editor tools
 """
 
@@ -14,7 +14,7 @@ from pathlib import Path
 class EditorLauncher:
     def __init__(self, root):
         self.root = root
-        self.root.title("RolePlayBot Editor Suite")
+        self.root.title("Ollama-Dungeon Editor Suite")
         self.root.geometry("600x600")
         self.root.resizable(False, False)
         
@@ -41,7 +41,7 @@ class EditorLauncher:
         # Title
         title_label = ttk.Label(
             main_frame, 
-            text="RolePlayBot Editor Suite",
+            text="Ollama-Dungeon Editor Suite",
             font=("Arial", 16, "bold")
         )
         title_label.pack(pady=(0, 20))
