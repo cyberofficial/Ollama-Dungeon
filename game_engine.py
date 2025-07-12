@@ -9,6 +9,7 @@ import time
 import pickle
 from datetime import datetime
 from typing import Dict, List, Optional, Any
+from config import OLLAMA_BASE_URL
 import uuid
 
 
@@ -316,7 +317,7 @@ class Agent:
                     print(f"🔄 Loading model for {self.data['name']} with {agent_token_limit} token context...")
             
             # Call Ollama API
-            response = requests.post('http://localhost:11434/api/chat', json=api_request)
+            response = requests.post(OLLAMA_BASE_URL + '/api/chat', json=api_request)
             
             if response.status_code == 200:
                 # Update model state tracking
