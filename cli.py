@@ -8,7 +8,7 @@ from game_engine import strip_thinking_tokens  # Then import specific functions
 # Import and rename for clarity
 WorldController = game_engine.WorldController  # Explicit assignment to fix VS Code issue
 from token_management import token_manager, context_manager
-from config import MODELS, TOKEN_SETTINGS
+from config import MODELS, TOKEN_SETTINGS, OLLAMA_BASE_URL
 
 # Initialize colorama for cross-platform colored output
 init()
@@ -1650,7 +1650,7 @@ def main():
     # Check if Ollama is available
     try:
         import requests
-        response = requests.get('http://localhost:11434/api/version', timeout=5)
+        response = requests.get(OLLAMA_BASE_URL + '/api/version', timeout=5)
         if response.status_code != 200:
             print("Warning: Ollama server doesn't seem to be running.")
             print("Please start Ollama with 'ollama serve' and ensure you have a model installed.")
