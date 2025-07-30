@@ -13,6 +13,7 @@ import argparse
 from io import StringIO
 from colorama import init, Fore, Style
 from typing import Dict, List, Any, Optional
+from config import OLLAMA_BASE_URL
 
 # Initialize colorama
 init()
@@ -195,7 +196,7 @@ def check_prerequisites():
     # Check Ollama connection (optional)
     try:
         import requests
-        response = requests.get("http://localhost:11434/api/tags", timeout=3)
+        response = requests.get(OLLAMA_BASE_URL + '/api/tags', timeout=3)
         if response.status_code == 200:
             print(f"{Fore.GREEN}✅ Ollama server available{Style.RESET_ALL}")
         else:

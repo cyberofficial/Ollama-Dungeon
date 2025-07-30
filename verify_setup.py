@@ -8,6 +8,7 @@ import os
 import sys
 import requests
 from typing import Dict, Any
+from config import OLLAMA_BASE_URL
 
 def check_file_exists(filepath: str, description: str) -> bool:
     """Check if a file exists and report status."""
@@ -30,7 +31,7 @@ def check_json_valid(filepath: str) -> bool:
 def check_ollama_connection() -> bool:
     """Check Ollama server connection."""
     try:
-        response = requests.get('http://localhost:11434/api/version', timeout=5)
+        response = requests.get(OLLAMA_BASE_URL + '/api/version', timeout=5)
         if response.status_code == 200:
             print("✅ Ollama server: Connected")
             return True
@@ -44,7 +45,7 @@ def check_ollama_connection() -> bool:
 def check_models_available() -> Dict[str, bool]:
     """Check if recommended models are available (informational only)."""
     try:
-        response = requests.get('http://localhost:11434/api/tags', timeout=5)
+        response = requests.get(OLLAMA_BASE_URL + '/api/tags', timeout=5)
         if response.status_code == 200:
             available_models = [m['name'] for m in response.json().get('models', [])]
             
