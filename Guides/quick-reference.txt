@@ -12,6 +12,7 @@ BASIC COMMANDS:
 
 INTERACTION:
 /say <agent> <message>    - Talk to an agent
+/sayto <agent> <message>  - Alternative to /say
 /memory <agent>           - Show an agent's memory
 /share <context>          - Share context with agents in room
 /follow <agent>           - Have agent follow you
@@ -23,11 +24,11 @@ ITEMS:
 /use <item>               - Use an item from inventory
 
 CONVERSATIONS:
-/conv <alice,bob,player> [turns] <topic> - Start conversation (omit turns for endless mode)
+/conv <zahra,kael,player> [turns] <topic> - Start conversation (omit turns for endless mode)
 /endconv                  - End endless conversation
 /invite <agent>           - Invite agent to endless conversation
 /remove <agent>           - Remove agent from endless conversation
-/dialog <alice,bob> <num> - Generate dialog between agents
+/dialog <zahra,kael> <num> - Generate dialog between agents
 
 SYSTEM:
 /save [name]              - Save game state
@@ -36,6 +37,8 @@ SYSTEM:
 /delete <save_name>       - Delete a saved game
 /status                   - Show system status
 /tokens [agent]           - Show token usage
+/analytics                - Show detailed usage analytics
+/model_state [agent]      - Display model performance info
 
 Type '/help' in-game for complete command list.
 ```

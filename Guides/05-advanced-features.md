@@ -18,7 +18,7 @@ AI models have limitations on how much context they can process. The game includ
 When you run `/tokens` or `/tokens <agent>`, you'll see output like this:
 
 ```
-Token usage for Alice:
+Token usage for Zahra:
 - Current context: 15,230 tokens
 - Memory entries: 24
 - Shared context entries: 8
@@ -60,7 +60,7 @@ Ollama Dungeon includes settings to customize how agents respond and ensure dive
 | Setting | Description | Default |
 |---------|-------------|---------|
 | `randomize_responses` | Add unique random seeds to agent calls | True |
-| `temperature` | Control response creativity and variation | 0.5 |
+| `temperature` | Control response creativity and variation | 0.7 |
 | `strip_thinking_tokens` | Remove `<think>` tags from responses | True |
 
 ### Understanding Response Settings
@@ -96,19 +96,19 @@ When you move between locations during an endless conversation:
 
 Example session:
 ```
-> /conv alice,bob The ancient ruins
+> /conv zahra,kael,player The magical crystal formations
 🗣️ Endless conversation mode activated!
-📋 Participants: Alice, Bob, Player
+📋 Participants: Zahra, Kael, Player
 
-> /go north
-🚶 Moving north...
-⚠️ Alice and Bob were removed from endless conversation (not following)
+> /go up
+🚶 Moving up...
+⚠️ Zahra and Kael were removed from endless conversation (not following)
 
-> /invite cave_guardian
-✅ Cave Guardian added to endless conversation
+> /invite scholar_maven
+✅ Scholar Maven added to endless conversation
 
-> /remove cave_guardian
-✅ Cave Guardian removed from endless conversation
+> /remove scholar_maven
+✅ Scholar Maven removed from endless conversation
 ```
 
 ### Best Practices for Endless Mode
@@ -237,15 +237,15 @@ AI Models:
 
 Token Usage:
 - Total tokens in room: 28,552
-- High usage agents: Alice (25,230)
+- High usage agents: Zahra (25,230)
 - Auto-compression: ✅ Enabled
 
 > /model_state
 === MODEL STATE INFO ===
 
 Active Agents:
-- Alice: Model=qwen3:4b, Context=3010 tokens, Last used=2025-06-06T07:53:12
-- Bob: Model=qwen3:4b, Context=3010 tokens, Last used=2025-06-06T07:53:15
+- Zahra: Model=qwen3:4b, Context=3010 tokens, Last used=2025-06-06T07:53:12
+- Kael: Model=qwen3:4b, Context=3010 tokens, Last used=2025-06-06T07:53:15
 
 Agent Settings:
 - Response Temperature: 0.5
@@ -254,8 +254,8 @@ Agent Settings:
 
 > /compress_all
 Compressed contexts for 2 agents:
-- Alice: 25,230 → 10,542 tokens (saved 14,688)
-- Bob: 3,322 → 3,322 tokens (no compression needed)
+- Zahra: 25,230 → 10,542 tokens (saved 14,688)
+- Kael: 3,322 → 3,322 tokens (no compression needed)
 
 Total tokens saved: 14,688
 ```

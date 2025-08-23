@@ -48,16 +48,15 @@ The available directions depend on the current room, but typically include:
 Example navigation session:
 ```
 > /look
-You are in the town square. There are streets leading north to the market, east to the tavern, and west to the residential area.
+You are in Sunspire City's Oasis Plaza. Shimmering waters reflect towering spires of golden sandstone. There are paths leading north to the palace district, south to the merchant quarter, east to the scholar district, and west to the whispering dunes.
 
-> /go east
-You moved to the tavern. It's a lively place with people chatting and drinking.
+> /go south
+You moved to the merchant quarter. It's a bustling marketplace with colorful stalls and the scent of spices.
 
 > /agents
 People here:
-- Alice (friendly): A woman with red hair wearing a tavern keeper's apron
-- Bob (curious): A middle-aged man sitting at a corner table
+- Zahra (shrewd): A skilled merchant trader with keen eyes for valuable goods
 
-> /save tavern_first_visit
-Game saved as 'tavern_first_visit'
+> /save first_marketplace_visit
+Game saved as 'first_marketplace_visit'
 ```

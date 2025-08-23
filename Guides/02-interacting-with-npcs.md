@@ -6,11 +6,11 @@ Ollama Dungeon's agents are AI-powered NPCs with their own personalities, memori
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/say <agent> <message>` | Talk to an agent | `/say alice What do you think of this tavern?` |
-| `/sayto <agent> <message>` | Alternative to `/say` | `/sayto bob How long have you been here?` |
-| `/talk <agent> <message>` | Alternative to `/say` | `/talk grix Tell me about the cave` |
+| `/say <agent> <message>` | Talk to an agent | `/say zahra What do you think of this marketplace?` |
+| `/sayto <agent> <message>` | Alternative to `/say` | `/sayto kael How long have you been mining here?` |
+| `/talk <agent> <message>` | Alternative to `/say` | `/talk zahra Tell me about the rare crystals` |
 | `/agents` or `/people` | List all NPCs in the current room | `/agents` |
-| `/memory <agent>` | Show an agent's memory summary | `/memory alice` |
+| `/memory <agent>` | Show an agent's memory summary | `/memory zahra` |
 
 ## Context Sharing
 
@@ -18,9 +18,9 @@ Agents can respond more appropriately if they have context about situations. You
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/share <context>` or `/summarize <context>` | Share context with all agents in room | `/share The sky is getting dark and it looks like rain` |
-| `/share <agent> <context>` | Share context with a specific agent | `/share alice I'm looking for information about a stolen artifact` |
-| `/share <agent1,agent2> <context>` | Share context with multiple specific agents | `/share bob,alice I suspect someone is watching us` |
+| `/share <context>` or `/summarize <context>` | Share context with all agents in room | `/share The crystal formations are glowing brighter than usual` |
+| `/share <agent> <context>` | Share context with a specific agent | `/share zahra I'm looking for information about rare gems` |
+| `/share <agent1,agent2> <context>` | Share context with multiple specific agents | `/share kael,zahra I suspect there's something unusual about these crystals` |
 
 ## Following Behavior
 
@@ -28,8 +28,8 @@ You can control whether agents follow you as you move between locations:
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/follow <agent>` | Have an agent follow you | `/follow alice` |
-| `/stay <agent>` | Make an agent stop following and stay in current location | `/stay alice` |
+| `/follow <agent>` | Have an agent follow you | `/follow zahra` |
+| `/stay <agent>` | Make an agent stop following and stay in current location | `/stay zahra` |
 
 When an agent is following you, they'll move with you when you use the `/go` command. Use `/stay` to make them stop following and remain in their current room, which is useful for managing which NPCs participate in conversations in different locations.
 
@@ -53,10 +53,10 @@ Over time, agents accumulate a lot of context which may consume tokens. Use thes
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/tokens <agent>` | Show token usage for an agent | `/tokens alice` |
-| `/compress <agent>` | Manually compress an agent's context | `/compress bob` |
+| `/tokens <agent>` | Show token usage for an agent | `/tokens zahra` |
+| `/compress <agent>` | Manually compress an agent's context | `/compress kael` |
 | `/compress_all` | Compress context for all agents in room | `/compress_all` |
-| `/reset <agent>` | Reset agent's memory and context | `/reset alice` |
+| `/reset <agent>` | Reset agent's memory and context | `/reset zahra` |
 
 ## Example Conversation
 
@@ -65,20 +65,19 @@ Here's an example of interacting with agents:
 ```
 > /agents
 People here:
-- Alice (friendly): A woman with red hair wearing a tavern keeper's apron
-- Bob (curious): A middle-aged man sitting at a corner table
+- Zahra (shrewd): A skilled merchant trader with keen eyes for valuable goods
 
-> /say alice Hello! Can you tell me about this place?
-You say to Alice: "Hello! Can you tell me about this place?"
-Alice says: "Welcome to the Rusty Dragon Tavern! We're the most popular establishment in town. Folks come here for my famous honey mead and to catch up on the latest gossip. Are you new in town? I don't believe I've seen you before."
+> /say zahra Hello! Can you tell me about this marketplace?
+You say to Zahra: "Hello! Can you tell me about this marketplace?"
+Zahra says: "Welcome to Sunspire City's merchant quarter! This is where the finest goods from across the realm find their way to discerning buyers. I specialize in rare crystals and magical artifacts. Are you perhaps looking for something specific, or just browsing today?"
 
-> /say alice Yes, I just arrived today. Any recommendations on what I should do?
-You say to Alice: "Yes, I just arrived today. Any recommendations on what I should do?"
-Alice says: "Well, you should definitely explore the market to the north. They have all sorts of interesting wares. And if you're the adventurous type, I've heard there are some interesting caves in the forest to the west. But be careful - there are rumors of strange creatures out there."
+> /say zahra Yes, I just arrived in the city. Any recommendations on what I should see first?
+You say to Zahra: "Yes, I just arrived in the city. Any recommendations on what I should see first?"
+Zahra says: "Well, you should definitely visit the scholar district to the east if you're interested in learning about our city's history. And if you're the adventurous type, the crystal caves below hold incredible treasures - though they can be dangerous. Kael down there knows those tunnels better than anyone."
 
-> /memory alice
-Alice remembers:
-Said: Welcome to the Rusty Dragon Tavern! We're the most popular establishment in town.
-Said: Well, you should definitely explore the market to the north.
-Observed: Met a new traveler who just arrived in town
+> /memory zahra
+Zahra remembers:
+Said: Welcome to Sunspire City's merchant quarter! This is where the finest goods from across the realm find their way to discerning buyers.
+Said: Well, you should definitely visit the scholar district to the east if you're interested in learning about our city's history.
+Observed: Met a new visitor who just arrived in Sunspire City
 ```

@@ -8,8 +8,8 @@ The game offers a sophisticated system for multi-participant conversations:
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/conv <participants> [turns] <topic>` | Start a conversation with specified participants about a topic | `/conv alice,bob,player 5 The recent thefts in town` |
-| `/conversation <participants> [turns] <topic>` | Alternative to `/conv` | `/conversation alice,bob Magical artifacts` |
+| `/conv <participants> [turns] <topic>` | Start a conversation with specified participants about a topic | `/conv zahra,kael,player 5 The recent crystal discoveries` |
+| `/conversation <participants> [turns] <topic>` | Alternative to `/conv` | `/conversation zahra,kael Magical artifacts in the caves` |
 
 ### Conversation Parameters:
 
@@ -19,26 +19,26 @@ The game offers a sophisticated system for multi-participant conversations:
 
 ### Example:
 ```
-> /conv alice,bob,player 3 The history of the town
-🗣️ Starting conversation about: The history of the town
-Participants: Alice, Bob, Player
+> /conv zahra,kael,player 3 The mysterious crystal formations
+🗣️ Starting conversation about: The mysterious crystal formations
+Participants: Zahra, Kael, Player
 ```
 
 ## Example Multi-Agent Conversation
 
 ```
-> /conv alice,bob,player 3 The strange noises from the forest
-🗣️ Starting conversation about: The strange noises from the forest
-Participants: Alice, Bob, Player
+> /conv zahra,kael,player 3 The strange energy readings from the deep caves
+🗣️ Starting conversation about: The strange energy readings from the deep caves
+Participants: Zahra, Kael, Player
 
-💭 It's your turn to speak about The strange noises from the forest
-🗣️ **You**: Have either of you heard those strange howling sounds coming from the forest at night?
+💭 It's your turn to speak about The strange energy readings from the deep caves
+🗣️ **You**: Have either of you noticed the unusual magical energy coming from the deeper cave systems?
 
-💬 Alice is thinking...
-🗣️ **Alice**: Yes, I've heard them for the past three nights. It doesn't sound like any wolf or animal I'm familiar with. Bob, you live closer to the forest edge - have you seen anything unusual?
+💬 Zahra is thinking...
+🗣️ **Zahra**: Yes, I've been tracking it for weeks now. The crystals I've been receiving from the mines have been far more potent than usual. Kael, you're down there every day - have you seen anything unusual in the deep tunnels?
 
-💬 Bob is thinking...
-🗣️ **Bob**: Indeed I have. Last night I saw strange lights among the trees, and the howling seemed to come from that direction. I'm too afraid to investigate alone, but someone should definitely look into it.
+💬 Kael is thinking...
+🗣️ **Kael**: Indeed I have. The crystal veins are singing differently, and some of the deeper passages glow with their own light now. I'm concerned it might destabilize the tunnels, but the potential discoveries... they could be extraordinary.
 
 🎯 Conversation concluded!
 ```
@@ -69,33 +69,33 @@ Endless mode is now location-aware:
 ## Endless Mode Example
 
 ```
-> /conv alice,bob,player The magical artifact
+> /conv zahra,kael,player The rare crystal formations
 🗣️ Endless conversation mode activated!
-📋 Participants: Alice, Bob, Player
-📝 Topic: The magical artifact
+📋 Participants: Zahra, Kael, Player
+📝 Topic: The rare crystal formations
 
-💭 It's your turn to speak about The magical artifact
-🗣️ **You**: I've heard rumors about an ancient artifact hidden somewhere in these parts. Do either of you know anything about it?
+💭 It's your turn to speak about The rare crystal formations
+🗣️ **You**: I've heard rumors about incredibly rare crystal formations deep in the caves. Do either of you know anything about them?
 
-💬 Alice is thinking...
-🗣️ **Alice**: I've heard whispers about something like that. An old relic from before the great war, supposedly with the power to control weather. My grandmother used to tell stories about it.
+💬 Zahra is thinking...
+🗣️ **Zahra**: I've heard whispers about something called the Heart of the Mountain. An ancient crystal formation supposedly deep in the caves, with the power to amplify magical energies a hundredfold. My grandmother used to tell stories about it.
 
-💬 Bob is thinking...
-🗣️ **Bob**: Control weather? That's not what I heard. The artifact I know of is said to reveal hidden truths. It's supposedly locked away in a cave system north of here, guarded by ancient traps.
+💬 Kael is thinking...
+🗣️ **Kael**: That's not just stories. I've found traces of it - crystalline formations that sing with an otherworldly harmony. The legendary Heart Crystal is real, hidden in passages so deep and dangerous that few have dared to search for it.
 
-💭 It's your turn to speak about The magical artifact
+💭 It's your turn to speak about The rare crystal formations
 🗣️ **You**: That's fascinating. Have either of you ever tried to find it?
 
-> /go north
-🚶 Moving north...
-📍 You are now in: Cave Entrance
-⚠️ Alice and Bob were removed from endless conversation (not following)
+> /go up
+🚶 Moving up...
+📍 You are now in: Sunspire City - Oasis Plaza
+⚠️ Zahra and Kael were removed from endless conversation (not following)
 
-> /invite cave_guardian
-✅ Cave Guardian added to endless conversation
+> /invite palace_guardian
+✅ Palace Guardian added to endless conversation
 
-💭 It's your turn to speak about The magical artifact
-🗣️ **You**: Guardian, I seek knowledge about the ancient artifact. Can you tell me about it?
+💭 It's your turn to speak about The rare crystal formations
+🗣️ **You**: Guardian, I seek knowledge about the legendary crystal formations. Can you tell me about them?
 
 [Conversation continues until you use /endconv]
 ```
@@ -106,7 +106,7 @@ You can also make two NPCs talk to each other automatically:
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/dialog <agent1,agent2> <exchanges>` | Generate automated dialog between two agents | `/dialog alice,bob 5` |
+| `/dialog <agent1,agent2> <exchanges>` | Generate automated dialog between two agents | `/dialog zahra,kael 5` |
 
 This works only during endless conversation mode and creates a natural dialog between the specified agents.
 

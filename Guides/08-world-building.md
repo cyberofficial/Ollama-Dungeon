@@ -33,7 +33,7 @@ The `world_template` directory serves as a template for creating new games. When
 Create a new directory under the `world_template` directory with your area name, such as "dungeon" or "mountain":
 
 ```
-world_template/dungeon/
+world_template/crystal_mines/
 ```
 
 ### Step 2: Create the Main Room JSON File
@@ -42,18 +42,18 @@ Each area needs a main `room.json` file that describes the entry point to that a
 
 ```json
 {
-  "name": "Dungeon Entrance",
-  "description": "A foreboding stone archway leads into darkness. The air is cool and damp, with the smell of earth and decay. Moss grows on the weathered stones, and faint echoing sounds come from within.",
+  "name": "Crystal Mine Entrance",
+  "description": "A shimmering archway carved from living crystal leads into the depths. The air thrums with magical energy, and faceted walls reflect rainbow patterns from embedded gems. The sound of distant mining echoes from within.",
   "exits": {
-    "north": "world/dungeon/hallway",
-    "south": "world/town",
-    "east": "world/dungeon/guardroom",
-    "west": "world/forest"
+    "north": "world/crystal_mines/main_shaft",
+    "south": "world/sunspire_city",
+    "east": "world/crystal_mines/storage_cavern",
+    "west": "world/sky_gardens"
   },
   "ambient": {
-    "sounds": ["dripping water", "distant scratching", "wind howling"],
-    "time_of_day": "any",
-    "weather": "sheltered"
+    "sounds": ["crystal chimes", "distant pickaxe strikes", "magical humming"],
+    "time_of_day": "eternal twilight",
+    "weather": "cool and dry, charged with magic"
   }
 }
 ```
@@ -76,7 +76,7 @@ The exit paths follow this format: `world/area_name/sub_location`. This creates 
 For sub-locations within your area (like a "guardroom" in a dungeon), create subdirectories:
 
 ```
-world_template/dungeon/guardroom/
+world_template/crystal_mines/main_shaft/
 ```
 
 Then add a `room.json` file within this directory with the appropriate details.
@@ -91,8 +91,8 @@ In the room where you want the NPC to appear, create an agent file named `agent_
 
 ```json
 {
-  "name": "Guard Captain",
-  "persona": "I'm the captain of the dungeon guard, a gruff veteran with little patience for trespassers. I take my duty seriously and have served the kingdom for 20 years. Despite my harsh exterior, I have a sense of honor and can be reasoned with.",
+  "name": "Master Crystal Keeper",
+  "persona": "I am the keeper of these ancient crystal mines, guardian of their secrets and protector of their power. I've spent decades learning to commune with the living crystals and understand their whispered wisdom. Every gem has a voice, and I've trained my mind to hear their ancient songs.",
   "background": "I grew up in the slums of the capital city and joined the guard to escape poverty. I've worked my way up through the ranks through dedication and toughness. The other guards respect me, but also fear my temper when rules are broken.",
   "knowledge": [
     "I know all the security protocols of the dungeon",

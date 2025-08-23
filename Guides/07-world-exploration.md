@@ -16,22 +16,21 @@ The default world template includes:
 
 ```
 world/
-  ├── town/
-  │   ├── room.json         # Town square
-  │   ├── tavern/           # The tavern sub-location
+  ├── sunspire_city/
+  │   ├── room.json         # Oasis Plaza
+  │   ├── merchant_quarter/ # The marketplace sub-location
   │   │   ├── room.json
-  │   │   ├── agent_alice.json
-  │   │   ├── agent_bob.json
+  │   │   ├── agent_zahra.json
+  │   │   ├── sunfire_crystal.json
   │   │   └── ...
-  │   └── market/           # The market sub-location
+  │   └── scholar_district/ # The scholar area sub-location
   │       ├── room.json
-  │       ├── health_potion.json
   │       └── ...
-  └── forest/
-      ├── room.json         # Forest entrance
-      └── cave/             # Cave sub-location
+  └── crystal_caves/
+      ├── room.json         # Cave entrance
+      └── mining_tunnels/   # Mining area sub-location
           ├── room.json
-          ├── agent_grix.json
+          ├── agent_kael.json
           └── ...
 ```
 
@@ -111,30 +110,29 @@ Some locations might be initially inaccessible. To unlock them:
 
 ```
 > /look
-You are in the town square. There are streets leading north to the market, east to the tavern, and west to the residential area.
+You are in Sunspire City's Oasis Plaza. Shimmering waters reflect towering spires of golden sandstone. There are paths leading north to the palace district, south to the merchant quarter, east to the scholar district, and west to the whispering dunes.
 
-> /go east
-You moved to the tavern. It's a lively place with people chatting and drinking.
+> /go south
+You moved to the merchant quarter. It's a bustling marketplace with colorful stalls and the scent of spices.
 
 > /agents
 People here:
-- Alice (friendly): A woman with red hair wearing a tavern keeper's apron
-- Bob (curious): A middle-aged man sitting at a corner table
+- Zahra (shrewd): A skilled merchant trader with keen eyes for valuable goods
 
-> /say alice Hello! What can you tell me about this area?
-You say to Alice: "Hello! What can you tell me about this area?"
-Alice says: "Welcome to the Rusty Dragon Tavern! The town is peaceful, but there have been strange noises from the forest lately. The market to the north has good supplies if you need anything."
-
-> /go west
-You moved back to the town square.
+> /say zahra Hello! What can you tell me about this area?
+You say to Zahra: "Hello! What can you tell me about this area?"
+Zahra says: "Welcome to Sunspire City's merchant quarter! This is where the finest goods from across the realm find their way to discerning buyers. The crystal caves below hold incredible treasures if you're brave enough to explore them."
 
 > /go north
-You moved to the market. Various stalls are selling goods and produce.
+You moved back to the Oasis Plaza.
+
+> /go east
+You moved to the scholar district. Ancient tomes and scrolls fill the libraries here.
 
 > /look
-The market is bustling with activity. Various merchants have set up stalls selling everything from fresh produce to handcrafted goods. A particular stall with potions catches your eye.
+The scholar district is a place of learning and ancient knowledge. Tall spires house vast libraries filled with the accumulated wisdom of ages.
 
-Exits: south (to town square)
+Exits: west (to Oasis Plaza)
 ```
 
 ## Tips for Effective Exploration

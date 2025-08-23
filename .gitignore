@@ -206,3 +206,4 @@ saves/*
 !saves/.gitkeep
 /inventory
 /world
+/.github

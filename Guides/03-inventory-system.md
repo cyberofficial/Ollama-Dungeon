@@ -17,14 +17,14 @@ Items are scattered throughout the world. When you enter a room, the room descri
 Example:
 ```
 > /look
-You are in the market. There are various stalls selling goods. You notice a health potion on one of the tables.
+You are in the crystal caves mining tunnels. The walls sparkle with embedded gems and you notice a crystal pickaxe leaning against the wall.
 
-> /pickup health_potion
-You pick up the health potion and add it to your inventory.
+> /pickup crystal_pickaxe
+You pick up the crystal pickaxe and add it to your inventory.
 
 > /inventory
 Your inventory:
-- Health Potion: A small vial containing a red liquid that restores health.
+- Crystal Pickaxe: A mining tool enhanced with crystal fragments that glow with inner light.
 ```
 
 ## Using Items
@@ -42,12 +42,13 @@ To use an item:
 
 Example:
 ```
-> /use health_potion
-You drink the health potion. You feel revitalized and healthier.
-The potion has been consumed and removed from your inventory.
+> /use crystal_pickaxe
+You swing the crystal pickaxe at the cave wall. The enhanced tool easily chips away at the rock, revealing a small vein of precious gems.
+The pickaxe's crystal fragments glow brighter after use.
 
 > /inventory
-Your inventory is empty.
+Your inventory:
+- Crystal Pickaxe: A mining tool enhanced with crystal fragments that glow with inner light.
 ```
 
 ## Item Properties
@@ -71,18 +72,18 @@ Items are defined in JSON files and may have various properties:
 
 ```
 > /look
-You are in the cave. It's dark and damp. You can barely make out a rusty dagger on the ground.
+You are in the crystal caves. The tunnels glitter with embedded gems and the air hums with magical energy. You can barely make out a crystal pickaxe leaning against the tunnel wall.
 
-> /pickup rusty dagger
-You pick up the rusty dagger and add it to your inventory.
+> /pickup crystal_pickaxe
+You pick up the crystal pickaxe and add it to your inventory.
 
 > /inventory
 Your inventory:
-- Rusty Dagger: An old, rusty dagger. It's not very sharp, but could be useful.
+- Crystal Pickaxe: A mining tool enhanced with crystal fragments that glow with inner light.
 
 > /go north
-You moved to a deeper part of the cave. There's a strange creature blocking your path!
+You moved deeper into the mining tunnels. Strange crystalline formations block your path!
 
-> /use rusty dagger
-You brandish the rusty dagger at the creature. Despite its condition, it seems to deter the creature, which backs away allowing you to pass.
+> /use crystal_pickaxe
+You swing the crystal pickaxe at the crystalline formations. The enhanced tool easily breaks through the magical barrier, allowing you to pass.
 ```
