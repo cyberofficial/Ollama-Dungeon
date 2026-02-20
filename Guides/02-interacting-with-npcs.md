@@ -12,6 +12,11 @@ Ollama Dungeon's agents are AI-powered NPCs with their own personalities, memori
 | `/agents` or `/people` | List all NPCs in the current room | `/agents` |
 | `/memory <agent>` | Show an agent's memory summary | `/memory zahra` |
 
+**Note:** In endless conversation mode (started with `/conv`), the `/say` command behaves differently:
+- `/say <message>` - Everyone in the conversation responds
+- `/say <agent> <message>` - Only the specified agent responds
+- `/say agent1,agent2 <message>` - Only the specified agents respond (comma-separated)
+
 ## Context Sharing
 
 Agents can respond more appropriately if they have context about situations. You can share information with them using:
@@ -19,6 +24,7 @@ Agents can respond more appropriately if they have context about situations. You
 | Command | Description | Example |
 |---------|-------------|---------|
 | `/share <context>` or `/summarize <context>` | Share context with all agents in room | `/share The crystal formations are glowing brighter than usual` |
+| `/share all <context>` | Share context with all agents (explicit) | `/share all The crystals are glowing` |
 | `/share <agent> <context>` | Share context with a specific agent | `/share zahra I'm looking for information about rare gems` |
 | `/share <agent1,agent2> <context>` | Share context with multiple specific agents | `/share kael,zahra I suspect there's something unusual about these crystals` |
 

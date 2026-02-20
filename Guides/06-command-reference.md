@@ -15,8 +15,8 @@ This is a quick reference guide to all available commands in Ollama Dungeon.
 | `/say <agent> <message>` | Talk to an agent |
 | `/sayto <agent> <message>` | Alternative to `/say` |
 | `/talk <agent> <message>` | Alternative to `/say` |
-| `/conv <agent1,agent2[,player]> [turns] <topic>` | Start a conversation |
-| `/conversation <agent1,agent2[,player]> [turns] <topic>` | Alternative to `/conv` |
+| `/conv <agent1,agent2[,player]> <topic>` | Start an endless conversation |
+| `/conversation <agent1,agent2[,player]> <topic>` | Alternative to `/conv` |
 | `/dialog <agent1,agent2> <exchanges>` | Automated dialog between agents |
 | `/endconv` | End endless conversation mode |
 | `/invite <agent>` | Invite agent to endless conversation |
@@ -71,8 +71,9 @@ This is a quick reference guide to all available commands in Ollama Dungeon.
 
 ### Conversation Mode
 
-- `/conv alice,bob,player 5 The weather` - 5 turns, including player
-- `/conv alice,bob The magical artifacts` - Endless mode (no turn limit)
+- `/conv alice,bob,player The weather today` - Endless conversation with Alice, Bob, and player
+- `/conv alice,bob The magical artifacts` - Endless conversation (no turn limit)
+- All `/conv` commands start endless mode - use `/endconv` to stop
 - In endless mode:
   - `/say <message>` - Everyone responds
   - `/say alice <message>` - Only Alice responds
@@ -93,16 +94,16 @@ While not accessible via commands, these important settings in `config.py` contr
 ```python
 AGENT_SETTINGS = {
     "max_memory_entries": 50,        # Maximum agent memory entries
-    "strip_thinking_tokens": True,   # Remove <think> tags from responses
+    "strip_thinking_tokens": True,   # Remove &lt;think&gt; tags from responses<think> tags from responses
     "randomize_responses": True,     # Prevent identical responses between agents
-    "temperature": 0.5,              # Response creativity (0.1-1.0)
+    "temperature": 0.7,              # Response creativity (0.1-1.0)
 }
 ```
 
 ### Token Management Settings
 ```python
 TOKEN_SETTINGS = {
-    "starting_tokens": 10,           # Initial token context size
+    "starting_tokens": 0,            # Initial token context size
     "increase_tokens_by": 1000,      # Growth amount when needed
     "reload_on_lower": False,        # Only reload on increased limits
 }

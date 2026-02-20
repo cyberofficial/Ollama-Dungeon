@@ -26,6 +26,50 @@ world/
 
 The `world_template` directory serves as a template for creating new games. When starting a new game, this template is copied to create the initial world state.
 
+### Current World Template Structure
+
+The default world_template includes these areas:
+
+```
+world_template/
+├── sunspire_city/           # Starting location (Oasis Plaza)
+│   ├── room.json
+│   ├── merchant_quarter/    # Home of Zahra the Gem Merchant
+│   │   ├── room.json
+│   │   ├── agent_zahra.json
+│   │   ├── sunfire_crystal.json
+│   │   └── memory_zahra.csv
+│   └── scholar_district/    # Home of Master Qasim the Lore Keeper
+│       ├── room.json
+│       ├── agent_qasim.json
+│       ├── scroll_desert_navigation.json
+│       └── memory_qasim.csv
+├── crystal_caves/
+│   ├── room.json
+│   └── mining_tunnels/      # Home of Kael the Crystal Miner
+│       ├── room.json
+│       ├── agent_kael.json
+│       ├── crystal_pickaxe.json
+│       └── memory_kael.csv
+├── sky_gardens/
+│   ├── room.json
+│   └── meditation_grove/    # Home of Sage Lyra the Sky Keeper
+│       ├── room.json
+│       ├── agent_lyra.json
+│       ├── celestial_dew.json
+│       └── memory_lyra.csv
+└── whispering_dunes/
+    ├── room.json
+    ├── ancient_ruins/
+    │   ├── room.json
+    │   └── amulet_sun_god.json
+    └── nomad_camp/          # Home of Amara the Desert Guide
+        ├── room.json
+        ├── agent_amara.json
+        ├── desert_survival_kit.json
+        └── memory_amara.csv
+```
+
 ## Creating Areas and Rooms
 
 ### Step 1: Create a New Area Directory
@@ -49,11 +93,6 @@ Each area needs a main `room.json` file that describes the entry point to that a
     "south": "world/sunspire_city",
     "east": "world/crystal_mines/storage_cavern",
     "west": "world/sky_gardens"
-  },
-  "ambient": {
-    "sounds": ["crystal chimes", "distant pickaxe strikes", "magical humming"],
-    "time_of_day": "eternal twilight",
-    "weather": "cool and dry, charged with magic"
   }
 }
 ```
@@ -65,7 +104,6 @@ Each area needs a main `room.json` file that describes the entry point to that a
 | `name` | The name of the room shown to players |
 | `description` | Detailed description of the room's appearance, smells, sounds |
 | `exits` | Dictionary of directions and their destinations |
-| `ambient` | Optional environmental details to enhance immersion |
 
 ### Exit Paths
 
@@ -91,36 +129,36 @@ In the room where you want the NPC to appear, create an agent file named `agent_
 
 ```json
 {
-  "name": "Master Crystal Keeper",
-  "persona": "I am the keeper of these ancient crystal mines, guardian of their secrets and protector of their power. I've spent decades learning to commune with the living crystals and understand their whispered wisdom. Every gem has a voice, and I've trained my mind to hear their ancient songs.",
-  "background": "I grew up in the slums of the capital city and joined the guard to escape poverty. I've worked my way up through the ranks through dedication and toughness. The other guards respect me, but also fear my temper when rules are broken.",
+  "name": "Kael the Crystal Miner",
+  "persona": "I am Kael, son of stone and keeper of the deep crystals. I've spent fifteen years in these tunnels, learning to read the veins and understand which stones hold true power versus mere pretty baubles. Every crystal has a song, and I've trained my ear to hear their melodies.",
+  "background": "I came to the crystal caves as a desperate young man fleeing debt in the city above. The previous foreman took pity on me and taught me the trade, but I discovered I had a natural gift for finding the richest veins and sensing unstable tunnel sections before they collapsed.",
   "knowledge": [
-    "I know all the security protocols of the dungeon",
-    "I have information about the mysterious prisoner in cell block D",
-    "I know which guards can be bribed and which are loyal",
-    "I've heard rumors about a secret passage in the east wing"
+    "I know the location of every major crystal vein in the cave system",
+    "I can identify magical crystals by sound, color, and feel",
+    "I understand cave safety and can predict dangerous areas",
+    "I know which crystals are valuable versus common decorative stones"
   ],
   "goals": [
-    "Maintain security in the dungeon at all costs",
-    "Eventually retire with a captain's pension",
-    "Keep the secret of cell block D from spreading"
+    "Keep my mining crews safe while maximizing their earnings",
+    "Find the legendary Heart of the Mountain crystal",
+    "Expand the tunnel network to reach deeper, richer veins"
   ],
-  "location": "world/dungeon/guardroom",
-  "memory_file": "memory_guard_captain.csv",
+  "location": "world/crystal_caves/mining_tunnels",
+  "memory_file": "memory_kael.csv",
   "following": false,
-  "mood": "vigilant",
-  "appearance": "A broad-shouldered man in well-kept armor, with a scarred face and a neatly trimmed gray beard",
-  "occupation": "dungeon guard captain",
+  "mood": "hardworking and protective of his workers",
+  "appearance": "A stocky, muscular man in his thirties with arms like tree trunks and hands permanently stained with rock dust.",
+  "occupation": "head crystal miner and tunnel foreman",
   "relationships": {
-    "player": "suspicious stranger",
-    "kingdom": "loyal servant",
-    "prisoners": "stern overseer"
+    "player": "surface dweller who might understand the value of good crystals",
+    "mining_crew": "brothers and family who depend on his leadership",
+    "crystals": "living things that deserve respect"
   },
-  "emotional_state": "Alert and somewhat stressed about recent security concerns",
+  "emotional_state": "Satisfied with his work but always alert to dangers",
   "quirks": [
-    "Constantly checks his keys",
-    "Rubs old sword wound when nervous",
-    "Speaks in short, direct sentences"
+    "Taps crystals with his pickaxe to test their quality by sound",
+    "Never enters a new tunnel without leaving an offering to the cave spirits",
+    "Can navigate the caves in complete darkness by feeling the air currents"
   ]
 }
 ```
@@ -149,7 +187,7 @@ In the room where you want the NPC to appear, create an agent file named `agent_
 Create a blank CSV file with the same name as specified in the `memory_file` field:
 
 ```
-world_template/dungeon/guardroom/memory_guard_captain.csv
+world_template/crystal_caves/mining_tunnels/memory_kael.csv
 ```
 
 This file will automatically be populated as the NPC interacts with the player.
@@ -164,19 +202,11 @@ In the room where you want the item to appear, create an item file named `item_n
 
 ```json
 {
-  "name": "Guard Key Ring",
-  "description": "A heavy iron ring holding several large, ornate keys. Each key is labeled with small symbols indicating different areas of the dungeon.",
-  "type": "key",
-  "value": 100,
-  "weight": 0.3,
-  "properties": {
-    "unlocks": ["cell_block_a", "guard_quarters", "supply_room"],
-    "magic": false,
-    "restricted": true
-  },
-  "usable": true,
+  "name": "Crystal Pickaxe",
+  "description": "A masterfully crafted mining pickaxe with a head made from compressed crystal dust and steel. The handle is wrapped in leather worn smooth by years of use, and small crystals embedded in the metal head glow softly to provide light while working.",
   "portable": true,
-  "use_description": "You use a key from the ring to unlock the door."
+  "usable": true,
+  "use_description": "You swing the crystal pickaxe and it strikes true, the magical crystals in the head helping guide it to extract valuable stones without damage."
 }
 ```
 
@@ -186,44 +216,9 @@ In the room where you want the item to appear, create an item file named `item_n
 |----------|-------------|
 | `name` | The name of the item shown to players |
 | `description` | Detailed description of the item's appearance |
-| `type` | Category of the item (weapon, armor, key, consumable, etc.) |
-| `value` | Worth in gold or other currency |
-| `weight` | How heavy the item is (affects inventory capacity) |
-| `properties` | Special attributes of the item (varies by type) |
-| `usable` | Whether the item can be used (activated) |
-| `portable` | Whether the item can be picked up and carried |
+| `portable` | Whether the item can be picked up and carried (default: true) |
+| `usable` | Whether the item can be used with `/use` (default: false) |
 | `use_description` | Text shown when the player uses the item |
-
-### Item Types and Properties
-
-Different item types can have different properties:
-
-1. **Weapons**
-   ```json
-   "properties": {
-     "damage": "2d6+1",
-     "magic": true,
-     "two_handed": false
-   }
-   ```
-
-2. **Armor**
-   ```json
-   "properties": {
-     "protection": 4,
-     "magic": false,
-     "slot": "body"
-   }
-   ```
-
-3. **Consumables**
-   ```json
-   "properties": {
-     "healing": "2d4+2",
-     "uses": 1,
-     "effect_duration": 60
-   }
-   ```
 
 ## Testing Your Creations
 

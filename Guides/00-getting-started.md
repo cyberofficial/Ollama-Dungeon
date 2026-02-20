@@ -6,9 +6,10 @@ Welcome to Ollama Dungeon, a text adventure powered by local AI. This guide will
 
 Before starting the game, ensure you have:
 
-1. **Ollama installed** - The game uses Ollama for AI responses. Make sure it's running with `ollama serve` in a terminal.
-2. **Required models** - The game uses different models for different functions (chat, summarization, etc.) which should be configured in your `config.py` file.
-3. **Python dependencies** - Install all required dependencies with `pip install -r requirements.txt`
+1. **Python 3.12.7** - The game is tested on Python 3.12.7
+2. **Ollama installed** - The game uses Ollama for AI responses. Make sure it's running with `ollama serve` in a terminal.
+3. **Required model** - The game uses `qwen3:4b` by default for both main conversation and summarization (configurable in `config.py`). Install it with `ollama pull qwen3:4b`
+4. **Python dependencies** - Install all required dependencies with `pip install -r requirements.txt`
 
 ## Launching the Game
 
@@ -18,7 +19,9 @@ To start playing Ollama Dungeon:
 2. Navigate to the game directory
 3. Run the command: `python main.py`
 
-You'll see the welcome screen with the game title and a prompt to type `/help` for available commands.
+**First Run:** On the first launch, the game will automatically copy the `world_template` directory to create your `world` directory. This ensures you always have a fresh template to start from.
+
+You'll see the welcome screen with the game title and a prompt to type `/help` for available commands. Your starting location is `world/sunspire_city`.
 
 ## Basic Concepts
 
@@ -28,6 +31,7 @@ The game world is structured as a directory-based environment:
 - **Rooms** are represented as directories in the filesystem
 - **Movement** occurs by navigating between these directories
 - **Items** and **NPCs (agents)** are JSON files within room directories
+- **World locations** include: `sunspire_city` (default starting location), `crystal_caves`, `sky_gardens`, and `whispering_dunes`
 
 ### Player Actions
 

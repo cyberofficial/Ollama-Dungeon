@@ -19,6 +19,11 @@ Welcome to the Ollama Dungeon player guides. These documents will help you under
 7. [**Command Reference**](./06-command-reference.md) - Complete listing of all game commands
 8. [**World Exploration**](./07-world-exploration.md) - Guide to exploring and understanding the world
 
+### World Building
+9. [**World Building**](./08-world-building.md) - Creating custom areas, rooms, NPCs, and items
+10. [**Editor Integration**](./09-editor-integration.md) - Using the World and NPC Editor tools
+11. [**Customization**](./customization.md) - Customizing game settings and behavior
+
 ## Quick Start
 
 If you're new to the game, we recommend reading the guides in order. However, if you need quick information:
@@ -49,7 +54,7 @@ Ollama Dungeon is a text adventure powered by local AI, where:
 All commands in the game start with a forward slash `/`. For example:
 - `/look` - Look around the current room
 - `/go north` - Move to the room to the north
-- `/say alice Hello!` - Talk to Alice
+- `/say zahra Hello!` - Talk to Zahra the Gem Merchant
 
 Type `/help` at any time in the game to see available commands.
 

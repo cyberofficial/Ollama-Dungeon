@@ -13,7 +13,7 @@ You can easily customize the title and subtitle that appear when you start the g
 ```python
 # Game settings
 GAME_SETTINGS = {
-    "default_location": "world/town",
+    "default_location": "world/sunspire_city",
     "auto_save_frequency": 10,  # Auto-save every N actions
     "debug_mode": True,        # Enable debug output,
     "title": "OLLAMA DUNGEON",  # Customize main title

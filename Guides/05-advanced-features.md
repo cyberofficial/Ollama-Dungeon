@@ -20,17 +20,22 @@ When you run `/tokens` or `/tokens <agent>`, you'll see output like this:
 ```
 Token usage for Zahra:
 - Current context: 15,230 tokens
+- Current token limit: 26,000 tokens
 - Memory entries: 24
 - Shared context entries: 8
 - Tokens until compression: 10,770
 - Status: ✅ Normal
+- Next expansion at: 23,400 tokens
 ```
 
 Key metrics:
 - **Current context**: How many tokens this agent is currently using
+- **Current token limit**: The current token limit for this agent (expands dynamically)
 - **Memory entries**: Number of memories the agent has stored
+- **Shared context entries**: Number of shared context entries the agent has received
 - **Status**: Indicates if token usage is normal or high
 - **Tokens until compression**: How many more tokens can be used before reaching compression threshold
+- **Next expansion at**: Token count that will trigger the next token limit expansion
 
 ### Token Management Configuration
 
@@ -40,8 +45,15 @@ Ollama Dungeon includes advanced token management settings that can be configure
 |---------|-------------|---------|
 | `max_context_tokens` | Maximum tokens before compression | 40000 |
 | `compression_threshold` | Start compression at this token count | 35000 |
-| `starting_tokens` | Starting token limit for new agents | 10 |
+| `starting_tokens` | Starting token limit for new agents | 0 |
 | `increase_tokens_by` | Amount to increase token limit by | 1000 |
+| `token_increase_threshold` | Percentage of limit to trigger expansion (0.9) | 0.9 |
+| `summary_chunk_size` | Size of chunks to summarize | 8000 |
+| `min_context_after_compression` | Minimum context to keep after compression | 5000 |
+| `enable_auto_compression` | Automatically compress when threshold reached | True |
+| `show_token_warnings` | Show token warnings to user | True |
+| `suppress_token_info` | Hide token expansion/compression messages for immersion | False |
+| `emergency_compression_threshold` | Emergency compression if regular fails | 38000 |
 | `reload_on_lower` | Only reload model when token count increases | False |
 
 When `reload_on_lower` is set to False (default), the system will not reload the model when switching to an agent with a lower token count. This optimization reduces unnecessary model reloads and improves response times.
@@ -61,7 +73,8 @@ Ollama Dungeon includes settings to customize how agents respond and ensure dive
 |---------|-------------|---------|
 | `randomize_responses` | Add unique random seeds to agent calls | True |
 | `temperature` | Control response creativity and variation | 0.7 |
-| `strip_thinking_tokens` | Remove `<think>` tags from responses | True |
+| `strip_thinking_tokens` | Remove<think> tags from responses | True |
+| `reply_length` | Response length: brief, medium, detailed, or verbose | detailed |
 
 ### Understanding Response Settings
 
@@ -118,6 +131,70 @@ Example session:
 3. **Remove agents** who are no longer relevant to the conversation topic
 4. **Monitor token usage** during long endless conversations with `/tokens`
 
+## Token Analytics
+
+For detailed tracking and analysis of token usage over time:
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/analytics` | Show system-wide token analytics | `/analytics` |
+| `/analytics <agent>` | Show detailed analytics for a specific agent | `/analytics alice` |
+| `/analytics save` | Save analytics data to file | `/analytics save` |
+
+### System-Wide Analytics
+
+Running `/analytics` without arguments shows overall statistics:
+
+```
+📊 System-Wide Token Analytics:
+
+🌍 Overall Statistics:
+- Total agents tracked: 5
+- Total tokens used: 145,230
+- Total API calls: 342
+- Average tokens per call: 424
+
+🔄 System Activity:
+- Total token expansions: 8
+- Total compressions: 3
+
+🏆 Top Token Users:
+1. Zahra: 52,340 tokens (124 calls)
+2. Kael: 38,120 tokens (98 calls)
+3. Scholar Maven: 28,450 tokens (67 calls)
+```
+
+### Agent-Specific Analytics
+
+Running `/analytics <agent>` shows detailed statistics for that agent:
+
+```
+📊 Detailed Analytics for Zahra:
+
+📈 Usage Statistics:
+- Total tokens used: 52,340
+- API calls made: 124
+- Conversation turns: 86
+- Average tokens per call: 422
+
+🔄 Token Management:
+- Token limit expansions: 3
+- Context compressions: 1
+- Peak tokens in single call: 28,450
+
+⏱️ Activity Timeline:
+- First seen: 2025-06-06T07:30:15
+- Last active: 2025-06-06T09:45:22
+```
+
+### Saving Analytics Data
+
+Use `/analytics save` to persist the current analytics data to `token_analytics.json`. This allows you to:
+- Track token usage over multiple sessions
+- Analyze patterns in agent behavior
+- Identify which agents consume the most tokens
+- Optimize your configuration based on actual usage
+
 ## System Status
 
 To get a comprehensive view of the game's status:
@@ -126,14 +203,37 @@ To get a comprehensive view of the game's status:
 /status
 ```
 
-This shows:
-- Current location
-- Agents and items in the room
-- Inventory status
-- Ollama connectivity
-- Model availability
-- Token usage summary
-- Context sharing statistics
+This displays organized sections:
+
+```
+=== SYSTEM STATUS ===
+
+World State:
+- Current location: world/sunspire_city
+- Agents in room: 2
+- Items in room: 1
+- Inventory items: 2
+
+AI Models:
+- Ollama: ✅ Connected
+- qwen3:4b (chat): ✅ Available
+- qwen3:4b (summary): ✅ Available
+
+Token Usage:
+- Total tokens in room: 28,552
+- High usage agents: Zahra (25,230)
+- Auto-compression: ✅ Enabled
+
+Context Sharing:
+- Shared contexts: 5
+- Current location contexts: 2
+```
+
+The status command provides:
+- **World State**: Current location and counts of agents, items, and inventory
+- **AI Models**: Ollama connectivity and model availability
+- **Token Usage**: Total tokens, high usage agents, and auto-compression status
+- **Context Sharing**: Statistics about shared contexts across agents
 
 ## File System Structure
 
@@ -176,7 +276,26 @@ inventory/                 # Global inventory items
 | Command | Description | Example |
 |---------|-------------|---------|
 | `/reset <agent>` | Reset an agent's memory and context | `/reset alice` |
+| `/model_state [agent]` | Show model state for all agents or specific agent | `/model_state` or `/model_state alice` |
 | `/share <context>` | Share context with all agents | `/share The weather has turned stormy` |
+
+### Model State Command
+
+The `/model_state` command shows detailed information about the AI model state:
+
+```
+🤖 Model States for All Agents:
+
+Zahra: Model=qwen3:4b, Context=15,230 tokens, Last used=2025-06-06T09:45:22
+Kael: Model=qwen3:4b, Context=8,450 tokens, Last used=2025-06-06T09:43:10
+```
+
+For a specific agent, use `/model_state <agent>`:
+
+```
+🤖 Model State for Zahra:
+Model=qwen3:4b, Context=15,230 tokens, Last used=2025-06-06T09:45:22
+```
 
 ## Troubleshooting
 
@@ -225,7 +344,7 @@ The filesystem structure makes the game easy to extend:
 === SYSTEM STATUS ===
 
 World State:
-- Current location: town/tavern
+- Current location: world/sunspire_city
 - Agents in room: 2
 - Items in room: 1
 - Inventory items: 2
@@ -236,21 +355,19 @@ AI Models:
 - qwen3:4b (summary): ✅ Available
 
 Token Usage:
-- Total tokens in room: 28,552
-- High usage agents: Zahra (25,230)
+- Total tokens in room: 28552
+- High usage agents: Zahra (25230)
 - Auto-compression: ✅ Enabled
 
+Context Sharing:
+- Shared contexts: 5
+- Current location contexts: 2
+
 > /model_state
-=== MODEL STATE INFO ===
+🤖 Model States for All Agents:
 
-Active Agents:
-- Zahra: Model=qwen3:4b, Context=3010 tokens, Last used=2025-06-06T07:53:12
-- Kael: Model=qwen3:4b, Context=3010 tokens, Last used=2025-06-06T07:53:15
-
-Agent Settings:
-- Response Temperature: 0.5
-- Randomized Responses: Enabled
-- Context Sharing: Enabled
+Zahra: Model=qwen3:4b, Context=15230 tokens, Last used=2025-06-06T09:45:22
+Kael: Model=qwen3:4b, Context=8450 tokens, Last used=2025-06-06T09:43:10
 
 > /compress_all
 Compressed contexts for 2 agents:

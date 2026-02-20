@@ -7,83 +7,120 @@ Ollama Dungeon includes a simple inventory system that allows you to pick up, ca
 | Command | Description | Example |
 |---------|-------------|---------|
 | `/inventory` or `/inv` | View your inventory | `/inventory` |
-| `/pickup <item>` or `/take <item>` | Pick up an item from the room | `/pickup rusty_dagger` |
+| `/pickup <item>` or `/take <item>` | Pick up an item from the room | `/pickup crystal pickaxe` |
 | `/use <item>` | Use an item from inventory | `/use health_potion` |
 
 ## Finding Items
 
-Items are scattered throughout the world. When you enter a room, the room description might mention items you can interact with. You can also use the `/look` command to see a description of the room, which often includes available items.
+Items are scattered throughout the world. When you enter a room, the room description will show available items. You can also use the `/look` command to see a description of the room, which includes items present.
 
 Example:
 ```
 > /look
-You are in the crystal caves mining tunnels. The walls sparkle with embedded gems and you notice a crystal pickaxe leaning against the wall.
+**Crystal Caves Mining Tunnels**
+The walls sparkle with embedded gems...
 
-> /pickup crystal_pickaxe
-You pick up the crystal pickaxe and add it to your inventory.
+People here: Cassandra
+
+Items here: crystal pickaxe
+
+Exits: north
+
+> /pickup crystal pickaxe
+You pick up the crystal pickaxe.
 
 > /inventory
 Your inventory:
-- Crystal Pickaxe: A mining tool enhanced with crystal fragments that glow with inner light.
+- crystal pickaxe: A mining tool enhanced with crystal fragments that glow with inner light.
 ```
 
 ## Using Items
 
-Different items have different effects when used:
-
-1. **Consumables** like potions might have immediate effects when used
-2. **Equipment** might change player stats or capabilities
-3. **Key items** might unlock new areas or trigger events
+Items must have the `usable` property set to `true` to be used. When you use an item, the game displays its `use_description` if one is defined.
 
 To use an item:
 ```
 /use <item_name>
 ```
 
-Example:
+Example (if the item has `usable: true`):
 ```
-> /use crystal_pickaxe
-You swing the crystal pickaxe at the cave wall. The enhanced tool easily chips away at the rock, revealing a small vein of precious gems.
-The pickaxe's crystal fragments glow brighter after use.
+> /use crystal pickaxe
+You use the crystal pickaxe. The enhanced tool easily chips away at the rock.
+```
 
-> /inventory
-Your inventory:
-- Crystal Pickaxe: A mining tool enhanced with crystal fragments that glow with inner light.
+If an item is not usable:
+```
+> /use crystal pickaxe
+You can't use the crystal pickaxe right now.
+```
+
+If you don't have the item:
+```
+> /use health_potion
+You don't have a 'health_potion' in your inventory.
 ```
 
 ## Item Properties
 
-Items are defined in JSON files and may have various properties:
+Items are defined as JSON files in room directories. The supported properties are:
 
-- **Name**: The name of the item
-- **Description**: A description of the item
-- **Type**: What kind of item it is (consumable, weapon, key, etc.)
-- **Effects**: What happens when the item is used
-- **Value**: How valuable the item is (if applicable)
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `name` | string | required | The name of the item |
+| `description` | string | required | A description of the item (shown in inventory) |
+| `portable` | boolean | `true` | Whether the item can be picked up |
+| `usable` | boolean | `false` | Whether the item can be used with `/use` |
+| `use_description` | string | "Nothing special happens." | Message shown when the item is used |
+
+Example item JSON:
+```json
+{
+  "name": "crystal pickaxe",
+  "description": "A mining tool enhanced with crystal fragments that glow with inner light.",
+  "portable": true,
+  "usable": true,
+  "use_description": "The enhanced tool easily chips away at the rock."
+}
+```
 
 ## Tips for Item Management
 
-1. **Check rooms thoroughly** - Items might be mentioned in room descriptions
-2. **Inventory management** - Some implementations might limit inventory capacity
-3. **Strategic use** - Some items might be more valuable to save for later
-4. **Item combinations** - Some puzzles might require using or combining specific items
+1. **Item names can include spaces** - Use multi-word names like `/pickup crystal pickaxe`
+2. **Check the `portable` flag** - Some items cannot be picked up (e.g., fixed furniture)
+3. **Set `usable: true`** - Items must be marked usable before they can be used with `/use`
+4. **Case-insensitive matching** - Item names match regardless of capitalization
 
 ## Example Item Interaction
 
 ```
 > /look
-You are in the crystal caves. The tunnels glitter with embedded gems and the air hums with magical energy. You can barely make out a crystal pickaxe leaning against the tunnel wall.
+**Crystal Caves Mining Tunnels**
+The tunnels glitter with embedded gems and the air hums with magical energy.
 
-> /pickup crystal_pickaxe
-You pick up the crystal pickaxe and add it to your inventory.
+People here: Cassandra
+
+Items here: crystal pickaxe
+
+Exits: north
+
+> /pickup crystal pickaxe
+You pick up the crystal pickaxe.
 
 > /inventory
 Your inventory:
-- Crystal Pickaxe: A mining tool enhanced with crystal fragments that glow with inner light.
+- crystal pickaxe: A mining tool enhanced with crystal fragments that glow with inner light.
 
 > /go north
-You moved deeper into the mining tunnels. Strange crystalline formations block your path!
+You go north.
 
-> /use crystal_pickaxe
-You swing the crystal pickaxe at the crystalline formations. The enhanced tool easily breaks through the magical barrier, allowing you to pass.
+**Crystal Caves Deep Tunnel**
+Strange crystalline formations block your path!
+
+Items here: none
+
+Exits: south
+
+> /use crystal pickaxe
+You use the crystal pickaxe. The enhanced tool easily breaks through the magical barrier.
 ```

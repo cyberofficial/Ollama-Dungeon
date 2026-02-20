@@ -12,27 +12,67 @@ The game world is organized as a hierarchical directory structure, where:
 
 ## Default World Layout
 
-The default world template includes:
+The default world template includes four main areas, each with unique sub-locations:
 
 ```
 world/
   ├── sunspire_city/
-  │   ├── room.json         # Oasis Plaza
+  │   ├── room.json         # Oasis Plaza (main area)
   │   ├── merchant_quarter/ # The marketplace sub-location
   │   │   ├── room.json
   │   │   ├── agent_zahra.json
   │   │   ├── sunfire_crystal.json
-  │   │   └── ...
+  │   │   └── memory_zahra.csv
   │   └── scholar_district/ # The scholar area sub-location
   │       ├── room.json
-  │       └── ...
-  └── crystal_caves/
-      ├── room.json         # Cave entrance
-      └── mining_tunnels/   # Mining area sub-location
+  │       ├── agent_qasim.json
+  │       ├── scroll_desert_navigation.json
+  │       └── memory_qasim.csv
+  ├── crystal_caves/
+  │   ├── room.json         # Cave entrance
+  │   └── mining_tunnels/   # Mining area sub-location
+  │       ├── room.json
+  │       ├── agent_kael.json
+  │       ├── crystal_pickaxe.json
+  │       └── memory_kael.csv
+  ├── sky_gardens/
+  │   ├── room.json         # Sky Gardens entrance
+  │   └── meditation_grove/ # Meditation sub-location
+  │       ├── room.json
+  │       ├── agent_lyra.json
+  │       ├── celestial_dew.json
+  │       └── memory_lyra.csv
+  └── whispering_dunes/
+      ├── room.json         # Dunes entrance
+      ├── ancient_ruins/    # Ancient ruins sub-location
+      │   ├── room.json
+      │   └── amulet_sun_god.json
+      └── nomad_camp/       # Nomad camp sub-location
           ├── room.json
-          ├── agent_kael.json
-          └── ...
+          ├── agent_amara.json
+          ├── desert_survival_kit.json
+          └── memory_amara.csv
 ```
+
+### Main Areas and Their Characters
+
+1. **Sunspire City** (starting location)
+   - Oasis Plaza - Central gathering point
+   - Merchant Quarter - Home to **Zahra the Gem Merchant**
+   - Scholar District - Home to **Master Qasim the Lore Keeper**
+
+2. **Crystal Caves**
+   - Cave entrance
+   - Mining Tunnels - Home to **Kael the Crystal Miner**
+
+3. **Sky Gardens**
+   - Sky Gardens entrance
+   - Meditation Grove - Home to **Sage Lyra the Sky Keeper**
+
+4. **Whispering Dunes**
+   - Dunes entrance
+   - Ancient Ruins - Mysterious location with ancient treasures
+   - Nomad Camp - Home to **Amara the Desert Guide**
 
 ## Navigation
 
@@ -96,32 +136,24 @@ Here are some effective strategies for exploring the world:
    /memory grix
    ```
 
-## Unlocking New Locations
-
-Some locations might be initially inaccessible. To unlock them:
-
-1. **Complete tasks**: NPCs might ask you to do something before allowing access.
-
-2. **Find key items**: Some areas may require specific items to enter.
-
-3. **Solve puzzles**: Figure out the right actions or commands to proceed.
-
 ## Example Exploration Session
 
 ```
 > /look
-You are in Sunspire City's Oasis Plaza. Shimmering waters reflect towering spires of golden sandstone. There are paths leading north to the palace district, south to the merchant quarter, east to the scholar district, and west to the whispering dunes.
+You are in Sunspire City's Oasis Plaza. Shimmering waters of the Sacred Oasis reflect towering spires of golden sandstone. Palm trees provide blessed shade while colorful silk canopies flutter in the desert breeze.
+
+Exits: north (to palace district), south (to merchant quarter), east (to scholar district), west (to whispering dunes), up (to sky gardens), down (to crystal caves)
 
 > /go south
 You moved to the merchant quarter. It's a bustling marketplace with colorful stalls and the scent of spices.
 
 > /agents
 People here:
-- Zahra (shrewd): A skilled merchant trader with keen eyes for valuable goods
+- Zahra the Gem Merchant
 
 > /say zahra Hello! What can you tell me about this area?
 You say to Zahra: "Hello! What can you tell me about this area?"
-Zahra says: "Welcome to Sunspire City's merchant quarter! This is where the finest goods from across the realm find their way to discerning buyers. The crystal caves below hold incredible treasures if you're brave enough to explore them."
+Zahra says: "Welcome to Sunspire City's merchant quarter! This is where the finest gems and crystals from across the realm find their way to discerning buyers. The crystal caves below hold incredible treasures if you're brave enough to explore them."
 
 > /go north
 You moved back to the Oasis Plaza.
@@ -129,10 +161,21 @@ You moved back to the Oasis Plaza.
 > /go east
 You moved to the scholar district. Ancient tomes and scrolls fill the libraries here.
 
+> /agents
+People here:
+- Master Qasim the Lore Keeper
+
 > /look
 The scholar district is a place of learning and ancient knowledge. Tall spires house vast libraries filled with the accumulated wisdom of ages.
 
 Exits: west (to Oasis Plaza)
+
+> /go up
+You moved to the Sky Gardens. Floating islands of lush greenery hover in the air, connected by bridges of woven cloud-stuff.
+
+> /agents
+People here:
+- Sage Lyra the Sky Keeper
 ```
 
 ## Tips for Effective Exploration

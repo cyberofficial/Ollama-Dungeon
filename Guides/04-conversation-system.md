@@ -4,63 +4,48 @@ Ollama Dungeon includes an advanced conversation system that allows for complex 
 
 ## Multi-Agent Conversations
 
-The game offers a sophisticated system for multi-participant conversations:
+The game offers a sophisticated system for multi-participant conversations using endless mode:
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/conv <participants> [turns] <topic>` | Start a conversation with specified participants about a topic | `/conv zahra,kael,player 5 The recent crystal discoveries` |
-| `/conversation <participants> [turns] <topic>` | Alternative to `/conv` | `/conversation zahra,kael Magical artifacts in the caves` |
+| `/conv <participants> <topic>` | Start an endless conversation with specified participants about a topic | `/conv zahra,kael,player The recent crystal discoveries` |
+| `/conversation <participants> <topic>` | Alternative to `/conv` | `/conversation zahra,kael Magical artifacts in the caves` |
 
 ### Conversation Parameters:
 
-- **Participants**: Comma-separated list of participant names (use "player" to include yourself)
-- **Turns** (optional): Number of conversation exchanges (if omitted, endless mode is activated)
+- **Participants**: Comma-separated list of participant names (use "player" to include yourself). At least 2 participants required.
 - **Topic**: What the conversation will be about
 
 ### Example:
 ```
-> /conv zahra,kael,player 3 The mysterious crystal formations
-🗣️ Starting conversation about: The mysterious crystal formations
-Participants: Zahra, Kael, Player
-```
+> /conv zahra,kael,player The mysterious crystal formations
+🗣️ Endless conversation mode activated!
+📋 Participants: Zahra, Kael, Player
+📝 Topic: The mysterious crystal formations
 
-## Example Multi-Agent Conversation
-
-```
-> /conv zahra,kael,player 3 The strange energy readings from the deep caves
-🗣️ Starting conversation about: The strange energy readings from the deep caves
-Participants: Zahra, Kael, Player
-
-💭 It's your turn to speak about The strange energy readings from the deep caves
-🗣️ **You**: Have either of you noticed the unusual magical energy coming from the deeper cave systems?
-
-💬 Zahra is thinking...
-🗣️ **Zahra**: Yes, I've been tracking it for weeks now. The crystals I've been receiving from the mines have been far more potent than usual. Kael, you're down there every day - have you seen anything unusual in the deep tunnels?
-
-💬 Kael is thinking...
-🗣️ **Kael**: Indeed I have. The crystal veins are singing differently, and some of the deeper passages glow with their own light now. I'm concerned it might destabilize the tunnels, but the potential discoveries... they could be extraordinary.
-
-🎯 Conversation concluded!
+💡 How it works:
+- Normal talk (/say <message>) = Everyone replies in order once
+- Directed talk (/say alice <message>) = Only Alice replies, others listen
+- Multiple targets (/say alice,bob <message>) = Alice and Bob reply, others listen
+- Type /endconv to end conversation mode
 ```
 
 ## Endless Conversation Mode
 
-When you omit the turns parameter in the `/conv` command, you enter "endless conversation mode" where the conversation continues until you explicitly end it:
+The `/conv` command always starts "endless conversation mode" where the conversation continues until you explicitly end it with `/endconv`:
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/endconv` | End an endless conversation (only during your turn) | `/endconv` |
+| `/endconv` | End an endless conversation | `/endconv` |
 | `/invite <agent>` | Invite an agent to join the endless conversation | `/invite alice` |
 | `/remove <agent>` | Remove an agent from the endless conversation | `/remove bob` |
-
-In endless mode, you can use special commands:
-- `/say <message>` - Everyone responds in order
-- `/say <agent> <message>` - Only the specified agent responds
-- `/say <agent1,agent2> <message>` - Only the specified agents respond
+| `/say <message>` | Everyone responds in order | `/say What do you all think?` |
+| `/say <agent> <message>` | Only the specified agent responds | `/say zahra Tell me more` |
+| `/say <agent1,agent2> <message>` | Only the specified agents respond | `/say zahra,kael What are your thoughts?` |
 
 ### Location-Aware Endless Mode
 
-Endless mode is now location-aware:
+Endless mode is location-aware:
 - When you move to a new location, agents who are not following you are automatically removed from the endless conversation
 - Only agents present in your current location or agents who are following you can participate
 - Use `/invite <agent>` to add agents from your current location back into the conversation
@@ -74,6 +59,12 @@ Endless mode is now location-aware:
 📋 Participants: Zahra, Kael, Player
 📝 Topic: The rare crystal formations
 
+💡 How it works:
+- Normal talk (/say <message>) = Everyone replies in order once
+- Directed talk (/say alice <message>) = Only Alice replies, others listen
+- Multiple targets (/say alice,bob <message>) = Alice and Bob reply, others listen
+- Type /endconv to end conversation mode
+
 💭 It's your turn to speak about The rare crystal formations
 🗣️ **You**: I've heard rumors about incredibly rare crystal formations deep in the caves. Do either of you know anything about them?
 
@@ -83,16 +74,22 @@ Endless mode is now location-aware:
 💬 Kael is thinking...
 🗣️ **Kael**: That's not just stories. I've found traces of it - crystalline formations that sing with an otherworldly harmony. The legendary Heart Crystal is real, hidden in passages so deep and dangerous that few have dared to search for it.
 
-💭 It's your turn to speak about The rare crystal formations
-🗣️ **You**: That's fascinating. Have either of you ever tried to find it?
+> /say zahra Tell me more about these stories your grandmother told
+You say to Zahra: "Tell me more about these stories your grandmother told"
+
+💬 Zahra is thinking...
+🗣️ **Zahra**: She spoke of a crystal so pure it could store memories, and so powerful it could amplify any spell cast near it. The Heart of the Mountain was said to be the seed from which all other crystals in these caves grew.
 
 > /go up
 🚶 Moving up...
 📍 You are now in: Sunspire City - Oasis Plaza
-⚠️ Zahra and Kael were removed from endless conversation (not following)
+🚶 Zahra and Kael left the endless conversation (not following)
 
 > /invite palace_guardian
-✅ Palace Guardian added to endless conversation
+❌ Agent 'palace_guardian' not found in current location. Available: merchant_guard
+
+> /invite merchant_guard
+✅ Merchant_guard has joined the endless conversation!
 
 💭 It's your turn to speak about The rare crystal formations
 🗣️ **You**: Guardian, I seek knowledge about the legendary crystal formations. Can you tell me about them?
@@ -102,13 +99,17 @@ Endless mode is now location-aware:
 
 ## Automated Dialog
 
-You can also make two NPCs talk to each other automatically:
+You can also make two NPCs talk to each other automatically during endless conversation mode:
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/dialog <agent1,agent2> <exchanges>` | Generate automated dialog between two agents | `/dialog zahra,kael 5` |
+| `/dialog <agent1,agent2> <exchanges>` | Generate automated dialog between two agents (1-10 exchanges) | `/dialog zahra,kael 5` |
 
-This works only during endless conversation mode and creates a natural dialog between the specified agents.
+**Notes:**
+- Only works during endless conversation mode
+- Requires exactly 2 agents (comma-separated)
+- Number of exchanges must be between 1-10
+- Both agents must be in the current location and part of the endless conversation
 
 ## Tips for Effective Conversations
 
@@ -146,7 +147,6 @@ Agents remember their conversations with you and with other NPCs:
 - Recent interactions are stored in the agent's memory
 - Older memories are automatically summarized to save space
 - You can view an agent's memory with `/memory <agent_name>`
-- Shared context can be viewed with `/context <agent_name>`
 
 ### Tips for Managing Context
 
