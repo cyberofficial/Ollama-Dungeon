@@ -106,6 +106,19 @@ When you move between locations during an endless conversation:
 |---------|-------------|-------------|
 | `/invite <agent>` | Add an agent to the endless conversation | Agent must be in current location |
 | `/remove <agent>` | Remove an agent from the endless conversation | Works with any participant |
+| `/dialog <agent1,agent2> <exchanges>` | Generate automated dialog between two agents | Requires exactly 2 agents, 1-10 exchanges |
+
+The `/dialog` command creates automated exchanges between two agents:
+- Both agents must be participants in the endless conversation
+- Specify the number of exchanges (1-10 recommended)
+- Agents will automatically take turns speaking based on their personalities
+- Useful for generating background conversations or developing character relationships
+
+Example:
+```
+> /dialog zahra,kael 5
+✅ Automated dialog completed (5 exchanges between Zahra and Kael)
+```
 
 Example session:
 ```

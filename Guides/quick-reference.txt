@@ -5,6 +5,7 @@
 BASIC COMMANDS:
 /look, /l                 - Describe current room
 /go <direction>           - Move to another location (north, south, east, west)
+/move <direction>         - Alternative to /go
 /agents, /people          - List people in current room
 /inventory, /inv          - View your inventory
 /help                     - Show all commands
@@ -13,10 +14,13 @@ BASIC COMMANDS:
 INTERACTION:
 /say <agent> <message>    - Talk to an agent
 /sayto <agent> <message>  - Alternative to /say
+/talk <agent> <message>   - Alternative to /say
 /memory <agent>           - Show an agent's memory
 /share <context>          - Share context with agents in room
+/summarize <context>      - Alternative to /share
 /follow <agent>           - Have agent follow you
 /stay <agent>             - Have agent stop following you
+/reset <agent>            - Reset agent's memory and context
 
 ITEMS:
 /pickup <item>            - Pick up an item
@@ -24,11 +28,12 @@ ITEMS:
 /use <item>               - Use an item from inventory
 
 CONVERSATIONS:
-/conv <zahra,kael,player> [turns] <topic> - Start conversation (omit turns for endless mode)
+/conv <agent1,agent2[,player]> <topic> - Start endless conversation mode
+/conversation <agent1,agent2[,player]> <topic> - Alternative to /conv
 /endconv                  - End endless conversation
 /invite <agent>           - Invite agent to endless conversation
 /remove <agent>           - Remove agent from endless conversation
-/dialog <zahra,kael> <num> - Generate dialog between agents
+/dialog <agent1,agent2> <exchanges> - Generate automated dialog (endless mode only)
 
 SYSTEM:
 /save [name]              - Save game state
@@ -37,8 +42,11 @@ SYSTEM:
 /delete <save_name>       - Delete a saved game
 /status                   - Show system status
 /tokens [agent]           - Show token usage
-/analytics                - Show detailed usage analytics
+/analytics [agent]        - Show detailed usage analytics
+/analytics save           - Save analytics data
 /model_state [agent]      - Display model performance info
+/compress <agent>         - Manually compress agent's context
+/compress_all             - Compress all agents' contexts in room
 
 Type '/help' in-game for complete command list.
 ```

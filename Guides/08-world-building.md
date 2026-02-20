@@ -7,7 +7,8 @@ This guide will help you create your own custom areas, rooms, NPCs, and items fo
 2. [Creating Areas and Rooms](#creating-areas-and-rooms)
 3. [Creating NPCs (Agents)](#creating-npcs-agents)
 4. [Creating Items](#creating-items)
-5. [Testing Your Creations](#testing-your-creations)
+5. [World Editor Tools](#world-editor-tools)
+6. [Testing Your Creations](#testing-your-creations)
 
 ## World Structure Overview
 
@@ -93,6 +94,11 @@ Each area needs a main `room.json` file that describes the entry point to that a
     "south": "world/sunspire_city",
     "east": "world/crystal_mines/storage_cavern",
     "west": "world/sky_gardens"
+  },
+  "ambient": {
+    "sounds": ["distant mining echoes", "crystal humming"],
+    "time_of_day": "dim underground",
+    "weather": "dry cool air"
   }
 }
 ```
@@ -104,10 +110,19 @@ Each area needs a main `room.json` file that describes the entry point to that a
 | `name` | The name of the room shown to players |
 | `description` | Detailed description of the room's appearance, smells, sounds |
 | `exits` | Dictionary of directions and their destinations |
+| `ambient` | Optional atmospheric settings (sounds, time of day, weather) |
 
 ### Exit Paths
 
 The exit paths follow this format: `world/area_name/sub_location`. This creates the navigation network between rooms.
+
+#### Supported Exit Directions
+
+The game supports 10 directional exits:
+
+- **Cardinal directions**: `north`, `south`, `east`, `west`
+- **Diagonal directions**: `northeast`, `northwest`, `southeast`, `southwest`
+- **Vertical directions**: `up`, `down`
 
 ### Step 3: Create Sub-Locations
 
@@ -155,6 +170,10 @@ In the room where you want the NPC to appear, create an agent file named `agent_
     "crystals": "living things that deserve respect"
   },
   "emotional_state": "Satisfied with his work but always alert to dangers",
+  "fears": [
+    "cave collapses and losing his crew",
+    "greedy miners who strip-mine and destroy the crystals' natural beauty"
+  ],
   "quirks": [
     "Taps crystals with his pickaxe to test their quality by sound",
     "Never enters a new tunnel without leaving an offering to the cave spirits",
@@ -180,6 +199,7 @@ In the room where you want the NPC to appear, create an agent file named `agent_
 | `occupation` | Their job or role in the world |
 | `relationships` | How they view other important entities |
 | `emotional_state` | More detailed description of their current feelings |
+| `fears` | List of things that scare or worry this NPC |
 | `quirks` | Distinctive behaviors that make them unique |
 
 ### Step 2: Create the Memory File
@@ -192,21 +212,48 @@ world_template/crystal_caves/mining_tunnels/memory_kael.csv
 
 This file will automatically be populated as the NPC interacts with the player.
 
+#### Memory CSV Structure
+
+The memory file uses CSV format with these columns:
+
+| Column | Description |
+|--------|-------------|
+| `timestamp` | ISO format timestamp when the memory was created |
+| `type` | Type of memory: `event`, `observation`, `dialogue`, or `emotion` |
+| `content` | The actual memory content or conversation text |
+
+Example memory entries:
+```csv
+timestamp,type,content
+2026-02-20T10:30:45,event,Player arrived at the crystal mines
+2026-02-20T10:31:12,dialogue,Player asked about the Heart of the Mountain crystal
+2026-02-20T10:31:45,emotion,Felt hopeful when player offered to help search
+2026-02-20T10:32:00,observation,Player seems experienced with underground exploration
+```
+
 ## Creating Items
 
 Items are objects that players can pick up, use, or interact with in the game world.
 
 ### Create the Item JSON File
 
-In the room where you want the item to appear, create an item file named `item_name.json`:
+In the room where you want the item to appear, create an item file (no `item_` prefix needed - use descriptive names like `crystal_pickaxe.json`):
 
 ```json
 {
   "name": "Crystal Pickaxe",
   "description": "A masterfully crafted mining pickaxe with a head made from compressed crystal dust and steel. The handle is wrapped in leather worn smooth by years of use, and small crystals embedded in the metal head glow softly to provide light while working.",
+  "type": "tool",
   "portable": true,
   "usable": true,
-  "use_description": "You swing the crystal pickaxe and it strikes true, the magical crystals in the head helping guide it to extract valuable stones without damage."
+  "use_description": "You swing the crystal pickaxe and it strikes true, the magical crystals in the head helping guide it to extract valuable stones without damage.",
+  "value": 50,
+  "weight": 3.5,
+  "properties": {
+    "durability": 100,
+    "mining_power": "enhanced",
+    "light_source": true
+  }
 }
 ```
 
@@ -216,9 +263,91 @@ In the room where you want the item to appear, create an item file named `item_n
 |----------|-------------|
 | `name` | The name of the item shown to players |
 | `description` | Detailed description of the item's appearance |
+| `type` | Category of item (e.g., "tool", "weapon", "consumable", "treasure") |
 | `portable` | Whether the item can be picked up and carried (default: true) |
 | `usable` | Whether the item can be used with `/use` (default: false) |
 | `use_description` | Text shown when the player uses the item |
+| `value` | Gold/currency value of the item (default: 0) |
+| `weight` | Weight of the item in units (default: 0) |
+| `properties` | Optional object with custom item attributes |
+
+## World Editor Tools
+
+The game includes GUI-based editor tools to streamline world building:
+
+### Editor Launcher
+
+The `editor_launcher.py` script serves as the central hub for launching all editor tools:
+
+```bash
+python editor_launcher.py
+```
+
+This opens a graphical interface with buttons to launch:
+- **World Editor** - Create and edit rooms, areas, and ambient settings
+- **NPC Editor** - Create and edit agents/NPCs
+- **System Verification** - Check Ollama connection and world integrity
+
+### World Editor Features
+
+Access the World Editor through the launcher or directly:
+
+```bash
+python world_editor.py
+```
+
+**Features:**
+- **New World**: Create a completely new world from scratch
+- **Validate**: Check all JSON files for syntax errors and missing required fields
+- **Export**: Package your world for sharing or backup
+- **Delete**: Remove existing worlds (with confirmation)
+
+**Room Editing:**
+- Create areas and sub-locations
+- Edit room names and descriptions
+- Configure exit connections between rooms
+- Set ambient properties (sounds, time of day, weather)
+- Visual tree view of world structure
+
+**Advantages over manual editing:**
+- Automatic JSON validation
+- Visual navigation of world structure
+- No syntax errors from missing commas or quotes
+- Immediate feedback on missing required fields
+- Easy exit linking without manual path typing
+
+### NPC Editor Features
+
+```bash
+python npc_editor.py
+```
+
+**Features:**
+- Create new agents with all required fields
+- Edit existing agent personalities and knowledge
+- Set agent locations and relationships
+- Configure fears, quirks, and emotional states
+- Preview agent personas before saving
+
+**Memory Management:**
+- View agent memories in tabular format
+- Add custom memories for backstory
+- Clear or archive memory files
+- Import/export memory CSV files
+
+### When to Use Manual Editing vs. GUI Tools
+
+**Use GUI tools when:**
+- Creating new areas or NPCs from scratch
+- You're new to the JSON structure
+- You want visual validation of connections
+- Complex exit networks need visualization
+
+**Use manual editing when:**
+- Making quick text changes to descriptions
+- Bulk editing multiple files
+- You're comfortable with JSON syntax
+- Using version control with diff tools
 
 ## Testing Your Creations
 

@@ -25,6 +25,7 @@ This is a quick reference guide to all available commands in Ollama Dungeon.
 | `/memory <agent>` | Show an agent's memory summary |
 | `/summarize [target(s)] <context>` | Share context with agents |
 | `/share [target(s)] <context>` | Alternative to `/summarize` |
+| `/share all <context>` | Share context with all agents (explicit) |
 | `/follow <agent>` | Have agent follow you |
 | `/stay <agent>` | Have agent stop following you |
 
@@ -50,6 +51,8 @@ This is a quick reference guide to all available commands in Ollama Dungeon.
 | `/reset <agent>` | Reset agent's memory and context |
 | `/model_state [agent]` | Show model loading state for agent(s) |
 | `/analytics` | View token usage and API call analytics |
+| `/analytics [agent]` | View detailed analytics for specific agent |
+| `/analytics save` | Save analytics data to file |
 | `/help` | Show help message |
 | `/quit`, `/exit`, `/q` | Exit the game |
 
@@ -66,6 +69,7 @@ This is a quick reference guide to all available commands in Ollama Dungeon.
 ### Context Sharing
 
 - `/share <message>` - Share with all agents in the room
+- `/share all <message>` - Share with all agents (explicit keyword)
 - `/share <agent> <message>` - Share with a specific agent
 - `/share <agent1,agent2> <message>` - Share with multiple specific agents
 

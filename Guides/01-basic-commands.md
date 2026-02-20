@@ -1,6 +1,6 @@
-# Basic Commands
+# Basic Commands Reference
 
-This guide covers the essential commands you'll use to navigate and interact with the Ollama Dungeon world.
+This guide provides a comprehensive reference for all commands in Ollama Dungeon, organized by category.
 
 ## Movement & Exploration
 
@@ -10,42 +10,147 @@ This guide covers the essential commands you'll use to navigate and interact wit
 | `/go <direction>` | Move in a direction | `/go north` |
 | `/move <direction>` | Alternative to `/go` | `/move east` |
 
-The available directions depend on the current room, but typically include:
-- north, south, east, west
-- up, down
-- in, out
+**Available directions** depend on the current room, but typically include:
+- Cardinal: north, south, east, west
+- Vertical: up, down
+- Relative: in, out
 
-## Getting Information
+## Interaction Commands
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/agents` or `/people` | List all NPCs in the room | `/agents` |
-| `/help` | Show available commands | `/help` |
+| `/say <agent> <message>` | Talk to a specific agent | `/say zahra Hello!` |
+| `/sayto <agent> <message>` | Alternative to `/say` (for immersion) | `/sayto zahra Hello!` |
+| `/talk <agent> <message>` | Alternative to `/say` | `/talk zahra Hello!` |
+
+## Conversation System
+
+The conversation system allows for multi-agent conversations with multiple modes.
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/conv <participants> [turns] <topic>` | Start conversation mode | `/conv player,zahra,kamar 5 discussing trade` |
+| `/conversation <participants> [turns] <topic>` | Alternative to `/conv` | `/conversation zahra,kamar 10 arguing about prices` |
+| `/endconv` | End endless conversation mode | `/endconv` |
+| `/invite <agent>` | Add agent to endless conversation | `/invite zahra` |
+| `/remove <agent>` | Remove agent from endless conversation | `/remove kamar` |
+| `/dialog <agent1,agent2> <exchanges>` | Automated dialog between 2 agents (endless mode only) | `/dialog zahra,kamar 3` |
+
+**Conversation Modes:**
+
+1. **Endless Mode** (no turn count specified): Conversation continues until `/endconv` is typed
+   - Example: `/conv player,zahra,kamar discussing the merchant guild`
+   - Use `/say <message>` to talk to everyone (all respond in order)
+   - Use `/say <agent> <message>` to target specific agents
+
+2. **Turn-Based Mode** (specific turn count): Conversation runs for specified number of total messages
+   - Example: `/conv player,zahra,kamar 10 discussing trade routes` (10 total messages across all participants)
+
+**Participant Format:**
+- Comma-separated list: `player,zahra,kamar`
+- At least 2 participants required
+- Use `player` to include yourself in the conversation
+- All non-player participants must be agents in the current room
+
+## Information Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/agents` or `/people` | List all NPCs in current room | `/agents` |
+| `/memory <agent>` | Show an agent's memory summary | `/memory zahra` |
+
+## Inventory Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/inventory` or `/inv` | View your inventory | `/inventory` |
+| `/pickup <item>` | Pick up an item from room | `/pickup crystal_key` |
+| `/take <item>` | Alternative to `/pickup` | `/take ancient_scroll` |
+| `/use <item>` | Use an item from inventory | `/use healing_potion` |
+
+## Context Sharing
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/summarize [target(s)] <message>` | Share context with agents | `/summarize I'm looking for the merchant guild` |
+| `/share [target(s)] <message>` | Alternative to `/summarize` | `/share all The caravan arrives tomorrow` |
+
+**Target formats:**
+- No target: Share with all agents in room
+- `all`: Share with all agents in room
+- Single agent: `/share zahra The prices are fair`
+- Multiple agents: `/share zahra,kamar The market is closing soon`
+
+## Agent Control
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/follow <agent>` | Have agent follow you between rooms | `/follow zahra` |
+| `/stay <agent>` | Have agent stop following you | `/stay zahra` |
+| `/reset <agent>` | Reset agent's memory and context | `/reset zahra` |
+
+**How following works:**
+- Agents set to follow will automatically move with you when you change rooms
+- Following agents persist in endless conversation mode when you move
+- Use `/stay` to make an agent remain in their current location
+
+## Token Management
+
+Monitor and manage AI context tokens to prevent memory overflow.
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/tokens [agent]` | Show token usage (all agents or specific) | `/tokens` or `/tokens zahra` |
+| `/analytics [agent]` | Show detailed token analytics and usage history | `/analytics` or `/analytics zahra` |
+| `/model_state [agent]` | Show current model state and context size | `/model_state` or `/model_state zahra` |
+| `/compress <agent>` | Manually compress an agent's context | `/compress zahra` |
+| `/compress_all` | Compress context for all agents in room | `/compress_all` |
+
+**Token monitoring:**
+- Tokens represent AI memory usage
+- High token counts (25,000+) trigger warnings
+- Auto-compression runs when approaching limits (if enabled)
+- Manual compression can free up tokens immediately
 
 ## System Commands
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/save [name]` | Save game state | `/save my_game` |
-| `/load [name]` | Load game state | `/load my_game` |
+| `/status` | Show system status and Ollama connectivity | `/status` |
+| `/save [name]` | Save game state (default: "default") | `/save my_game` |
+| `/load [name]` | Load game state (default: "default") | `/load my_game` |
 | `/saves` | List all saved games | `/saves` |
-| `/delete <save_name>` | Delete a saved game | `/delete my_game` |
+| `/delete <save_name>` | Delete a saved game | `/delete old_save` |
+| `/help` | Show available commands | `/help` |
 | `/quit`, `/exit`, or `/q` | Exit the game | `/quit` |
-| `/status` | Show system status and connectivity | `/status` |
 
-## Tips for Navigation
+## Tips for New Players
 
-1. **Always explore** - Use `/look` whenever you enter a new room to get a description and learn what's there.
+### Navigation
+1. **Always explore** - Use `/look` when entering new rooms to learn about your surroundings
+2. **Multiple command forms** - Many commands have shortcuts (like `/l` for `/look`) for faster typing
+3. **Check exits** - Room descriptions mention available directions
+4. **Save frequently** - Use `/save <name>` to create save points
 
-2. **Multiple command forms** - Many commands have alternative forms (like `/l` for `/look`) to make typing faster.
+### Conversation
+1. **Start simple** - Use `/say <agent> <message>` for one-on-one conversations
+2. **Group discussions** - Use `/conv` for multi-agent conversations about specific topics
+3. **Endless mode** - Omit the turn count for conversations that continue until you end them
+4. **Target responses** - In endless mode, use `/say <agent> <message>` to have only that agent respond
 
-3. **Check exits** - The room description will usually mention available exits, so pay attention to directions.
+### Token Management
+1. **Monitor usage** - Use `/tokens` to check context sizes before long conversations
+2. **Compress when needed** - Use `/compress_all` if agents are slow or unresponsive
+3. **Check analytics** - Use `/analytics` to see which agents use the most tokens
 
-4. **Remember where you are** - The game maintains a player location that's shown in the room description.
+### Agent Management
+1. **Build relationships** - Agents remember conversations through their memory system
+2. **Travel companions** - Use `/follow` to have agents accompany you
+3. **Reset if needed** - Use `/reset` to clear an agent's memory if needed
 
-5. **Save frequently** - Use `/save <name>` to create save points you can return to.
+## Example Sessions
 
-Example navigation session:
+### Basic Exploration
 ```
 > /look
 You are in Sunspire City's Oasis Plaza. Shimmering waters reflect towering spires of golden sandstone. There are paths leading north to the palace district, south to the merchant quarter, east to the scholar district, and west to the whispering dunes.
@@ -57,6 +162,62 @@ You moved to the merchant quarter. It's a bustling marketplace with colorful sta
 People here:
 - Zahra (shrewd): A skilled merchant trader with keen eyes for valuable goods
 
+> /say zahra Hello! What do you have for sale today?
+You say to Zahra: "Hello! What do you have for sale today?"
+Zahra says: "Ah, welcome traveler! I have rare spices from the eastern deserts, silks from the mountain weavers, and curiosities from the crystal caves. What catches your eye?"
+
 > /save first_marketplace_visit
 Game saved as 'first_marketplace_visit'
+```
+
+### Multi-Agent Conversation
+```
+> /conv player,zahra,kamar discussing the crystal trade
+🗣️ Endless conversation mode activated!
+📋 Participants: Player, Zahra, Kamar
+📝 Topic: discussing the crystal trade
+
+> /say I've heard crystals from the caves are valuable
+You say: "I've heard crystals from the caves are valuable"
+
+🗣️ **Zahra**: Indeed! The resonance crystals fetch high prices in the palace district.
+
+🗣️ **Kamar**: But dangerous to harvest. The cave spirits don't give them up easily.
+
+> /say kamar How do you harvest them safely?
+You say to Kamar: "How do you harvest them safely?"
+
+🗣️ **Kamar**: You must sing to the spirits. Old songs. My grandmother taught me.
+
+> /endconv
+✅ Endless conversation mode ended.
+```
+
+### Managing Token Usage
+```
+> /tokens
+Comprehensive Token Usage Summary:
+Total tokens in room: 45,234
+Agents monitored: 3
+By agent:
+- Zahra: 18,456 tokens ✅ Normal
+- Kamar: 22,120 tokens 🟡 Medium
+- Mira: 4,658 tokens ✅ Normal
+
+> /compress kamar
+Compressed Kamar's context: 22120 -> 12450 tokens (saved 9670 tokens)
+
+> /analytics kamar
+📊 Detailed Analytics for Kamar:
+
+📈 Usage Statistics:
+- Total tokens used: 145,678
+- API calls made: 234
+- Conversation turns: 156
+- Average tokens per call: 622.7
+
+🔄 Token Management:
+- Token limit expansions: 2
+- Context compressions: 5
+- Peak tokens in single call: 28,450
 ```

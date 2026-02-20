@@ -103,12 +103,14 @@ Example:
 > /look
 You are in the tavern. It's a warm, cozy place with a crackling fireplace and the smell of fresh bread and ale. There are several patrons drinking and chatting.
 
-Exits: west (to town square), north (to inn rooms)
+Exits: west, north
 
 You see two people here:
 - Alice, the tavern keeper
 - Bob, a town local
 ```
+
+**Note:** The `/look` command only shows direction names (north, south, east, west, up, down), not where they lead. You'll need to explore to discover what lies in each direction!
 
 ## Exploring the World
 
@@ -142,7 +144,7 @@ Here are some effective strategies for exploring the world:
 > /look
 You are in Sunspire City's Oasis Plaza. Shimmering waters of the Sacred Oasis reflect towering spires of golden sandstone. Palm trees provide blessed shade while colorful silk canopies flutter in the desert breeze.
 
-Exits: north (to palace district), south (to merchant quarter), east (to scholar district), west (to whispering dunes), up (to sky gardens), down (to crystal caves)
+Exits: north, south, east, west, up, down
 
 > /go south
 You moved to the merchant quarter. It's a bustling marketplace with colorful stalls and the scent of spices.
@@ -168,7 +170,7 @@ People here:
 > /look
 The scholar district is a place of learning and ancient knowledge. Tall spires house vast libraries filled with the accumulated wisdom of ages.
 
-Exits: west (to Oasis Plaza)
+Exits: west
 
 > /go up
 You moved to the Sky Gardens. Floating islands of lush greenery hover in the air, connected by bridges of woven cloud-stuff.

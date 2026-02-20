@@ -32,12 +32,20 @@ If you're new to the game, we recommend reading the guides in order. However, if
 - To understand how to talk to NPCs, see [Interacting with NPCs](./02-interacting-with-npcs.md)
 - For help with multi-agent conversations, see [Conversation System](./04-conversation-system.md)
 
-## Recent Updates
+## Key Features
 
-### Enhanced Endless Conversation Mode
+### Endless Conversation Mode
+The game features a sophisticated endless conversation system:
 - **Location-aware conversations**: Agents are automatically removed from endless mode when you move to new locations (unless they're following you)
 - **Manual participant control**: Use `/invite <agent>` and `/remove <agent>` to manage who participates in endless conversations
-- **Improved conversation flow**: Only relevant agents participate in conversations based on your current location
+- **Dynamic conversation flow**: Only relevant agents participate in conversations based on your current location
+- **Agent following system**: Agents can follow you between rooms using `/follow <agent>` and stay behind using `/stay <agent>`
+
+### Advanced Token Management
+- **Dynamic token limits**: Context automatically expands based on usage patterns
+- **Auto-compression**: Agents automatically compress their context when approaching token limits
+- **Manual control**: Use `/tokens`, `/compress`, and `/analytics` to monitor and manage token usage
+- **Per-agent tracking**: Each agent maintains their own context with intelligent memory summarization
 
 ## Game Overview
 
@@ -52,10 +60,33 @@ Ollama Dungeon is a text adventure powered by local AI, where:
 ## Command Format
 
 All commands in the game start with a forward slash `/`. For example:
-- `/look` - Look around the current room
-- `/go north` - Move to the room to the north
-- `/say zahra Hello!` - Talk to Zahra the Gem Merchant
 
-Type `/help` at any time in the game to see available commands.
+**Movement & Exploration:**
+- `/look` or `/l` - Look around the current room
+- `/go north` - Move to the room to the north
+
+**Interaction:**
+- `/say zahra Hello!` - Talk to Zahra the Gem Merchant
+- `/agents` or `/people` - List all agents in the current room
+- `/memory zahra` - View what Zahra remembers
+
+**Conversations:**
+- `/conv zahra,qasim,player The history of Sunspire` - Start an endless conversation
+- `/invite qasim` - Add Qasim to the ongoing conversation
+- `/remove zahra` - Remove Zahra from the conversation
+- `/endconv` - End the endless conversation mode
+
+**Inventory:**
+- `/inventory` or `/inv` - View your inventory
+- `/pickup crystal` - Pick up an item
+- `/use celestial_dew` - Use an item
+
+**System:**
+- `/save` - Save your game
+- `/load` - Load a saved game
+- `/status` - Check system status and token usage
+- `/tokens` - View token usage for all agents
+
+Type `/help` at any time in the game to see all available commands.
 
 Enjoy your adventure!
