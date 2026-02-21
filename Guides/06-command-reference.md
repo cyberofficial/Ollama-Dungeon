@@ -98,7 +98,8 @@ While not accessible via commands, these important settings in `config.py` contr
 ```python
 AGENT_SETTINGS = {
     "max_memory_entries": 50,        # Maximum agent memory entries
-    "strip_thinking_tokens": True,   # Remove &lt;think&gt; tags from responses<think> tags from responses
+    "enable_thinking": False,        # Enable thinking mode in Ollama API (False = disable at source)
+    "strip_thinking_tokens": True,   # Remove `<thinking>` tags from responses (fallback cleanup)<think> tags from responses
     "randomize_responses": True,     # Prevent identical responses between agents
     "temperature": 0.7,              # Response creativity (0.1-1.0)
 }

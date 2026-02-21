@@ -73,7 +73,8 @@ Ollama Dungeon includes settings to customize how agents respond and ensure dive
 |---------|-------------|---------|
 | `randomize_responses` | Add unique random seeds to agent calls | True |
 | `temperature` | Control response creativity and variation | 0.7 |
-| `strip_thinking_tokens` | Remove<think> tags from responses | True |
+| `enable_thinking` | Enable thinking mode in Ollama API (models get thinking benefit) | True |
+| `strip_thinking_tokens` | Remove `<thinking>` tags from responses (fallback cleanup) | True |<think> tags from responses | True |
 | `reply_length` | Response length: brief, medium, detailed, or verbose | detailed |
 
 ### Understanding Response Settings
@@ -85,7 +86,11 @@ Ollama Dungeon includes settings to customize how agents respond and ensure dive
   - Medium values (0.5-0.7): Good balance of creativity and coherence
   - Higher values (0.8-1.0): More creative but potentially less focused responses
 
-- **strip_thinking_tokens**: Automatically removes any text between `<think>` tags, which agents use for internal reasoning that isn't meant to be spoken aloud.
+- **enable_thinking**: Controls whether the AI model generates thinking content:
+  - **True (default)**: Passes `think: true` to the Ollama API, enabling thinking mode. Models get the benefit of thinking for better reasoning, with thinking content removed from final output. Best for models that benefit from thinking (like deepseek-r1).
+  - **False**: Passes `think: false` to prevent thinking generation. Saves tokens and processing time. Best for standard models like qwen3:4b, llama3, and mistral that don't benefit from thinking mode.
+
+- **strip_thinking_tokens**: Fallback safety measure that removes any `<thinking>` tags and their content from responses. Ensures clean output by stripping thinking tokens that might appear in responses.<think>` tags, which agents use for internal reasoning that isn't meant to be spoken aloud.
 
 These settings help create a more immersive experience where each character has a distinct voice and personality.
 

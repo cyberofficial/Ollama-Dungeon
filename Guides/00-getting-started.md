@@ -169,6 +169,8 @@ Controls agent behavior and memory:
 - `max_memory_entries`: Maximum memory entries before summarization (default: 50)
 - `context_sharing_enabled`: Allow agents to share context (default: True)
 - `persistent_sessions`: Keep agent sessions between interactions (default: True)
+- `enable_thinking`: Enable thinking mode in Ollama API (default: True, models get thinking benefit)
+- `strip_thinking_tokens`: Remove `<thinking>` tags from AI responses (default: True, fallback cleanup)
 - `temperature`: AI response randomness (default: 0.7, higher = more creative)
 - `reply_length`: Response verbosity - "brief", "medium", "detailed", or "verbose" (default: "detailed")
 

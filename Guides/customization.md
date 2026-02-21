@@ -99,7 +99,8 @@ AGENT_SETTINGS = {
     "context_sharing_enabled": True, # Allow agents to share context
     "persistent_sessions": True,     # Keep agent sessions between interactions
     "auto_save_context": True,       # Automatically save context after interactions
-    "strip_thinking_tokens": True,   # Remove thinking tags from AI responses
+    "enable_thinking": True,         # Enable thinking mode in Ollama API (True = models get thinking benefit)
+    "strip_thinking_tokens": True,   # Remove <thinking> tags from responses (fallback cleanup)
     "randomize_responses": True,     # Add random seed to agent calls
     "temperature": 0.7,              # Temperature for responses (0.0-1.0)
     "reply_length": "detailed",      # Response length: brief, medium, detailed, verbose
@@ -116,6 +117,10 @@ Key settings:
   - "medium": Moderate detail
   - "detailed": Full responses (default)
   - "verbose": Maximum detail
+- **enable_thinking**: Controls AI thinking behavior
+  - **True (default)**: Enables thinking by passing `think: true`. Models get the benefit of thinking for better reasoning, with thinking content removed from final output.
+  - **False**: Disables thinking at the API level by passing `think: false`. Saves tokens and processing time. Best for models that don't benefit from thinking mode (qwen3:4b, llama3, mistral).
+- **strip_thinking_tokens**: Fallback that removes `<thinking>` tags from responses. Ensures clean output by stripping thinking tokens that might appear in responses.
 - **max_memory_entries**: Higher values mean agents remember more before summarizing
 - **persistent_sessions**: Keep True so agents remember between conversations
 

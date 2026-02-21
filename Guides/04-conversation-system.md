@@ -103,7 +103,8 @@ Agents can follow you between rooms, maintaining their participation in endless 
 ### Conversation Response Cleaning
 
 The game automatically cleans agent responses to maintain immersion:
-- Removes thinking tokens (like `<thinking>` tags from the AI model)
+- Controls thinking behavior via `enable_thinking` setting (prevents thinking at API source when disabled)
+- Removes thinking tokens as fallback (like `<thinking>` tags from the AI model)
 - Strips speaker names from responses (e.g., "Zahra: Hello" becomes "Hello")
 - Removes meta-text like "says:", "responds:", "replies:"
 - Cleans up action descriptions that don't contain actual dialogue
@@ -221,8 +222,8 @@ When an agent generates a response:
 
 1. **Gather context** - Agent's memory, conversation history, room description
 2. **Build prompt** - Create a prompt with current situation and conversation state
-3. **AI generation** - Send to Ollama model with agent's personality
-4. **Token stripping** - Remove thinking tokens (e.g., `<thinking>...</thinking>`)
+3. **AI generation** - Send to Ollama model with agent's personality (passes `think` parameter based on `enable_thinking` setting)
+4. **Token stripping** - Remove thinking tokens as fallback (e.g., `<thinking>...</thinking>`) if present
 5. **Response cleaning** - Strip meta-text, speaker names, and formatting artifacts
 6. **Display** - Show cleaned response to player
 7. **Context update** - Add response to all participants' context and memory

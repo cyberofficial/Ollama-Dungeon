@@ -1156,12 +1156,24 @@ Current topic: {self.endless_topic}
 Provide a brief, focused summary that captures the essential context for continuing the conversation."""
             
             try:
-                response = ollama.chat(
-                    model=MODELS['summary'],
-                    messages=[{
+                # Prepare chat request
+                chat_request = {
+                    'model': MODELS['summary'],
+                    'messages': [{
                         'role': 'user',
                         'content': summary_prompt
-                    }]                )
+                    }]
+                }
+
+                # Apply think parameter from settings
+                from config import AGENT_SETTINGS
+                enable_thinking = AGENT_SETTINGS.get('enable_thinking', False)
+                if not enable_thinking:
+                    chat_request['think'] = False
+                else:
+                    chat_request['think'] = True
+
+                response = ollama.chat(**chat_request)
                 summary = response['message']['content'].strip()
                 # Strip thinking tokens from summary
                 from game_engine import strip_thinking_tokens

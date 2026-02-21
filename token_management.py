@@ -197,16 +197,26 @@ Conversation:
 Summary (2-3 sentences):"""
 
             # Call Ollama with summary model
-            response = requests.post(f'{OLLAMA_BASE_URL}/api/generate',
-                json={
-                    'model': MODELS['summary'],
-                    'prompt': summary_prompt,
-                    'stream': False,
-                    'options': {
-                        'num_ctx': 8000,  # Smaller context for summary model
-                        'temperature': 0.3  # Lower temperature for more consistent summaries
-                    }
-                    })
+            # Prepare request payload
+            request_payload = {
+                'model': MODELS['summary'],
+                'prompt': summary_prompt,
+                'stream': False,
+                'options': {
+                    'num_ctx': 8000,  # Smaller context for summary model
+                    'temperature': 0.3  # Lower temperature for more consistent summaries
+                }
+            }
+
+            # Apply think parameter from settings
+            from config import AGENT_SETTINGS
+            enable_thinking = AGENT_SETTINGS.get('enable_thinking', False)
+            if not enable_thinking:
+                request_payload['think'] = False
+            else:
+                request_payload['think'] = True
+
+            response = requests.post(f'{OLLAMA_BASE_URL}/api/generate', json=request_payload)
             
             if response.status_code == 200:
                 summary = response.json()['response'].strip()

@@ -309,6 +309,16 @@ class Agent:
                 'stream': False,
                 'options': api_options
             }
+
+            # Pass think parameter to control thinking mode at the API level
+            # When enable_thinking is False, explicitly disable thinking to prevent
+            # the model from generating <thinking> tags in the first place
+            enable_thinking = AGENT_SETTINGS.get('enable_thinking', False)
+            if not enable_thinking:
+                api_request['think'] = False
+            else:
+                # When enabled, either pass True or let the model decide (omit parameter)
+                api_request['think'] = True
             
             # Only set keep_alive if we're reloading or this is a new model instance
             if should_reload:
