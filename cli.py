@@ -1,7 +1,8 @@
 import os
 import sys
 import shutil
-from typing import List
+import requests
+from typing import List, Optional
 from colorama import init, Fore, Style
 import game_engine  # Import the entire module first
 from game_engine import strip_thinking_tokens  # Then import specific functions
@@ -19,6 +20,9 @@ class GameCLI:
     def __init__(self):
         self.world: game_engine.WorldController = WorldController()
         self.running = True
+        # Ollama connection cache
+        self._ollama_connection_checked = False
+        self._ollama_available = False
         # Conversation endless mode state
         self.endless_mode = False
         self.endless_participants = []  # List of participant names in order
@@ -71,7 +75,38 @@ class GameCLI:
     def print_colored(self, text: str, color: str = Fore.WHITE):
         """Print colored text."""
         print(f"{color}{text}{Style.RESET_ALL}")
-    
+
+    def check_ollama_connection(self, silent: bool = False) -> bool:
+        """Check Ollama connection with caching to avoid repeated checks.
+
+        Args:
+            silent: If True, don't print warning messages
+
+        Returns:
+            True if Ollama is available, False otherwise
+        """
+        # Return cached result if already checked
+        if self._ollama_connection_checked:
+            return self._ollama_available
+
+        # Perform connection check
+        try:
+            response = requests.get(OLLAMA_BASE_URL + '/api/version', timeout=5)
+            self._ollama_available = (response.status_code == 200)
+        except:
+            self._ollama_available = False
+
+        self._ollama_connection_checked = True
+
+        # Print warning on first check if not available
+        if not self._ollama_available and not silent:
+            print("Warning: Ollama server doesn't seem to be running.")
+            print("Please start Ollama with 'ollama serve' and ensure you have a model installed.")
+            print("You can still play, but AI responses won't work.")
+            print()
+
+        return self._ollama_available
+
     def print_title(self):
         """Print the game title."""
         from config import GAME_SETTINGS
@@ -186,15 +221,18 @@ class GameCLI:
         agent = self.world.find_agent_by_name(agent_name)
         if not agent:
             return f"There's no one named '{agent_name}' here."
-          # Get room context for the agent
+
+        # Cache frequently accessed value (Issue #15 optimization)
+        agent_data_name = agent.data['name']
+        # Get room context for the agent
         room_context = self.world.get_room_description()
-        
-        self.print_colored(f"You say to {agent.data['name']}: \"{message}\"", Fore.CYAN)
-        
+
+        self.print_colored(f"You say to {agent_data_name}: \"{message}\"", Fore.CYAN)
+
         # Generate AI response
         response = agent.generate_response(message, room_context)
-        
-        return f"{Fore.MAGENTA}{agent.data['name']} says: \"{response}\"{Style.RESET_ALL}"
+
+        return f"{Fore.MAGENTA}{agent_data_name} says: \"{response}\"{Style.RESET_ALL}"
     
     def _handle_endless_say(self, args: List[str]) -> str:
         """Handle say command in endless conversation mode."""
@@ -250,17 +288,19 @@ class GameCLI:
             # Only targeted agents respond
             for target_name in target_names:
                 for agent in self.endless_agents:
-                    if agent.data['name'].lower() == target_name:
+                    # Cache frequently accessed value (Issue #15 optimization)
+                    agent_name = agent.data['name']
+                    if agent_name.lower() == target_name:
                         response = self._generate_endless_response(agent, message, target_names)
-                        self.print_colored(f"🗣️ **{agent.data['name']}**: {response}", Fore.MAGENTA)
+                        self.print_colored(f"🗣️ **{agent_name}**: {response}", Fore.MAGENTA)
                         print()
-                        
+
                         # Share response with all other agents
                         for other_agent in self.endless_agents:
                             if other_agent != agent:
-                                other_agent.share_context(f"In group conversation, {agent.data['name']} said: \"{response}\"")
-                                other_agent.add_memory('dialogue', 'agent_conversation', f"Heard {agent.data['name']} say: {response}")
-                        
+                                other_agent.share_context(f"In group conversation, {agent_name} said: \"{response}\"")
+                                other_agent.add_memory('dialogue', 'agent_conversation', f"Heard {agent_name} say: {response}")
+
                         agent.add_memory('dialogue', 'agent_conversation', f"Said in group conversation: {response}")
                         break
             
@@ -282,17 +322,19 @@ class GameCLI:
             for participant_name in self.endless_participants:
                 if participant_name != 'player':
                     for agent in self.endless_agents:
-                        if agent.data['name'].lower() == participant_name:
+                        # Cache frequently accessed value (Issue #15 optimization)
+                        agent_name = agent.data['name']
+                        if agent_name.lower() == participant_name:
                             response = self._generate_endless_response(agent, message, [])
-                            self.print_colored(f"🗣️ **{agent.data['name']}**: {response}", Fore.MAGENTA)
+                            self.print_colored(f"🗣️ **{agent_name}**: {response}", Fore.MAGENTA)
                             print()
-                            
+
                             # Share response with all other agents
                             for other_agent in self.endless_agents:
                                 if other_agent != agent:
-                                    other_agent.share_context(f"In group conversation, {agent.data['name']} said: \"{response}\"")
-                                    other_agent.add_memory('dialogue', 'agent_conversation', f"Heard {agent.data['name']} say: {response}")
-                            
+                                    other_agent.share_context(f"In group conversation, {agent_name} said: \"{response}\"")
+                                    other_agent.add_memory('dialogue', 'agent_conversation', f"Heard {agent_name} say: {response}")
+
                             agent.add_memory('dialogue', 'agent_conversation', f"Said in group conversation: {response}")
                             break
             
@@ -783,7 +825,7 @@ Respond naturally as {agent_name}. Stay focused on the conversation topic: {self
         """Show overall system status."""
         from token_management import token_manager, context_manager
         import requests
-        
+
         status = f"""
 {Fore.CYAN}=== SYSTEM STATUS ==={Style.RESET_ALL}
 
@@ -794,31 +836,27 @@ Respond naturally as {agent_name}. Stay focused on the conversation topic: {self
 - Inventory items: {len(self.world.player_inventory)}
 
 {Fore.GREEN}AI Models:{Style.RESET_ALL}"""
-        
-        # Check Ollama connectivity
-        try:
-            response = requests.get(OLLAMA_BASE_URL + '/api/version', timeout=3)
-            if response.status_code == 200:
-                status += "\n- Ollama: ✅ Connected"
-                
-                # Check if models are available
-                try:
-                    from config import MODELS
-                    models_response = requests.get(OLLAMA_BASE_URL + '/api/tags', timeout=3)
-                    if models_response.status_code == 200:
-                        available_models = [m['name'] for m in models_response.json().get('models', [])]
-                        for model_type, model_name in MODELS.items():
-                            if model_name in available_models:
-                                status += f"\n- {model_name} ({model_type}): ✅ Available"
-                            else:
-                                status += f"\n- {model_name} ({model_type}): ❌ Not found"
-                except:
-                    status += "\n- Model check: ❌ Failed"
-            else:
-                status += "\n- Ollama: ❌ Connection failed"
-        except:
+
+        # Check Ollama connectivity using cached status
+        if self.check_ollama_connection(silent=True):
+            status += "\n- Ollama: ✅ Connected"
+
+            # Check if models are available
+            try:
+                from config import MODELS
+                models_response = requests.get(OLLAMA_BASE_URL + '/api/tags', timeout=3)
+                if models_response.status_code == 200:
+                    available_models = [m['name'] for m in models_response.json().get('models', [])]
+                    for model_type, model_name in MODELS.items():
+                        if model_name in available_models:
+                            status += f"\n- {model_name} ({model_type}): ✅ Available"
+                        else:
+                            status += f"\n- {model_name} ({model_type}): ❌ Not found"
+            except:
+                status += "\n- Model check: ❌ Failed"
+        else:
             status += "\n- Ollama: ❌ Not responding"
-        
+
         # Token usage summary
         agents = self.world.get_agents_in_room()
         total_tokens = 0
@@ -849,7 +887,8 @@ Respond naturally as {agent_name}. Stay focused on the conversation topic: {self
             return "Usage: /conv player,bob,alice,jake <conversation description>"
         
         # Parse participants (first argument)
-        participant_names = args[0].lower().split(',')
+        participant_names = args[0].split(',')
+        participant_names = [name.strip() for name in participant_names]
         if len(participant_names) < 2:
             return "Please specify at least 2 participants separated by comma (e.g., player,alice,bob)"
         
@@ -858,28 +897,35 @@ Respond naturally as {agent_name}. Stay focused on the conversation topic: {self
         if not topic:
             return "Please provide a conversation description"
         
-        # Find all agents in current room
-        agents = self.world.get_agents_in_room()
-        agent_dict = {agent.data['name'].lower(): agent for agent in agents}
+        # Find all agents in current room for reference
+        agents_in_room = self.world.get_agents_in_room()
         
-        # Validate that all non-player participants exist
+        # Validate that all non-player participants exist using partial name matching
         missing_agents = []
         agent_participants = []
+        matched_names = []  # Track matched names for participant list
+        
         for name in participant_names:
-            if name != 'player':
-                if name not in agent_dict:
-                    missing_agents.append(name)
+            if name.lower() == 'player':
+                matched_names.append('player')
+            else:
+                # Use find_agent_by_name for partial name matching
+                agent = self.world.find_agent_by_name(name)
+                if agent:
+                    agent_participants.append(agent)
+                    # Use the actual agent name from the data
+                    matched_names.append(agent.data['name'].lower())
                 else:
-                    agent_participants.append(agent_dict[name])
+                    missing_agents.append(name)
         
         if missing_agents:
-            available = list(agent_dict.keys())
+            available = [agent.data['name'] for agent in agents_in_room]
             available.append('player')
             return f"Agent(s) not found: {', '.join(missing_agents)}. Available: {', '.join(available)}"
         
         # Set up endless mode state
         self.endless_mode = True
-        self.endless_participants = participant_names
+        self.endless_participants = matched_names  # Use matched names (full agent names in lowercase)
         self.endless_topic = topic
         self.endless_agents = agent_participants
         
@@ -1659,22 +1705,12 @@ def main():
             print("Error: Neither 'world' nor 'world_template' directory found. Make sure you're running from the game directory.")
             sys.exit(1)
     
-    # Check if Ollama is available
-    try:
-        import requests
-        response = requests.get(OLLAMA_BASE_URL + '/api/version', timeout=5)
-        if response.status_code != 200:
-            print("Warning: Ollama server doesn't seem to be running.")
-            print("Please start Ollama with 'ollama serve' and ensure you have a model installed.")
-            print("You can still play, but AI responses won't work.")
-            print()
-    except:
-        print("Warning: Can't connect to Ollama. AI responses won't work.")
-        print("Please start Ollama with 'ollama serve' and ensure you have a model installed.")
-        print()
-    
     # Start the game
     game = GameCLI()
+
+    # Check Ollama connection once at startup
+    game.check_ollama_connection()
+
     game.run()
 
 

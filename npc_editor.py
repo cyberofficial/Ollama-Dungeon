@@ -555,14 +555,10 @@ class NPCEditorStandalone:
             # Save to file
             with open(file_path, 'w', encoding='utf-8') as f:
                 json.dump(npc_data, f, indent=2, ensure_ascii=False)
-            
-            # Create memory file if it doesn't exist
-            memory_file_path = os.path.join(os.path.dirname(file_path), npc_data['memory_file'])
-            if not os.path.exists(memory_file_path):
-                with open(memory_file_path, 'w', newline='', encoding='utf-8') as f:
-                    writer = csv.writer(f)
-                    writer.writerow(['memory_type', 'key', 'value', 'timestamp'])
-            
+
+            # Ensure memory file exists
+            self._ensure_memory_file(os.path.dirname(file_path), npc_data['memory_file'])
+
             self.current_npc_file = file_path
             self.file_label.config(text=f"File: {os.path.basename(file_path)}")
             self.npc_data = npc_data.copy()
@@ -805,6 +801,19 @@ class NPCEditorStandalone:
             safe_name = "".join(c for c in npc_name.lower() if c.isalnum() or c in (' ', '-', '_')).rstrip()
             safe_name = safe_name.replace(' ', '_')
             self.memory_file_var.set(f"memory_{safe_name}.csv")
+
+    def _ensure_memory_file(self, file_path: str, memory_filename: str):
+        """Ensure memory file exists, create it if missing.
+
+        Args:
+            file_path: Directory path where the memory file should be created
+            memory_filename: Name of the memory file
+        """
+        memory_file_path = os.path.join(file_path, memory_filename)
+        if not os.path.exists(memory_file_path):
+            with open(memory_file_path, 'w', newline='', encoding='utf-8') as f:
+                writer = csv.writer(f)
+                writer.writerow(['memory_type', 'key', 'value', 'timestamp'])
 
 
 def main():

@@ -31,11 +31,13 @@ AGENT_SETTINGS = {
     "context_sharing_enabled": True, # Allow agents to share context
     "persistent_sessions": True,     # Keep agent sessions between interactions
     "auto_save_context": True,       # Automatically save context after interactions
-    "enable_thinking": True,         # Enable thinking mode in Ollama API (True by default to let models think)
+    "enable_thinking": False,         # Enable thinking mode in Ollama API (True by default to let models think)
     "strip_thinking_tokens": True,   # Remove <thinking> tags and content from AI responses
     "randomize_responses": True,     # Add random seed to agent calls
     "temperature": 0.7,              # Temperature for responses (higher = more creative and varied)
     "reply_length": "detailed",        # Response length: "brief", "medium", "detailed", or "verbose"
+    "show_thinking_indicator": True, # Show "*<Agent is thinking>*" while generating responses
+    "stream_responses": True,        # Stream AI responses in real-time instead of waiting for full response
 }
 
 # Game settings

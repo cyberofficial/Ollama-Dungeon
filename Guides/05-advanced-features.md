@@ -54,7 +54,7 @@ Ollama Dungeon includes advanced token management settings that can be configure
 | `show_token_warnings` | Show token warnings to user | True |
 | `suppress_token_info` | Hide token expansion/compression messages for immersion | False |
 | `emergency_compression_threshold` | Emergency compression if regular fails | 38000 |
-| `reload_on_lower` | Only reload model when token count increases | False |
+| `reload_on_lower` | Reload model when switching to agent with lower token count | False |
 
 When `reload_on_lower` is set to False (default), the system will not reload the model when switching to an agent with a lower token count. This optimization reduces unnecessary model reloads and improves response times.
 
@@ -73,9 +73,11 @@ Ollama Dungeon includes settings to customize how agents respond and ensure dive
 |---------|-------------|---------|
 | `randomize_responses` | Add unique random seeds to agent calls | True |
 | `temperature` | Control response creativity and variation | 0.7 |
-| `enable_thinking` | Enable thinking mode in Ollama API (models get thinking benefit) | True |
-| `strip_thinking_tokens` | Remove `<thinking>` tags from responses (fallback cleanup) | True |<think> tags from responses | True |
+| `enable_thinking` | Enable thinking mode in Ollama API (models get thinking benefit) | False |
+| `strip_thinking_tokens` | Remove `<thinking>` tags from responses (fallback cleanup) | True |
 | `reply_length` | Response length: brief, medium, detailed, or verbose | detailed |
+| `show_thinking_indicator` | Show "*Agent is thinking...*" while generating responses | True |
+| `stream_responses` | Stream AI responses in real-time | True |
 
 ### Understanding Response Settings
 
@@ -87,10 +89,14 @@ Ollama Dungeon includes settings to customize how agents respond and ensure dive
   - Higher values (0.8-1.0): More creative but potentially less focused responses
 
 - **enable_thinking**: Controls whether the AI model generates thinking content:
-  - **True (default)**: Passes `think: true` to the Ollama API, enabling thinking mode. Models get the benefit of thinking for better reasoning, with thinking content removed from final output. Best for models that benefit from thinking (like deepseek-r1).
-  - **False**: Passes `think: false` to prevent thinking generation. Saves tokens and processing time. Best for standard models like qwen3:4b, llama3, and mistral that don't benefit from thinking mode.
+  - **True**: Passes `think: true` to the Ollama API, enabling thinking mode. Models get the benefit of thinking for better reasoning, with thinking content removed from final output. Best for models that benefit from thinking (like deepseek-r1).
+  - **False (default)**: Passes `think: false` to prevent thinking generation. Saves tokens and processing time. Best for standard models like qwen3:4b, llama3, and mistral that don't benefit from thinking mode.
 
-- **strip_thinking_tokens**: Fallback safety measure that removes any `<thinking>` tags and their content from responses. Ensures clean output by stripping thinking tokens that might appear in responses.<think>` tags, which agents use for internal reasoning that isn't meant to be spoken aloud.
+- **strip_thinking_tokens**: Fallback safety measure that removes any `<thinking>` tags and their content from responses. Ensures clean output by stripping thinking tokens that might appear in responses.
+
+- **show_thinking_indicator**: When enabled, displays "*Agent is thinking...*" while the AI is generating a response, providing visual feedback that the agent is processing.
+
+- **stream_responses**: When enabled, AI responses are displayed in real-time as they're generated, rather than waiting for the complete response. This provides a more interactive experience.
 
 These settings help create a more immersive experience where each character has a distinct voice and personality.
 
@@ -393,4 +399,3 @@ Compressed contexts for 2 agents:
 - Kael: 3,322 → 3,322 tokens (no compression needed)
 
 Total tokens saved: 14,688
-```

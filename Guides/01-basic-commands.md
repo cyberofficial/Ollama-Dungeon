@@ -25,26 +25,24 @@ This guide provides a comprehensive reference for all commands in Ollama Dungeon
 
 ## Conversation System
 
-The conversation system allows for multi-agent conversations with multiple modes.
+The conversation system allows for multi-agent conversations.
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/conv <participants> [turns] <topic>` | Start conversation mode | `/conv player,zahra,kamar 5 discussing trade` |
-| `/conversation <participants> [turns] <topic>` | Alternative to `/conv` | `/conversation zahra,kamar 10 arguing about prices` |
+| `/conv <participants> <topic>` | Start endless conversation mode | `/conv player,zahra,kamar discussing trade` |
+| `/conversation <participants> <topic>` | Alternative to `/conv` | `/conversation zahra,kamar arguing about prices` |
 | `/endconv` | End endless conversation mode | `/endconv` |
 | `/invite <agent>` | Add agent to endless conversation | `/invite zahra` |
 | `/remove <agent>` | Remove agent from endless conversation | `/remove kamar` |
 | `/dialog <agent1,agent2> <exchanges>` | Automated dialog between 2 agents (endless mode only) | `/dialog zahra,kamar 3` |
 
-**Conversation Modes:**
+**Conversation Mode:**
 
-1. **Endless Mode** (no turn count specified): Conversation continues until `/endconv` is typed
-   - Example: `/conv player,zahra,kamar discussing the merchant guild`
-   - Use `/say <message>` to talk to everyone (all respond in order)
-   - Use `/say <agent> <message>` to target specific agents
-
-2. **Turn-Based Mode** (specific turn count): Conversation runs for specified number of total messages
-   - Example: `/conv player,zahra,kamar 10 discussing trade routes` (10 total messages across all participants)
+All `/conv` commands start endless conversation mode where the conversation continues until you end it with `/endconv`:
+- Example: `/conv player,zahra,kamar discussing the merchant guild`
+- Use `/say <message>` to talk to everyone (all respond in order)
+- Use `/say <agent> <message>` to target specific agents
+- Use `/say agent1,agent2 <message>` to target multiple specific agents
 
 **Participant Format:**
 - Comma-separated list: `player,zahra,kamar`

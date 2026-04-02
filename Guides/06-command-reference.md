@@ -99,9 +99,12 @@ While not accessible via commands, these important settings in `config.py` contr
 AGENT_SETTINGS = {
     "max_memory_entries": 50,        # Maximum agent memory entries
     "enable_thinking": False,        # Enable thinking mode in Ollama API (False = disable at source)
-    "strip_thinking_tokens": True,   # Remove `<thinking>` tags from responses (fallback cleanup)<think> tags from responses
+    "strip_thinking_tokens": True,   # Remove `<thinking>` tags from responses (fallback cleanup)
     "randomize_responses": True,     # Prevent identical responses between agents
     "temperature": 0.7,              # Response creativity (0.1-1.0)
+    "reply_length": "detailed",      # Response length: brief, medium, detailed, or verbose
+    "show_thinking_indicator": True, # Show "*Agent is thinking...*" while generating
+    "stream_responses": True,        # Stream AI responses in real-time
 }
 ```
 

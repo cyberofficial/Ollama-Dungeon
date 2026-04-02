@@ -9,22 +9,25 @@ import time
 import pickle
 from datetime import datetime
 from typing import Dict, List, Optional, Any
-from config import OLLAMA_BASE_URL
+from config import OLLAMA_BASE_URL, MODELS, TOKEN_SETTINGS, AGENT_SETTINGS, GAME_SETTINGS
+from token_management import token_manager, get_token_usage_warning, context_manager, token_analytics
+import random
+import glob
 import uuid
+
+# Pre-compiled regex patterns for performance (Issue #14)
+# Handle both <thinking>...</thinking> and <think>...</think> tags
+THINKING_PATTERN = re.compile(r'<think>.*?</think>|<thinking>.*?</thinking>', re.DOTALL | re.IGNORECASE)
+MULTILINE_PATTERN = re.compile(r'\n\s*\n')
 
 
 def strip_thinking_tokens(text: str) -> str:
-    """Remove <think> tags and their content from AI responses."""
-    # Remove <think>...</think> blocks (including multiline)
-    pattern = r'<think>.*?</think>'
-    cleaned_text = re.sub(pattern, '', text, flags=re.DOTALL | re.IGNORECASE)
-    
-    # Clean up extra whitespace that might be left behind
-    cleaned_text = re.sub(r'\n\s*\n', '\n', cleaned_text)  # Remove multiple blank lines
+    """Remove <thinking> tags and their content from AI responses."""
+    # Use pre-compiled pattern for better performance (Issue #14)
+    cleaned_text = THINKING_PATTERN.sub('', text)
+    cleaned_text = MULTILINE_PATTERN.sub('\n', cleaned_text)
     cleaned_text = cleaned_text.strip()
-    
     return cleaned_text
-
 
 class Agent:
     """Represents an AI agent with memory and context."""
@@ -38,6 +41,8 @@ class Agent:
         self.session_id = None  # Ollama session ID
         self.context_messages = []  # Full conversation context
         self.context_file: str = ""  # File to save/load context
+        self._pending_memories = []  # Buffer for memory writes (Issue #1)
+        self._memory_buffer_size = 10  # Flush buffer when this many memories accumulate
         self._initialize_session()
         self._load_memory()
         self._load_context()
@@ -104,34 +109,54 @@ class Agent:
             json.dump(self.data, f, indent=2)
     
     def _load_memory(self):
-        """Load agent's memory from CSV file."""
+        """Load memory (recent entries only for efficiency)."""
         memory_file = os.path.join(os.path.dirname(self.agent_file), self.data['memory_file'])
         if os.path.exists(memory_file):
             with open(memory_file, 'r', encoding='utf-8') as f:
                 reader = csv.DictReader(f)
-                self.memory = list(reader)
-    
+                all_memories = list(reader)
+                from config import AGENT_SETTINGS
+                max_memories = AGENT_SETTINGS.get('max_memory_entries', 50)
+                self.memory = all_memories[-max_memories:] if len(all_memories) > max_memories else all_memories
     def add_memory(self, memory_type: str, key: str, value: str):
-        """Add a new memory entry."""
-        memory_file = os.path.join(os.path.dirname(self.agent_file), self.data['memory_file'])
+        """Add memory with buffered writing."""
         timestamp = datetime.now().isoformat()
-        
         new_memory = {
             'memory_type': memory_type,
             'key': key,
             'value': value,
             'timestamp': timestamp
         }
-        
         self.memory.append(new_memory)
-          # Append to CSV file
+        self._pending_memories.append(new_memory)
+        if len(self._pending_memories) >= self._memory_buffer_size:
+            self._flush_memory_buffer()
+
+    def _flush_memory_buffer(self):
+        """Write buffered memories to CSV."""
+        if not self._pending_memories:
+            return
+        memory_file = os.path.join(os.path.dirname(self.agent_file), self.data['memory_file'])
         file_exists = os.path.exists(memory_file)
         with open(memory_file, 'a', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=['memory_type', 'key', 'value', 'timestamp'])
             if not file_exists:
                 writer.writeheader()
-            writer.writerow(new_memory)
-    
+            writer.writerows(self._pending_memories)
+        self._pending_memories = []
+
+    def flush_memory(self):
+        """Public method to flush memory buffer (for testing)."""
+        self._flush_memory_buffer()
+
+    def __del__(self):
+        """Flush on destroy."""
+        if hasattr(self, '_pending_memories') and self._pending_memories:
+            try:
+                self._flush_memory_buffer()
+            except:
+                pass
+
     def get_memory_summary(self, limit: int = 10) -> str:
         """Get a summary of recent memories."""
         recent_memories = self.memory[-limit:] if len(self.memory) > limit else self.memory
@@ -141,14 +166,20 @@ class Agent:
         
         summary_parts = []
         for mem in recent_memories:
-            if mem['memory_type'] == 'dialogue':
-                summary_parts.append(f"Said: {mem['value']}")
-            elif mem['memory_type'] == 'observation':
-                summary_parts.append(f"Observed: {mem['value']}")
-            elif mem['memory_type'] == 'event':
-                summary_parts.append(f"Did: {mem['value']}")
-            elif mem['memory_type'] == 'emotion':
-                summary_parts.append(f"Felt: {mem['value']}")
+            # Handle both 'memory_type' and 'type' column names for backwards compatibility
+            mem_type = mem.get('memory_type') or mem.get('type', 'unknown')
+            mem_value = mem.get('value', mem.get('content', ''))
+            
+            if mem_type == 'dialogue':
+                summary_parts.append(f"Said: {mem_value}")
+            elif mem_type == 'observation':
+                summary_parts.append(f"Observed: {mem_value}")
+            elif mem_type == 'event':
+                summary_parts.append(f"Did: {mem_value}")
+            elif mem_type == 'emotion':
+                summary_parts.append(f"Felt: {mem_value}")
+            elif mem_value:  # Handle unknown types gracefully
+                summary_parts.append(f"{mem_type.title()}: {mem_value}")
         
         return f"{self.data['name']}'s recent activities: " + "; ".join(summary_parts[-5:])
     
@@ -191,11 +222,12 @@ class Agent:
         # Save context to persist shared information
         self._save_context()
     
-    def generate_response(self, player_input: str, room_context: str) -> str:
+    def generate_response(self, player_input: str, room_context: str, show_thinking: bool = True) -> str:
         """Generate AI response using Ollama with persistent context and token management."""
         try:
-            from token_management import token_manager, get_token_usage_warning
-            from config import MODELS, TOKEN_SETTINGS
+            # Show thinking indicator if enabled
+            if show_thinking and AGENT_SETTINGS.get('show_thinking_indicator', True):
+                print(f"*{self.data['name']} is thinking...*", flush=True)
             
             # Add player message to context
             player_message = {
@@ -226,9 +258,8 @@ class Agent:
             
             # Check if we need to compress context (after potential expansion)
             if token_manager.should_compress(self.context_messages, self.data['name']):
-                from config import TOKEN_SETTINGS
                 if not TOKEN_SETTINGS.get('suppress_token_info', False):
-                    print(f"🔄 Compressing context for {self.data['name']} to manage token usage...")
+                    print(f"[Compressing] Context for {self.data['name']} to manage token usage...")
                 self.context_messages = token_manager.compress_context(self.context_messages, self.data['name'])
               # Get token usage warning
             current_tokens = token_manager.count_message_tokens(self.context_messages)
@@ -241,7 +272,6 @@ class Agent:
             # Check if we need to reload the model with new parameters
             should_reload = token_manager.should_reload_model(self.data['name'], MODELS['main'], agent_token_limit)
               # Prepare API request
-            from config import AGENT_SETTINGS
             import random
             
             # Get options for Ollama API request
@@ -275,7 +305,6 @@ class Agent:
                 reminder += f"- Use your character's distinctive voice, vocabulary, and mannerisms\n"
                 
                 # Add noise factors to ensure unique generation pattern
-                import time, random, uuid
                 timestamp_ms = int(time.time() * 1000)
                 random_noise = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(10))
                 unique_id = str(uuid.uuid4())
@@ -293,8 +322,6 @@ class Agent:
                 # 1. Character name hash (consistent per character)
                 # 2. High precision time (changes for each call)
                 # 3. Random component (adds extra unpredictability)
-                import time, random
-                
                 name_hash = hash(self.data['name'])
                 time_component = int(time.time() * 1000000)  # Use microseconds for higher precision
                 random_component = random.randint(1, 1000000)  # Add true randomness
@@ -303,10 +330,13 @@ class Agent:
                 unique_seed = (name_hash ^ time_component ^ random_component) % 2147483647
                 api_options['seed'] = unique_seed
             
+            # Check if streaming is enabled
+            stream_enabled = AGENT_SETTINGS.get('stream_responses', False)
+            
             api_request = {
                 'model': MODELS['main'],
                 'messages': self.context_messages,
-                'stream': False,
+                'stream': stream_enabled,
                 'options': api_options
             }
 
@@ -324,40 +354,42 @@ class Agent:
             if should_reload:
                 api_request['keep_alive'] = '5m'  # Keep model loaded for 5 minutes
                 if not TOKEN_SETTINGS.get('suppress_token_info', False):
-                    print(f"🔄 Loading model for {self.data['name']} with {agent_token_limit} token context...")
+                    print(f"[Loading] Model for {self.data['name']} with {agent_token_limit} token context...")
             
-            # Call Ollama API
-            response = requests.post(OLLAMA_BASE_URL + '/api/chat', json=api_request)
-            
-            if response.status_code == 200:
-                # Update model state tracking
-                token_manager.update_model_state(self.data['name'], MODELS['main'], agent_token_limit)
-                ai_response = response.json()['message']['content'].strip()
-                
-                # Record API call in analytics
-                from token_management import token_analytics
-                token_analytics.record_api_call(self.data['name'], current_tokens)
-                
-                # Strip thinking tokens if enabled in config
-                from config import AGENT_SETTINGS
-                if AGENT_SETTINGS.get('strip_thinking_tokens', True):
-                    ai_response = strip_thinking_tokens(ai_response)
-                
-                # Add AI response to context (cleaned version)
-                self.context_messages.append({
-                    "role": "assistant", 
-                    "content": ai_response
-                })
-                
-                # Save context to file
-                self._save_context()
-                
-                # Add this interaction to memory (with cleaned response)
-                self.add_memory('dialogue', 'player_interaction', f"Player said: '{player_input}' - I responded: '{ai_response}'")
-                
-                return ai_response
+            # Call Ollama API - handle both streaming and non-streaming
+            if stream_enabled:
+                ai_response = self._stream_response(api_request)
             else:
-                return f"*{self.data['name']} seems distracted and doesn't respond*"
+                response = requests.post(OLLAMA_BASE_URL + '/api/chat', json=api_request)
+                
+                if response.status_code == 200:
+                    ai_response = response.json()['message']['content'].strip()
+                else:
+                    return f"*{self.data['name']} seems distracted and doesn't respond*"
+            
+            # Update model state tracking
+            token_manager.update_model_state(self.data['name'], MODELS['main'], agent_token_limit)
+            
+            # Record API call in analytics
+            token_analytics.record_api_call(self.data['name'], current_tokens)
+            
+            # Strip thinking tokens if enabled in config
+            if AGENT_SETTINGS.get('strip_thinking_tokens', True):
+                ai_response = strip_thinking_tokens(ai_response)
+            
+            # Add AI response to context (cleaned version)
+            self.context_messages.append({
+                "role": "assistant", 
+                "content": ai_response
+            })
+            
+            # Save context to file
+            self._save_context()
+            
+            # Add this interaction to memory (with cleaned response)
+            self.add_memory('dialogue', 'player_interaction', f"Player said: '{player_input}' - I responded: '{ai_response}'")
+            
+            return ai_response
                 
         except Exception as e:
             print(f"Error generating response for {self.data['name']}: {e}")
@@ -404,7 +436,6 @@ RESPOND AS {self.data['name']}:"""
         """Build the enhanced system prompt for chat-based AI model with full self-awareness."""
         memory_summary = self.get_memory_summary(5)
           # Get shared context from the context manager
-        from token_management import context_manager
         shared_context_from_manager = context_manager.get_shared_context(self.data['location'], max_tokens=800)
         
         # Get local shared context (prioritize most recent)
@@ -523,8 +554,6 @@ You are {self.data['name']}. You have consciousness, agency, and free will withi
         return context_data
     def _get_length_instruction(self) -> str:
         """Get response length instruction based on config setting."""
-        from config import AGENT_SETTINGS
-        
         reply_length = AGENT_SETTINGS.get('reply_length', 'medium').lower()
         
         length_instructions = {
@@ -535,13 +564,45 @@ You are {self.data['name']}. You have consciousness, agency, and free will withi
         }
         
         return length_instructions.get(reply_length, length_instructions['medium'])
+    
+    def _stream_response(self, api_request: dict) -> str:
+        """Stream response from Ollama API and display in real-time."""
+        import sys
+        
+        try:
+            response = requests.post(OLLAMA_BASE_URL + '/api/chat', json=api_request, stream=True)
+            
+            if response.status_code != 200:
+                return f"*{self.data['name']} seems distracted and doesn't respond*"
+            
+            full_response = ""
+            
+            for line in response.iter_lines():
+                if line:
+                    try:
+                        chunk = json.loads(line)
+                        if 'message' in chunk and 'content' in chunk['message']:
+                            content = chunk['message']['content']
+                            full_response += content
+                            # Print content in real-time without newline
+                            print(content, end='', flush=True)
+                    except json.JSONDecodeError:
+                        continue
+            
+            # Print newline after streaming completes
+            print()
+            
+            return full_response.strip()
+            
+        except Exception as e:
+            print(f"\nError streaming response for {self.data['name']}: {e}")
+            return f"*{self.data['name']} seems confused and mumbles something incoherent*"
 
 
 class WorldController:
     """Manages the game world, rooms, and overall state."""
     
     def __init__(self):
-        from config import GAME_SETTINGS
         self.player_location = GAME_SETTINGS.get("default_location", "world/sunspire_city")  # Starting location
         self.player_inventory = []
         self.agents_cache = {}  # Cache loaded agents
@@ -550,7 +611,6 @@ class WorldController:
     def load_player_state(self):
         """Load existing player state from any location, or use defaults."""
         # Search for existing player.json in any location
-        import glob
         player_files = glob.glob("world/**/player.json", recursive=True)
         
         if player_files:
@@ -559,7 +619,6 @@ class WorldController:
             try:
                 with open(player_file, 'r') as f:
                     player_data = json.load(f)
-                    from config import GAME_SETTINGS
                     default_location = GAME_SETTINGS.get("default_location", "world/sunspire_city")
                     self.player_location = player_data.get('location', default_location)
                     self.player_inventory = player_data.get('inventory', [])
@@ -643,25 +702,42 @@ class WorldController:
         """Get a complete description of the current room."""
         room = self.get_current_room()
         description = f"**{room['name']}**\n{room['description']}"
-        
-        # Add agents
-        agents = self.get_agents_in_room()
-        if agents:
-            agent_names = [agent.data['name'] for agent in agents]
+
+        # Optimized: Scan directory once for both agents and items (Issue #10)
+        agent_names = []
+        item_names = []
+
+        if os.path.exists(self.player_location):
+            for file in os.listdir(self.player_location):
+                if file.startswith('agent_') and file.endswith('.json'):
+                    agent_file = os.path.join(self.player_location, file)
+                    try:
+                        with open(agent_file, 'r') as f:
+                            agent_data = json.load(f)
+                            agent_names.append(agent_data.get('name', file))
+                    except Exception:
+                        agent_names.append(file)
+                elif file.endswith('.json') and file != 'room.json' and file != 'player.json':
+                    item_file = os.path.join(self.player_location, file)
+                    try:
+                        with open(item_file, 'r') as f:
+                            item_data = json.load(f)
+                            item_names.append(item_data.get('name', file))
+                    except Exception:
+                        item_names.append(file)
+
+        if agent_names:
             description += f"\n\nPeople here: {', '.join(agent_names)}"
-        
-        # Add items
-        items = self.get_items_in_room()
-        if items:
-            item_names = [item['name'] for item in items]
+
+        if item_names:
             description += f"\nItems here: {', '.join(item_names)}"
-          # Add exits
+
         exits = room.get('exits', {})
         if exits:
             description += f"\nExits: {', '.join(exits.keys())}"
-        
+
         return description
-    
+
     def get_agents_in_room(self) -> List[Agent]:
         """Get all agents in the current room."""
         agents = []
@@ -696,32 +772,45 @@ class WorldController:
         return items
     
     def find_agent_by_name(self, name: str) -> Optional[Agent]:
-        """Find agent by name in current room. Supports partial name matching."""
+        """Find agent by name in current room. Supports partial name matching.
+
+        Optimized with single-pass algorithm and priority matching (Issue #8).
+        """
         agents = self.get_agents_in_room()
         search_name = name.lower().strip()
-        
-        # First try exact match
+        search_words = search_name.split()
+
+        best_match = None
+        best_match_score = 0  # 0=none, 1=word, 2=contains, 3=exact
+
+        # Single pass through all agents with priority scoring
         for agent in agents:
-            if agent.data['name'].lower() == search_name:
+            agent_name_lower = agent.data['name'].lower()
+            agent_name_words = agent_name_lower.split()
+
+            # Priority 3: Exact match (highest priority - return immediately)
+            if agent_name_lower == search_name:
                 return agent
-        
-        # Then try partial match (agent name contains the search term)
-        for agent in agents:
-            if search_name in agent.data['name'].lower():
-                return agent
-        
-        # Finally try word-based partial match (search term matches any word in agent name)
-        for agent in agents:
-            agent_name_words = agent.data['name'].lower().split()
-            search_words = search_name.split()
-            # Check if any search word matches any agent name word
-            for search_word in search_words:
-                for agent_word in agent_name_words:
-                    if search_word == agent_word or agent_word.startswith(search_word):
-                        return agent
-        
-        return None
-    
+
+            # Priority 2: Contains match
+            if search_name in agent_name_lower:
+                if best_match_score < 2:
+                    best_match = agent
+                    best_match_score = 2
+                continue
+
+            # Priority 1: Word-based match
+            if best_match_score < 1:
+                for search_word in search_words:
+                    for agent_word in agent_name_words:
+                        if search_word == agent_word or agent_word.startswith(search_word):
+                            best_match = agent
+                            best_match_score = 1
+                            break
+                    if best_match_score >= 1:
+                        break
+
+        return best_match
     def find_item_by_name(self, name: str) -> Optional[Dict[str, Any]]:
         """Find item by name in current room."""
         items = self.get_items_in_room()
@@ -800,8 +889,6 @@ class WorldController:
     
     def share_context_with_agents(self, context: str):
         """Share context with all agents in the current room."""
-        from token_management import context_manager
-        
         # Add to shared context manager
         context_manager.add_shared_context(self.player_location, context, "player")
         
@@ -832,7 +919,7 @@ class WorldController:
                 backup_name = f"{save_name}_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
                 backup_path = os.path.join(backup_dir, backup_name)
                 shutil.copytree(save_dir, backup_path)
-                print(f"📦 Created backup: {backup_name}")
+                print(f"[Backup] Created: {backup_name}")
             
             # Remove existing save directory if it exists
             if os.path.exists(save_dir):
@@ -889,7 +976,7 @@ class WorldController:
                 backup_name = f"world_backup_before_load_{save_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
                 backup_path = os.path.join(backup_dir, backup_name)
                 shutil.copytree("world", backup_path)
-                print(f"📦 Created world backup: {backup_name}")
+                print(f"[Backup] Created world backup: {backup_name}")
             
             # Load player state
             player_file = os.path.join(save_dir, "player_state.json")
@@ -908,7 +995,7 @@ class WorldController:
                 
                 # Copy saved world directory
                 shutil.copytree(saved_world_path, "world")
-                print(f"🌍 World state restored from save '{save_name}'")
+                print(f"[Restore] World state restored from save '{save_name}'")
             else:
                 return f"Save '{save_name}' doesn't contain world data"
             
@@ -921,7 +1008,7 @@ class WorldController:
                 
                 # Copy saved inventory directory
                 shutil.copytree(saved_inventory_path, "inventory")
-                print(f"🎒 Inventory restored from save")
+                print(f"[Restore] Inventory restored from save")
             
             # Clear agent cache to force reload with restored contexts
             self.agents_cache = {}
@@ -975,7 +1062,7 @@ class WorldController:
           backup_name = f"deleted_save_{save_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
           backup_path = os.path.join(backup_dir, backup_name)
           shutil.copytree(save_dir, backup_path)
-          print(f"📦 Created backup before deletion: {backup_name}")
+          print(f"[Backup] Created before deletion: {backup_name}")
             # Delete the save directory
           shutil.rmtree(save_dir)
           

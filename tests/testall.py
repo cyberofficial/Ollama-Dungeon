@@ -301,6 +301,7 @@ class TestAllOllamaDungeon(unittest.TestCase):
         agent.add_memory("conversation", "player", "Greeted the tavern keeper")
         agent.add_memory("observation", "environment", "Player looked around curiously")
         agent.add_memory("interaction", "item", "Player examined the ancient key")
+        agent.flush_memory()  # Flush buffer to ensure persistence for test
         
         # Check memory count
         self.assertEqual(len(agent.memory), 3)

@@ -107,13 +107,13 @@ Ollama Dungeon includes several advanced features that enhance gameplay:
 
 The game supports multi-agent conversations where agents participate naturally:
 
-- `/conv <agent1,agent2[,player]> <topic>` - Start an endless conversation
+- `/conv <agent1,agent2[,player]> <topic>` - Start an endless conversation (no turn limit)
   - Example: `/conv player,zahra,qasim Discuss the history of Sunspire City`
   - Agents will converse with each other and respond to your input
   - Use `/endconv` to end the conversation
   - `/invite <agent>` - Add an agent to the ongoing conversation
   - `/remove <agent>` - Remove an agent from the conversation
-  - `/dialog <agent1,agent2> <exchanges>` - Generate automated dialog between two agents
+  - `/dialog <agent1,agent2> <exchanges>` - Generate automated dialog between two agents (endless mode only)
 
 ### Agent Following System
 
@@ -133,7 +133,7 @@ The game includes sophisticated token management to prevent AI context overflow:
 - `/compress <agent>` - Manually compress an agent's context to save tokens
 - `/compress_all` - Compress all agents in the current room
 
-Token limits automatically expand based on usage patterns, and the system can automatically compress contexts when thresholds are reached. These settings are configurable in `config.py`.
+Token limits start at 0 and automatically expand based on usage patterns. The system can automatically compress contexts when thresholds are reached. These settings are configurable in `config.py`.
 
 ### Context Sharing
 
@@ -158,7 +158,7 @@ You can use any compatible Ollama model. Change these to use different models li
 Controls how the game manages AI context tokens:
 - `max_context_tokens`: Maximum tokens before compression (default: 40000)
 - `compression_threshold`: Start compression at this token count (default: 35000)
-- `starting_tokens`: Initial token limit (default: 0)
+- `starting_tokens`: Initial token limit (default: 0) - tokens start at 0 and expand dynamically as needed
 - `increase_tokens_by`: Amount to increase limit when threshold reached (default: 1000)
 - `token_increase_threshold`: Percentage of current limit to trigger expansion (default: 0.9)
 - `enable_auto_compression`: Automatically compress when threshold reached (default: True)
@@ -169,10 +169,12 @@ Controls agent behavior and memory:
 - `max_memory_entries`: Maximum memory entries before summarization (default: 50)
 - `context_sharing_enabled`: Allow agents to share context (default: True)
 - `persistent_sessions`: Keep agent sessions between interactions (default: True)
-- `enable_thinking`: Enable thinking mode in Ollama API (default: True, models get thinking benefit)
+- `enable_thinking`: Enable thinking mode in Ollama API (default: False, set to True for models that benefit from thinking like deepseek-r1)
 - `strip_thinking_tokens`: Remove `<thinking>` tags from AI responses (default: True, fallback cleanup)
 - `temperature`: AI response randomness (default: 0.7, higher = more creative)
 - `reply_length`: Response verbosity - "brief", "medium", "detailed", or "verbose" (default: "detailed")
+- `show_thinking_indicator`: Show "*Agent is thinking...*" while generating responses (default: True)
+- `stream_responses`: Stream AI responses in real-time instead of waiting for full response (default: True)
 
 #### GAME_SETTINGS
 General game settings:

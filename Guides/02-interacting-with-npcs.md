@@ -138,29 +138,29 @@ Over time, agents accumulate a lot of context which may consume tokens. Use thes
 
 Agents use AI models that may generate "thinking" content - internal reasoning that helps them formulate better responses. The game provides two levels of control over this behavior:
 
-### Primary Control: `enable_thinking` (Recommended)
+### Primary Control: `enable_thinking`
 The `enable_thinking` setting in `config.py` controls whether thinking is generated at the API level:
 
-- **When `enable_thinking: True` (default)**: The game passes `think: true` to the Ollama API, enabling the model to use its thinking capabilities. Some models (like deepseek-r1) use a separate "thinking" field in their JSON response rather than `<thinking>` tags. This gives models the benefit of thinking for better reasoning.
+- **When `enable_thinking: True`**: The game passes `think: true` to the Ollama API, enabling the model to use its thinking capabilities. Some models (like deepseek-r1) use a separate "thinking" field in their JSON response rather than `<thinking>` tags. This gives models the benefit of thinking for better reasoning.
 
-- **When `enable_thinking: False`**: The game passes `think: false` to the Ollama API, which prevents the model from generating thinking content in the first place. This saves tokens and processing time.
+- **When `enable_thinking: False` (default)**: The game passes `think: false` to the Ollama API, which prevents the model from generating thinking content in the first place. This saves tokens and processing time.
 
 ### Fallback Control: `strip_thinking_tokens`
 As a safety measure, `strip_thinking_tokens: True` (default) removes any `<thinking>` tags that might appear in responses, providing clean output. This works as a fallback cleanup even when thinking is enabled at the API level.
 
 ### Default Behavior
 
-With the default settings (`enable_thinking: True` and `strip_thinking_tokens: True`):
-- Models get the benefit of thinking mode for better reasoning
-- Thinking content is removed from final output (either from the separate thinking field or `<thinking>` tags)
-- You get improved response quality without seeing the internal reasoning
+With the default settings (`enable_thinking: False` and `strip_thinking_tokens: True`):
+- Thinking is disabled at the API level to save tokens and processing time
+- Any `<thinking>` tags that might still appear are removed as fallback cleanup
+- You get faster responses with lower token usage
 
-### When to Disable Thinking
+### When to Enable Thinking
 
-Disable thinking (`enable_thinking: False`) when:
-- Using standard models (like qwen3:4b, llama3, mistral) that don't benefit from thinking mode
-- You want faster responses with lower token usage
-- You don't need the reasoning benefits that thinking mode provides
+Enable thinking (`enable_thinking: True`) when:
+- Using models that benefit from thinking mode (like deepseek-r1)
+- You want more detailed reasoning in responses
+- You need complex problem-solving capabilities
 
 ## Analytics and Monitoring
 
