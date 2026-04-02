@@ -846,6 +846,201 @@ class TestAllOllamaDungeon(unittest.TestCase):
         agent_limit = tm.get_current_token_limit("test_agent")
         self.assertEqual(agent_limit, TOKEN_SETTINGS['starting_tokens'])
 
+    # Additional CLI Command Tests
+    def test_cli_quit_command(self):
+        """Test CLI quit command."""
+        cli = GameCLI()
+        
+        # Test quit command
+        result = cli.cmd_quit([])
+        self.assertIn("Farewell", result)
+        self.assertFalse(cli.running)
+        
+        # Test exit alias
+        cli.running = True
+        result = cli.cmd_quit([])
+        self.assertIn("Farewell", result)
+        self.assertFalse(cli.running)
+
+    def test_cli_list_saves_command(self):
+        """Test CLI list saves command."""
+        cli = GameCLI()
+        
+        # Test list saves when no saves exist
+        result = cli.cmd_list_saves([])
+        self.assertIsInstance(result, str)
+        
+        # Create a save and test listing
+        cli.world.player_location = "world/town/tavern"
+        cli.cmd_save(["test_save_for_list"])
+        
+        result = cli.cmd_list_saves([])
+        self.assertIn("test_save_for_list", result)
+
+    def test_cli_delete_save_command(self):
+        """Test CLI delete save command."""
+        cli = GameCLI()
+        
+        # Test delete without save name
+        result = cli.cmd_delete_save([])
+        self.assertIn("Delete which save", result)
+        
+        # Create a save and delete it
+        cli.world.player_location = "world/town/tavern"
+        cli.cmd_save(["test_save_to_delete"])
+        
+        result = cli.cmd_delete_save(["test_save_to_delete"])
+        self.assertIn("deleted", result.lower())
+        
+        # Verify it's deleted
+        result = cli.cmd_delete_save(["test_save_to_delete"])
+        self.assertIn("not found", result.lower())
+
+    def test_cli_reset_agent_command(self):
+        """Test CLI reset agent command."""
+        cli = GameCLI()
+        cli.world.player_location = "world/town/tavern"
+        
+        # Test reset without agent name
+        result = cli.cmd_reset_agent([])
+        self.assertIn("Reset which agent", result)
+        
+        # Test reset with nonexistent agent
+        result = cli.cmd_reset_agent(["NonexistentAgent"])
+        self.assertIn("no one named", result.lower())
+        
+        # Test reset with valid agent
+        result = cli.cmd_reset_agent(["Alice"])
+        self.assertIn("reset", result.lower())
+
+    def test_cli_compress_agent_command(self):
+        """Test CLI compress agent command."""
+        cli = GameCLI()
+        cli.world.player_location = "world/town/tavern"
+        
+        # Test compress without agent name
+        result = cli.cmd_compress_agent([])
+        self.assertIn("Compress which agent", result)
+        
+        # Test compress with nonexistent agent
+        result = cli.cmd_compress_agent(["NonexistentAgent"])
+        self.assertIn("no one named", result.lower())
+        
+        # Test compress with valid agent
+        result = cli.cmd_compress_agent(["Alice"])
+        self.assertIsInstance(result, str)
+
+    def test_cli_compress_all_command(self):
+        """Test CLI compress all command."""
+        cli = GameCLI()
+        cli.world.player_location = "world/town/tavern"
+        
+        # Test compress all
+        result = cli.cmd_compress_all([])
+        self.assertIsInstance(result, str)
+
+    def test_cli_invite_command(self):
+        """Test CLI invite command."""
+        cli = GameCLI()
+        
+        # Test invite when not in endless mode
+        result = cli.cmd_invite(["Alice"])
+        self.assertIn("only works in endless", result.lower())
+        
+        # Start endless mode and test invite
+        cli.world.player_location = "world/town/tavern"
+        cli.cmd_conv(["Alice,Marcus", "test", "topic"])
+        
+        # Test invite without agent name
+        result = cli.cmd_invite([])
+        self.assertIn("invite", result.lower())
+        
+        # Test invite with valid agent
+        cli.world.player_location = "world/forest/cave"
+        result = cli.cmd_invite(["Grix"])
+        self.assertIsInstance(result, str)
+        
+        # Clean up
+        cli.cmd_endconv([])
+
+    def test_cli_remove_command(self):
+        """Test CLI remove command."""
+        cli = GameCLI()
+        
+        # Test remove when not in endless mode
+        result = cli.cmd_remove(["Alice"])
+        self.assertIn("only works in endless", result.lower())
+        
+        # Start endless mode and test remove
+        cli.world.player_location = "world/town/tavern"
+        result = cli.cmd_conv(["Alice,player", "test", "topic"])
+        self.assertIn("endless", result.lower())
+        
+        # Test remove without agent name
+        result = cli.cmd_remove([])
+        self.assertIn("remove", result.lower())
+        
+        # Test remove with valid agent
+        result = cli.cmd_remove(["Alice"])
+        self.assertIn("removed", result.lower())
+        
+        # Clean up
+        cli.cmd_endconv([])
+
+    def test_cli_dialog_command(self):
+        """Test CLI dialog command."""
+        cli = GameCLI()
+        
+        # Test dialog when not in endless mode
+        result = cli.cmd_dialog(["Alice,Marcus", "3"])
+        self.assertIn("only works in endless", result.lower())
+        
+        # Start endless mode and test dialog
+        cli.world.player_location = "world/town/tavern"
+        result = cli.cmd_conv(["Alice,player", "test", "topic"])
+        self.assertIn("endless", result.lower())
+        
+        # Test dialog without enough arguments
+        result = cli.cmd_dialog(["Alice"])
+        self.assertIn("dialog", result.lower())
+        
+        # Test dialog with invalid number
+        result = cli.cmd_dialog(["Alice,player", "invalid"])
+        self.assertIn("invalid", result.lower())
+        
+        # Clean up
+        cli.cmd_endconv([])
+
+    def test_cli_analytics_command(self):
+        """Test CLI analytics command."""
+        cli = GameCLI()
+        cli.world.player_location = "world/town/tavern"
+        
+        # Test analytics without arguments
+        result = cli.cmd_analytics([])
+        self.assertIn("Analytics", result)
+        
+        # Test analytics with specific agent
+        result = cli.cmd_analytics(["Alice"])
+        self.assertIsInstance(result, str)
+        
+        # Test analytics save
+        result = cli.cmd_analytics(["save"])
+        self.assertIn("saved", result.lower())
+
+    def test_cli_model_state_command(self):
+        """Test CLI model state command."""
+        cli = GameCLI()
+        cli.world.player_location = "world/town/tavern"
+        
+        # Test model state without arguments
+        result = cli.cmd_model_state([])
+        self.assertIsInstance(result, str)
+        
+        # Test model state with specific agent
+        result = cli.cmd_model_state(["Alice"])
+        self.assertIsInstance(result, str)
+
 
 def run_comprehensive_tests():
     """Run all tests with detailed reporting."""
