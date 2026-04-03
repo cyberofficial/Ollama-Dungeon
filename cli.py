@@ -10,6 +10,7 @@ from game_engine import strip_thinking_tokens  # Then import specific functions
 WorldController = game_engine.WorldController  # Explicit assignment to fix VS Code issue
 from token_management import token_manager, context_manager
 from config import MODELS, TOKEN_SETTINGS, OLLAMA_BASE_URL
+from network import ollama_client
 
 # Initialize colorama for cross-platform colored output
 init()
@@ -91,7 +92,7 @@ class GameCLI:
 
         # Perform connection check
         try:
-            response = requests.get(OLLAMA_BASE_URL + '/api/version', timeout=5)
+            response = ollama_client.get('/api/version', timeout=5)
             self._ollama_available = (response.status_code == 200)
         except:
             self._ollama_available = False
@@ -844,7 +845,7 @@ Respond naturally as {agent_name}. Stay focused on the conversation topic: {self
             # Check if models are available
             try:
                 from config import MODELS
-                models_response = requests.get(OLLAMA_BASE_URL + '/api/tags', timeout=3)
+                models_response = ollama_client.get('/api/tags', timeout=3)
                 if models_response.status_code == 200:
                     available_models = [m['name'] for m in models_response.json().get('models', [])]
                     for model_type, model_name in MODELS.items():

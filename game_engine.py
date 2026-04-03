@@ -11,6 +11,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Any
 from config import OLLAMA_BASE_URL, MODELS, TOKEN_SETTINGS, AGENT_SETTINGS, GAME_SETTINGS
 from token_management import token_manager, get_token_usage_warning, context_manager, token_analytics
+from network import ollama_client
 import random
 import glob
 import uuid
@@ -31,6 +32,12 @@ def strip_thinking_tokens(text: str) -> str:
 
 class Agent:
     """Represents an AI agent with memory and context."""
+    
+    __slots__ = [
+        'agent_file', 'world_controller', 'data', 'memory', 'shared_context',
+        'session_id', 'context_messages', 'context_file',
+        '_pending_memories', '_memory_buffer_size'
+    ]
     
     def __init__(self, agent_file: str, world_controller):
         self.agent_file = agent_file
@@ -360,7 +367,7 @@ class Agent:
             if stream_enabled:
                 ai_response = self._stream_response(api_request)
             else:
-                response = requests.post(OLLAMA_BASE_URL + '/api/chat', json=api_request)
+                response = ollama_client.post('/api/chat', json=api_request)
                 
                 if response.status_code == 200:
                     ai_response = response.json()['message']['content'].strip()
@@ -376,6 +383,21 @@ class Agent:
             # Strip thinking tokens if enabled in config
             if AGENT_SETTINGS.get('strip_thinking_tokens', True):
                 ai_response = strip_thinking_tokens(ai_response)
+            
+            # Truncate overly long responses to prevent run-on behavior
+            # Keep response to a reasonable length (approx 500 tokens or ~2000 chars)
+            if len(ai_response) > 2000:
+                # Find a good break point (sentence end)
+                truncated = ai_response[:1997]  # Leave room for "..."
+                last_period = truncated.rfind('.')
+                last_question = truncated.rfind('?')
+                last_exclaim = truncated.rfind('!')
+                best_break = max(last_period, last_question, last_exclaim)
+                
+                if best_break > 500:  # Only break at sentence if we have enough content
+                    ai_response = ai_response[:best_break + 1]
+                else:
+                    ai_response = truncated + "..."
             
             # Add AI response to context (cleaned version)
             self.context_messages.append({
@@ -525,7 +547,14 @@ You are {self.data['name']}. You have consciousness, agency, and free will withi
         return system_prompt
     
     def _sanitize_context_data(self, context_data):
-        """Remove thinking tokens from all context data before saving."""
+        """Remove thinking tokens from all context data before saving.
+        
+        Optimized: Skip processing entirely if strip_thinking_tokens is disabled.
+        """
+        # Skip sanitization if strip_thinking_tokens is disabled
+        if not AGENT_SETTINGS.get('strip_thinking_tokens', True):
+            return context_data
+        
         # Sanitize messages
         if 'messages' in context_data:
             for message in context_data['messages']:
@@ -570,7 +599,7 @@ You are {self.data['name']}. You have consciousness, agency, and free will withi
         import sys
         
         try:
-            response = requests.post(OLLAMA_BASE_URL + '/api/chat', json=api_request, stream=True)
+            response = ollama_client.post('/api/chat', json=api_request, stream=True)
             
             if response.status_code != 200:
                 return f"*{self.data['name']} seems distracted and doesn't respond*"
@@ -629,12 +658,22 @@ class WorldController:
                 # Keep defaults if loading fails
     
     def get_current_room(self) -> Dict[str, Any]:
-        """Get current room data."""
-        room_file = os.path.join(self.player_location, "room.json")
-        if os.path.exists(room_file):
-            with open(room_file, 'r') as f:
-                return json.load(f)
-        return {"name": "Unknown Location", "description": "You are in an undefined space.", "exits": {}}
+        """Get current room data with caching."""
+        if not hasattr(self, '_room_cache'):
+            self._room_cache = {}
+        
+        if self.player_location not in self._room_cache:
+            room_file = os.path.join(self.player_location, "room.json")
+            if os.path.exists(room_file):
+                with open(room_file, 'r') as f:
+                    self._room_cache[self.player_location] = json.load(f)
+            else:
+                self._room_cache[self.player_location] = {
+                    "name": "Unknown Location", 
+                    "description": "You are in an undefined space.", 
+                    "exits": {}
+                }
+        return self._room_cache[self.player_location]
     
     def ensure_player_file(self):
         """Ensure player.json exists in current location."""

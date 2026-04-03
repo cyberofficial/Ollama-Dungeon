@@ -792,10 +792,12 @@ class TestAllOllamaDungeon(unittest.TestCase):
             self.assertIsInstance(zahra.data, dict)
             self.assertIn('name', zahra.data)
     
-    @patch('requests.post')
+    @patch('network.ollama_client.post')
     def test_api_integration_mock(self, mock_post):
-        """Test API integration with mocked responses."""        # Mock successful API response
+        """Test API integration with mocked responses."""
+        # Mock successful API response
         mock_response = Mock()
+        mock_response.status_code = 200
         mock_response.json.return_value = {
             "message": {"content": "Hello! I'm Alice, the tavern keeper. What brings you here?"}
         }
